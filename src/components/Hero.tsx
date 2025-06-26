@@ -105,7 +105,7 @@ export default function Hero({ onApplyClick }: HeroProps) {
             </motion.div>
             <div className="mt-8 lg:mt-0">
               <img 
-                src="https://res.cloudinary.com/dtzv2ckwm/image/upload/v1746302102/Fur_bldbyp.jpg"
+                src="https://res.cloudinary.com/dtzv2ckwm/video/upload/v1750925885/q8huffr53xspqsclvhpq.mov"
                 alt="Students collaborating in a modern tech environment with hands-on wood work"
                 className="w-full h-48 sm:h-72 md:h-96 object-cover rounded-lg lg:h-full"
                 loading="lazy"
