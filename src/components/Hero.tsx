@@ -1,7 +1,7 @@
-import React from 'react';
-import { ArrowRight } from 'lucide-react';
+import React, { useState } from 'react';
+import { ArrowRight, Play, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useTourContext } from '../context/TourContext';
 
 interface HeroProps {
@@ -11,6 +11,7 @@ interface HeroProps {
 export default function Hero({ onApplyClick }: HeroProps) {
   const navigate = useNavigate();
   const { startTour } = useTourContext();
+  const [showVideoModal, setShowVideoModal] = useState(false);
 
   const handleExplorePrograms = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -32,12 +33,23 @@ export default function Hero({ onApplyClick }: HeroProps) {
     }
   };
 
-  const handleApplyNow = () => {
-    navigate('/apply');
-  };
-
   const handleStartTour = () => {
     startTour();
+  };
+
+  const handlePlayVideo = () => {
+    setShowVideoModal(true);
+  };
+
+  const handleCloseVideo = () => {
+    setShowVideoModal(false);
+  };
+
+  // Handle keyboard events for the video modal
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      handleCloseVideo();
+    }
   };
 
   return (
@@ -64,19 +76,6 @@ export default function Hero({ onApplyClick }: HeroProps) {
                 <motion.button
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  onClick={handleApplyNow}
-                  className="w-full sm:w-auto px-8 py-3 text-base font-medium rounded-lg text-white 
-                    bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 
-                    transition-colors md:py-4 md:text-lg md:px-10 
-                    focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 
-                    dark:focus:ring-offset-gray-900 shadow-md"
-                >
-                  Apply Now
-                  <ArrowRight className="ml-2 h-4 w-4 inline-block" />
-                </motion.button>
-                <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
                   onClick={handleExplorePrograms}
                   className="w-full sm:w-auto px-8 py-3 text-base font-medium rounded-lg 
                     text-blue-600 dark:text-blue-400 bg-transparent 
@@ -85,6 +84,7 @@ export default function Hero({ onApplyClick }: HeroProps) {
                     transition-colors md:py-4 md:text-lg md:px-10
                     focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 
                     dark:focus:ring-offset-gray-900"
+                  id="explore-programs-button"
                 >
                   Explore Programs
                 </motion.button>
@@ -103,23 +103,69 @@ export default function Hero({ onApplyClick }: HeroProps) {
                 </button>
               </div>
             </motion.div>
-            <div className="mt-8 lg:mt-0">
-              <img 
-                src="https://res.cloudinary.com/dtzv2ckwm/video/upload/v1750925885/q8huffr53xspqsclvhpq.mov"
-                alt="Students collaborating in a modern tech environment with hands-on wood work"
-                className="w-full h-48 sm:h-72 md:h-96 object-cover rounded-lg lg:h-full"
-                loading="lazy"
-                srcSet="
-                  https://res.cloudinary.com/dtzv2ckwm/image/upload/v1746302102/Fur_bldbyp.jpg 800w,
-                  https://res.cloudinary.com/dtzv2ckwm/image/upload/v1746302102/Fur_bldbyp.jpg 1200w,
-                  https://res.cloudinary.com/dtzv2ckwm/image/upload/v1746302102/Fur_bldbyp.jpg 2070w
-                "
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              />
+            <div className="mt-8 lg:mt-0 relative">
+              <div className="relative overflow-hidden rounded-lg shadow-xl h-[70vh] flex items-center justify-center">
+                <img 
+                  src="https://res.cloudinary.com/dtzv2ckwm/image/upload/v1751277611/IMG_4453_i7e8pr.jpg"
+                  alt="FolioTech students at work"
+                  className="hero-image w-full h-full object-cover rounded-lg"
+                  loading="lazy"
+                />
+                <button 
+                  onClick={handlePlayVideo}
+                  className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-30 hover:bg-opacity-40 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 rounded-lg"
+                  aria-label="Play video about FolioTech"
+                >
+                  <div className="w-16 h-16 md:w-20 md:h-20 bg-white bg-opacity-80 rounded-full flex items-center justify-center transform hover:scale-110 transition-transform duration-300">
+                    <Play className="h-8 w-8 md:h-10 md:w-10 text-blue-600 ml-1" />
+                  </div>
+                </button>
+              </div>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Video Modal */}
+      <AnimatePresence>
+        {showVideoModal && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-75"
+            onClick={handleCloseVideo}
+            onKeyDown={handleKeyDown}
+            tabIndex={-1}
+          >
+            <motion.div 
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="relative w-full max-w-4xl bg-black rounded-lg overflow-hidden"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button 
+                onClick={handleCloseVideo}
+                className="absolute top-4 right-4 z-10 p-2 bg-black bg-opacity-50 rounded-full text-white hover:bg-opacity-70 focus:outline-none focus:ring-2 focus:ring-white"
+                aria-label="Close video"
+              >
+                <X className="h-6 w-6" />
+              </button>
+              <div className="aspect-w-16 aspect-h-9">
+                <video 
+                  src="https://res.cloudinary.com/dtzv2ckwm/video/upload/v1751307841/ScreenRecording_06-30-2025_18-50-53_1_po8njx.mov"
+                  controls
+                  autoPlay
+                  className="w-full h-full object-contain"
+                >
+                  Your browser does not support the video tag.
+                </video>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
