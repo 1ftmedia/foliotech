@@ -23,8 +23,6 @@ export default function Hero({ onApplyClick }: HeroProps) {
       const elementPosition = programsSection.getBoundingClientRect().top;
       const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
 
-      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
       window.scrollTo({
         top: offsetPosition,
         behavior: prefersReducedMotion ? 'auto' : 'smooth'
@@ -46,7 +44,6 @@ export default function Hero({ onApplyClick }: HeroProps) {
     setShowVideoModal(false);
   };
 
-  // Handle keyboard events for the video modal
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Escape') {
       handleCloseVideo();
@@ -71,24 +68,24 @@ export default function Hero({ onApplyClick }: HeroProps) {
       </div>
       
       <div className="max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="relative z-10 py-16 sm:py-20 md:py-24 lg:py-28 xl:py-32">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+        <div className="relative z-10 py-16 sm:py-20 md:py-24 lg:py-28 xl:py-32 flex items-center justify-center min-h-screen">
+          <div className="text-center">
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: prefersReducedMotion ? 0 : 0.6 }}
-              className="text-left text-white"
+              className="text-white"
             >
-              <h1 className="tracking-tight font-extrabold text-white">
-                <span className="block text-4xl sm:text-5xl md:text-6xl text-white mt-2">
+              <h1 className="tracking-tight font-extrabold">
+                <span className="block text-4xl sm:text-5xl md:text-6xl mt-2">
                   FolioTech Institute
                 </span>
               </h1>
-              <p className="mt-3 text-base text-gray-100 sm:mt-5 sm:text-lg md:mt-5 md:text-xl leading-relaxed max-w-xl">
+              <p className="mt-3 text-base text-gray-100 sm:mt-5 sm:text-lg md:mt-5 md:text-xl leading-relaxed max-w-xl mx-auto">
                 Empowering the next generation of tech leaders through cutting-edge education, 
                 industry partnerships, and hands-on learning experiences.
               </p>
-              <div className="mt-5 sm:mt-8 flex flex-col sm:flex-row gap-4">
+              <div className="mt-5 sm:mt-8 flex flex-col sm:flex-row gap-4 justify-center">
                 <motion.button
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
@@ -104,6 +101,18 @@ export default function Hero({ onApplyClick }: HeroProps) {
                 >
                   Explore Programs
                 </motion.button>
+                <button 
+                  onClick={handlePlayVideo}
+                  className="w-full sm:w-auto px-8 py-3 text-base font-medium rounded-lg
+                    text-blue-600 bg-white
+                    hover:bg-blue-50
+                    transition-all duration-300 transform hover:scale-105
+                    focus:outline-none focus:ring-2 focus:ring-white
+                    flex items-center justify-center"
+                  aria-label="Watch campus tour video"
+                >
+                  <Play className="mr-2 h-5 w-5" /> Watch Campus Tour
+                </button>
               </div>
               <div className="mt-4">
                 <motion.button
@@ -121,16 +130,6 @@ export default function Hero({ onApplyClick }: HeroProps) {
                 </motion.button>
               </div>
             </motion.div>
-            <div className="mt-8 lg:mt-0 relative flex items-center justify-center">
-              <button 
-                onClick={handlePlayVideo}
-                className="px-8 py-4 bg-white text-blue-600 rounded-lg font-semibold hover:bg-blue-50 transition-all duration-300 transform hover:scale-105 flex items-center justify-center shadow-lg"
-                aria-label="Watch campus tour video"
-              >
-                <Play className="mr-2 h-5 w-5" />
-                Watch Campus Tour
-              </button>
-            </div>
           </div>
         </div>
       </div>
