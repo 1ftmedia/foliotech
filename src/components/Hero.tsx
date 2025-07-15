@@ -166,7 +166,7 @@ export default function Hero({ onApplyClick }: HeroProps) {
               </button>
               <div className="aspect-w-16 aspect-h-9">
                 <video
-                  src="https://res.cloudinary.com/dtzv2ckwm/video/upload/v1751307841/ScreenRecording_06-30-2025_18-50-53_1_po8njx.mov"
+                  src="https://res.cloudinary.com/dtzv2ckwm/video/upload/v1752610579/FolioTech_30sec_video_Intro_Video_with_audio_1280x720_website_yyfsvc.mp4"
                   controls
                   autoPlay
                   className="w-full h-full object-contain"
