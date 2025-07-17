@@ -62,7 +62,7 @@ export default function Hero({ onApplyClick }: HeroProps) {
           className="w-full h-full object-cover"
           aria-hidden="true"
         >
-          <source src="https://res.cloudinary.com/dtzv2ckwm/video/upload/v1751307841/ScreenRecording_06-30-2025_18-50-53_1_po8njx.mov" type="video/mp4" />
+          <source src="https://res.cloudinary.com/dtzv2ckwm/video/upload/v1752794205/FolioTech_30sec_video_Intro_Video_no_audio_1280x720_website_jz2clz.mov" type="video/mp4" />
         </video>
         <div className="absolute inset-0 bg-black bg-opacity-50 dark:bg-opacity-70"></div>
       </div>
