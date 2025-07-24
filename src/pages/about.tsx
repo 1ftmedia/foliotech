@@ -264,7 +264,6 @@ export default function About() {
                 "https://res.cloudinary.com/dtzv2ckwm/image/upload/v1746302434/Elect_wg04ur.jpg",
                 "https://res.cloudinary.com/dtzv2ckwm/image/upload/v1746302239/Tailoring_qwee1e.jpg",
                 "https://res.cloudinary.com/dtzv2ckwm/image/upload/v1746302189/Welding_b1y9ue.jpg",
-                "https://res.cloudinary.com/dtzv2ckwm/image/upload/v1746302162/Knitting_udffuy.jpg",
                 "https://res.cloudinary.com/dtzv2ckwm/image/upload/v1746302102/Fur_bldbyp.jpg",
                 "https://res.cloudinary.com/dtzv2ckwm/image/upload/v1746302032/Catering_d0efnz.jpg"
               ]}
