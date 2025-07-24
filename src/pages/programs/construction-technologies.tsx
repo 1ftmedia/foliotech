@@ -169,7 +169,7 @@ export default function ConstructionTechnologies() {
   return (
     <>
       <Helmet>
-        <title>Construction and Manufacturing Courses</title>
+        <title>Construction Technologies Courses | FolioTech Institute</title>
         <meta name="description" content="Practical training in construction trades, helping students build a solid career in the industry." />
       </Helmet>
 
