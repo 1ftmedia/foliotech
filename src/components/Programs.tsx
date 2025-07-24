@@ -8,7 +8,6 @@ const courses: Course[] = [
     id: '1',
     title: 'Computer Technology',
     description: 'Master modern computer technology practices and principles with hands-on projects.',
-    duration: '2 years',
     level: "Advanced Diploma",
     image: 'https://res.cloudinary.com/dtzv2ckwm/image/upload/v1746299927/Computer_h9ofeq.jpg'
   },
@@ -16,7 +15,6 @@ const courses: Course[] = [
     id: '2',
     title: 'Vocational Studies',
     description: 'Hands-on training for practical skills, preparing individuals for career-focused industries.',
-    duration: '2 years',
     level: "Advanced Diploma",
     image: 'https://res.cloudinary.com/dtzv2ckwm/image/upload/v1752797550/IMG-20250708-WA0034_brbeyx.jpg'
   },
@@ -24,7 +22,6 @@ const courses: Course[] = [
     id: '3',
     title: 'Construction Technologies',
     description: 'Construction Technologies enhance efficiency and safety in construction through innovative digital solutions.',
-    duration: '2 years',
     level: "Advanced Diploma",
     image: 'https://res.cloudinary.com/dtzv2ckwm/image/upload/v1746302189/Welding_b1y9ue.jpg'
   }
@@ -114,16 +111,6 @@ FolioTech Institute
                       </h3>
                       <p className="mt-3 text-base text-gray-500 dark:text-gray-400">
                         {course.description}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="mt-6 flex items-center">
-                    <div className="flex-shrink-0">
-                      <Icon className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-                    </div>
-                    <div className="ml-3">
-                      <p className="text-sm font-medium text-gray-900 dark:text-white">
-                        Duration: {course.duration}
                       </p>
                     </div>
                   </div>
