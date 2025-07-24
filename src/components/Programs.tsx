@@ -20,7 +20,7 @@ const courses: Course[] = [
   },
   {
     id: '3',
-    title: 'Construction Technologies',
+    title: 'Construction and Manufacturing',
     description: 'Construction Technologies enhance efficiency and safety in construction through innovative digital solutions.',
     level: "Advanced Diploma",
     image: 'https://res.cloudinary.com/dtzv2ckwm/image/upload/v1746302189/Welding_b1y9ue.jpg'
