@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, ChevronRight, Info, BookOpen, GraduationCap } from 'lucide-react';
+import { X, ChevronRight } from 'lucide-react';
 import { useTour } from '../hooks/useTour';
 
 interface WelcomeModalProps {
@@ -146,27 +146,6 @@ export function WelcomeModal({ onClose }: WelcomeModalProps) {
                   <p className="text-lg text-gray-700 dark:text-gray-300">
                     Thank you for visiting FolioTech Institute! We're dedicated to providing cutting-edge education in technology and vocational skills.
                   </p>
-                  
-                  <div className="my-6 bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg border-l-4 border-[#1E3A8A]">
-                    <h3 className="text-[#1E3A8A] dark:text-blue-300 font-semibold flex items-center">
-                      <Info className="h-5 w-5 mr-2" />
-                      What makes us unique
-                    </h3>
-                    <ul className="mt-2 space-y-2">
-                      <li className="flex items-start">
-                        <BookOpen className="h-5 w-5 text-[#1E3A8A] dark:text-blue-300 mr-2 mt-0.5" />
-                        <span>Industry-led curriculum designed for real-world application</span>
-                      </li>
-                      <li className="flex items-start">
-                        <GraduationCap className="h-5 w-5 text-[#1E3A8A] dark:text-blue-300 mr-2 mt-0.5" />
-                        <span>Expert instructors with proven industry experience</span>
-                      </li>
-                      <li className="flex items-start">
-                        <ChevronRight className="h-5 w-5 text-[#1E3A8A] dark:text-blue-300 mr-2 mt-0.5" />
-                        <span>Strong partnerships with leading tech companies</span>
-                      </li>
-                    </ul>
-                  </div>
                   
                   <p className="text-gray-700 dark:text-gray-300">
                     Would you like a quick tour of our website to learn more about what we offer?
