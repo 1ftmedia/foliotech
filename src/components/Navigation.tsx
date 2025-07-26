@@ -20,8 +20,8 @@ const navItems: NavItem[] = [
     title: "Support",
     href: "#",
     children: [
-      { title: "Sponsorships", href: "/sponsorships" },
-      { title: "Give", href: "/give" }
+      { title: "Sponsor A Student", href: "/sponsorships" },
+      { title: "Donate Equipment", href: "/give" }
     ]
   },
   { title: "Careers", href: "/career-development" },
