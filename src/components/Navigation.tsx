@@ -359,7 +359,7 @@ export function Navigation() {
                     }}
                     className="px-4 py-2 text-white bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 rounded-lg transition-colors whitespace-nowrap"
                   >
-                    Sign Up
+                    Get Started
                   </button>
                 </div>
               )}

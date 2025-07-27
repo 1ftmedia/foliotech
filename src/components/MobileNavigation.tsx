@@ -352,7 +352,7 @@ export function MobileNavigation({ isOpen, onClose, navItems }: MobileNavigation
                     }}
                     className="w-full py-3 px-4 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors"
                   >
-                    Sign Up
+                    Get Started
                   </button>
                 </div>
               </div>

@@ -287,7 +287,7 @@ export function SideNavigation({ isOpen, onClose }: SideNavigationProps) {
                       onClick={handleSignUpClick}
                       className="w-full py-2 px-4 text-center font-medium text-white bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 rounded-lg transition-colors"
                     >
-                      Sign Up
+                      Get Started
                     </button>
                   </div>
                 )}
