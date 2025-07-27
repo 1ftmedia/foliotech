@@ -21,10 +21,19 @@ const navItems: NavItem[] = [
     href: "#",
     children: [
       { title: "Sponsor a Student", href: "/sponsorships" },
-      { title: "Donate Equipment", href: "/give" }
+      { title: "Donate Equipment", href: "/give" },
+      { title: "Volunteer to Teach", href: "/volunteer" },
+      { title: "Partnership", href: "/partnership-inquiry" }
     ]
   },
-  { title: "Careers", href: "/career-development" },
+  {
+    title: "Careers",
+    href: "#",
+    children: [
+      { title: "Career Tracks", href: "/career-development" },
+      { title: "Hire a Graduate", href: "/hire-graduate" }
+    ]
+  },
   { title: "Contact", href: "#contact" },
 ];
 
