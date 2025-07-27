@@ -22,7 +22,7 @@ const navItems: NavItem[] = [
     children: [
       { title: "Sponsor a Student", href: "/sponsorships" },
       { title: "Donate Equipment", href: "/give" },
-      { title: "Volunteer to Teach", href: "/volunteer" },
+      { title: "Volunteer to Teach", href: "/volunteer-to-teach" },
       { title: "Partnership", href: "/partnership-inquiry" }
     ]
   },
@@ -31,7 +31,7 @@ const navItems: NavItem[] = [
     href: "#",
     children: [
       { title: "Career Tracks", href: "/career-development" },
-      { title: "Hire a Graduate", href: "/hire-graduate" }
+      { title: "Hire a Graduate", href: "/hire-a-graduate" }
     ]
   },
   { title: "Contact", href: "#contact" },

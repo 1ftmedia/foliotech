@@ -496,7 +496,7 @@ export default function CareerDevelopment() {
     duration: '6 months',
     salary_range: '₦100,000 - ₦300,000',
     demand_level: 'medium',
-    tools: ['Pipe Wrench', 'Plumber’s Tape', 'Pipe Cutter', 'Fittings', 'Torch'],
+    tools: ['Pipe Wrench', 'Plumber Tape', 'Pipe Cutter', 'Fittings', 'Torch'],
     certifications: ['National Vocational Certificate in Plumbing', 'NCCER Plumbing Level 1'],
     icon: 'compass'
   },

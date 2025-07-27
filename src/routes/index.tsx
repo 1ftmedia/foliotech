@@ -100,6 +100,14 @@ const CareerDevelopment = lazyWithRetry(() =>
   import('../pages/CareerDevelopment').then(module => ({ default: module.default }))
 );
 
+const VolunteerToTeach = lazyWithRetry(() => 
+  import('../pages/volunteer-to-teach').then(module => ({ default: module.default }))
+);
+
+const HireAGraduate = lazyWithRetry(() => 
+  import('../pages/hire-a-graduate').then(module => ({ default: module.default }))
+);
+
 // Enhanced Suspense wrapper with error handling
 function SuspenseWrapper({ children }: { children: React.ReactNode }) {
   return (
@@ -321,6 +329,30 @@ const router = createBrowserRouter([
         <ErrorBoundary>
           <SuspenseWrapper>
             <CareerDevelopment />
+          </SuspenseWrapper>
+        </ErrorBoundary>
+      </Layout>
+    ),
+  },
+  {
+    path: '/volunteer-to-teach',
+    element: (
+      <Layout>
+        <ErrorBoundary>
+          <SuspenseWrapper>
+            <VolunteerToTeach />
+          </SuspenseWrapper>
+        </ErrorBoundary>
+      </Layout>
+    ),
+  },
+  {
+    path: '/hire-a-graduate',
+    element: (
+      <Layout>
+        <ErrorBoundary>
+          <SuspenseWrapper>
+            <HireAGraduate />
           </SuspenseWrapper>
         </ErrorBoundary>
       </Layout>
