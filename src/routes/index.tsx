@@ -347,6 +347,18 @@ const router = createBrowserRouter([
     ),
   },
   {
+    path: '/faq',
+    element: (
+      <Layout>
+        <ErrorBoundary>
+          <SuspenseWrapper>
+            <FAQ />
+          </SuspenseWrapper>
+        </ErrorBoundary>
+      </Layout>
+    ),
+  },
+  {
     path: '/hire-a-graduate',
     element: (
       <Layout>

@@ -25,6 +25,7 @@ interface ApplicationState {
   // Computed
   isCurrentStepValid: () => boolean;
   canProceedToNextStep: () => boolean;
+  getCompletionPercentage: () => number;
 }
 
 const initialState = {
@@ -83,6 +84,12 @@ export const useApplicationStore = create<ApplicationState>()(
             !state.isSubmitting &&
             state.currentStep < 5 // Total number of steps - 1
           );
+        },
+
+        getCompletionPercentage: () => {
+          const state = get();
+          const completedSteps = Object.values(state.stepCompletion).filter(Boolean).length;
+          return Math.round((completedSteps / 5) * 100); // 5 total steps
         },
       }),
       {

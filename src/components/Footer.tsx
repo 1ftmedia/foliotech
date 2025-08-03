@@ -107,15 +107,21 @@ export function Footer() {
               Quick Links
             </h3>
             <ul className="space-y-2">
-              {['Programs', 'Admissions', 'Student Life', 'Research', 'Careers', 'Career Development'].map((item) => (
-                <li key={item}>
+              {[
+                { title: 'Programs', href: '/programs' },
+                { title: 'About', href: '/about' },
+                { title: 'Admissions', href: '/apply' },
+                { title: 'Contact', href: '#contact' },
+                { title: 'Career Development', href: '/career-development' }
+              ].map((item) => (
+                <li key={item.title}>
                   <Link
-                    to={item === 'Career Development' ? '/career-development' : `#${item.toLowerCase()}`}
+                    to={item.href}
                     className="text-[#0066cc] hover:text-[#004d99] dark:text-[#66b3ff] dark:hover:text-[#99ccff] 
                       transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-[#0066cc] dark:focus:ring-[#66b3ff] 
                       rounded"
                   >
-                    {item}
+                    {item.title}
                   </Link>
                 </li>
               ))}
@@ -128,16 +134,22 @@ export function Footer() {
               Resources
             </h3>
             <ul className="space-y-2">
-              {['Student Portal', 'Library', 'Academic Calendar', 'Support', 'FAQs'].map((item) => (
-                <li key={item}>
-                  <a
-                    href={`#${item.toLowerCase()}`}
+              {[
+                { title: 'Student Portal', href: '/dashboard' },
+                { title: 'Applications', href: '/applications' },
+                { title: 'Sponsorships', href: '/sponsorships' },
+                { title: 'Support', href: '/give' },
+                { title: 'FAQs', href: '/faq' }
+              ].map((item) => (
+                <li key={item.title}>
+                  <Link
+                    to={item.href}
                     className="text-[#0066cc] hover:text-[#004d99] dark:text-[#66b3ff] dark:hover:text-[#99ccff] 
                       transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-[#0066cc] dark:focus:ring-[#66b3ff] 
                       rounded"
                   >
-                    {item}
-                  </a>
+                    {item.title}
+                  </Link>
                 </li>
               ))}
             </ul>

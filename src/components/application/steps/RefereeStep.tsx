@@ -9,9 +9,12 @@ export function RefereeStep() {
   return (
     <div className="space-y-8">
       <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-lg">
-        <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">
+        <div className="flex items-center mb-6">
+          <Users className="h-6 w-6 text-blue-600 dark:text-blue-400 mr-3" />
+          <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
           Referee Information
-        </h3>
+          </h3>
+        </div>
 
         <div className="grid gap-6 md:grid-cols-2">
           {/* Referee Name */}
@@ -127,11 +130,24 @@ export function RefereeStep() {
         </div>
       </div>
 
-      <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-6">
-        <p className="text-sm text-gray-600 dark:text-gray-400">
+      <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-6 border border-blue-200 dark:border-blue-800">
+        <div className="flex items-start">
+          <svg className="h-5 w-5 text-blue-600 dark:text-blue-400 mr-2 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <div>
+            <h4 className="text-sm font-medium text-blue-800 dark:text-blue-300 mb-1">
+              About Your Referee
+            </h4>
+            <p className="text-sm text-blue-700 dark:text-blue-400">
           Your referee should be someone who can vouch for your character and academic/professional capabilities. 
-          They will be contacted as part of the application process.
-        </p>
+              This could be a teacher, employer, mentor, or community leader who knows you well.
+            </p>
+            <p className="text-xs text-blue-600 dark:text-blue-500 mt-2">
+              <strong>Note:</strong> Your referee may be contacted as part of the application review process.
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );

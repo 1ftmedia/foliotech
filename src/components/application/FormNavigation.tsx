@@ -31,17 +31,29 @@ export const FormNavigation = memo(function FormNavigation({
 
   const handleNext = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
-    if (!isLastStep) {
+    if (!isLastStep && canProceedToNextStep()) {
       onNext();
     }
-  }, [isLastStep, onNext]);
+  }, [isLastStep, onNext, canProceedToNextStep]);
 
   const handleSubmit = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
-    if (onSubmit) {
+    if (onSubmit && canProceedToNextStep()) {
       onSubmit();
     }
-  }, [onSubmit]);
+  }, [onSubmit, canProceedToNextStep]);
+
+  // Handle keyboard navigation
+  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      if (isLastStep) {
+        handleSubmit(e as any);
+      } else {
+        handleNext(e as any);
+      }
+    }
+  }, [isLastStep, handleSubmit, handleNext]);
 
   return (
     <div 
@@ -74,6 +86,7 @@ export const FormNavigation = memo(function FormNavigation({
               aria-label="Go to previous step"
               aria-disabled={isSubmitting}
               data-testid="prev-button"
+              onKeyDown={handleKeyDown}
             >
               <ArrowLeft className="h-5 w-5 md:mr-2" aria-hidden="true" />
               <span className="hidden md:inline">Previous</span>
@@ -98,6 +111,7 @@ export const FormNavigation = memo(function FormNavigation({
             aria-label="Submit application"
             aria-disabled={!canProceedToNextStep() || isSubmitting}
             data-testid="submit-button"
+            onKeyDown={handleKeyDown}
           >
             {isSubmitting ? (
               <>
@@ -132,6 +146,7 @@ export const FormNavigation = memo(function FormNavigation({
             aria-label="Go to next step"
             aria-disabled={!canProceedToNextStep() || isSubmitting}
             data-testid="next-button"
+            onKeyDown={handleKeyDown}
           >
             {isSubmitting ? (
               <>
