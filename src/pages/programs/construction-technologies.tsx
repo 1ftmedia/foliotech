@@ -177,7 +177,7 @@ export default function ConstructionTechnologies() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="text-center mb-12 scroll-mt-20 pt-12">
             <h1 className="text-4xl font-extrabold text-gray-900 dark:text-white sm:text-5xl">
-              Construction Technologies Courses
+              Manufacturing & Construction Courses
             </h1>
             <p className="mt-4 text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
               Practical training in construction trades, helping students build a solid career in the industry.
