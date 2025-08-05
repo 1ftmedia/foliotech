@@ -6,7 +6,7 @@ import type { Course } from '../types';
 const courses: Course[] = [
   {
     id: '1',
-    title: 'Computer Technology',
+    title: 'Computer Technologies',
     description: 'Master modern computer technology practices and principles with hands-on projects.',
     level: "Advanced Diploma",
     image: 'https://res.cloudinary.com/dtzv2ckwm/image/upload/v1746299927/Computer_h9ofeq.jpg'
