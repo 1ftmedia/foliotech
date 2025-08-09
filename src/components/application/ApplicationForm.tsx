@@ -294,7 +294,7 @@ export function ApplicationForm({ onSubmit, programId, courseId, draftId }: Appl
               <div className="text-center">
                 <h3 className="font-bold text-xl">LIMITED TIME OFFER: Application Fee Waived!</h3>
                 <p className="text-sm opacity-90 mt-1">Start your academic journey at FolioTech Institute with no application fees</p>
-              </div>
+              </motion.div>
             </div>
           </motion.div>
 
