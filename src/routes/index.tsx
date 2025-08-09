@@ -108,6 +108,10 @@ const HireAGraduate = lazyWithRetry(() =>
   import('../pages/hire-a-graduate').then(module => ({ default: module.default }))
 );
 
+const FAQ = lazyWithRetry(() => 
+  import('../pages/faq').then(module => ({ default: module.default }))
+);
+
 // Enhanced Suspense wrapper with error handling
 function SuspenseWrapper({ children }: { children: React.ReactNode }) {
   return (
