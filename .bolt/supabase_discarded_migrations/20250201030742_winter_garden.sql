@@ -219,4 +219,4 @@ CREATE TRIGGER update_resources_updated_at
 INSERT INTO programs (name, description, capacity) VALUES
   ('Computer Technology', 'Master modern computer technology practices and principles with hands-on projects.', 500),
   ('Vocational Studies', 'Hands-on training for practical skills, preparing individuals for career-focused industries.', 500),
-  ('Construction Technologies', 'Construction Technologies enhance efficiency and safety in construction through innovative digital solutions.', 500);
+  ('Manufacturing & Construction', 'Mafucturing & Construction enhance efficiency and safety in development through innovative digital solutions.', 500);
