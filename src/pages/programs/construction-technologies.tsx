@@ -169,7 +169,7 @@ export default function ConstructionTechnologies() {
   return (
     <>
       <Helmet>
-        <title>Construction Technologies Courses | FolioTech Institute</title>
+        <title>Construction Technologies Courses</title>
         <meta name="description" content="Practical training in construction trades, helping students build a solid career in the industry." />
       </Helmet>
 
@@ -180,7 +180,7 @@ export default function ConstructionTechnologies() {
               Manufacturing & Construction Courses
             </h1>
             <p className="mt-4 text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
-              Practical training in construction trades, helping students build a solid career in the industry.
+              Practical training in manufacturing & construction trades, helping students build a solid career in the industry.
             </p>
           </div>
 
