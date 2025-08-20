@@ -25,7 +25,7 @@ export function ProgramDetail() {
       {/* Hero Section */}
       <div className="relative">
         <img
-          src={program.metadata.image || 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3'}
+          src={program.metadata?.image || 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3'}
           alt={program.name}
           className="w-full h-64 md:h-96 object-cover rounded-lg"
         />
@@ -43,10 +43,10 @@ export function ProgramDetail() {
       {/* Program Info */}
       <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
         {[
-          { icon: Clock, label: 'Duration', value: program.metadata.duration },
-          { icon: BookOpen, label: 'Level', value: program.metadata.level },
+          { icon: Clock, label: 'Duration', value: program.metadata?.duration || 'Duration not specified' },
+          { icon: BookOpen, label: 'Level', value: program.metadata?.level || 'Level not specified' },
           { icon: Users, label: 'Capacity', value: `${program.capacity} students` },
-          { icon: DollarSign, label: 'Tuition', value: `₦${program.metadata.price?.toLocaleString() ?? 'Free'}` }
+          { icon: DollarSign, label: 'Tuition', value: `₦${program.metadata?.price?.toLocaleString() ?? 'Free'}` }
         ].map(({ icon: Icon, label, value }) => (
           <div key={label} className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm">
             <div className="flex items-center space-x-3">

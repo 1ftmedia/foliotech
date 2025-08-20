@@ -39,9 +39,13 @@ export const api = {
         .single();
         
       if (error) throw error;
+      if (!data) {
+        throw new Error(`Program not found: ${id}`);
+      }
       return data;
     } catch (error) {
-      throw new Error(`Failed to fetch program: ${error.message}`);
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      throw new Error(`Failed to fetch program: ${errorMessage}`);
     }
   },
 
@@ -84,9 +88,13 @@ export const api = {
         .single();
         
       if (error) throw error;
+      if (!data) {
+        throw new Error(`Course not found: ${courseId} in program ${programId}`);
+      }
       return data;
     } catch (error) {
-      throw new Error(`Failed to fetch course: ${error.message}`);
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      throw new Error(`Failed to fetch course: ${errorMessage}`);
     }
   },
 

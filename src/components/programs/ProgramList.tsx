@@ -35,10 +35,15 @@ export function ProgramList() {
   const filteredPrograms = programs?.filter(program => {
     const matchesSearch = program.name.toLowerCase().includes(filters.search.toLowerCase()) ||
                          program.description.toLowerCase().includes(filters.search.toLowerCase());
-    const matchesCategory = !filters.category || program.metadata.category === filters.category;
-    const matchesLevel = !filters.level || program.metadata.level === filters.level;
-    const matchesPrice = program.metadata.price >= filters.priceRange[0] && 
-                        program.metadata.price <= filters.priceRange[1];
+    
+    // Safely access metadata properties with fallbacks
+    const category = program.metadata?.category || '';
+    const level = program.metadata?.level || '';
+    const price = program.metadata?.price || 0;
+    
+    const matchesCategory = !filters.category || category === filters.category;
+    const matchesLevel = !filters.level || level === filters.level;
+    const matchesPrice = price >= filters.priceRange[0] && price <= filters.priceRange[1];
     
     return matchesSearch && matchesCategory && matchesLevel && matchesPrice;
   });
@@ -177,7 +182,7 @@ export function ProgramList() {
               className="bg-white dark:bg-gray-800 rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow"
             >
               <img
-                src={program.metadata.image || 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3'}
+                src={program.metadata?.image || 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3'}
                 alt={program.name}
                 className="w-full h-48 object-cover"
               />
@@ -191,10 +196,10 @@ export function ProgramList() {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center text-gray-500 dark:text-gray-400">
                     <Clock className="h-4 w-4 mr-1" />
-                    <span className="text-sm">{program.metadata.duration}</span>
+                    <span className="text-sm">{program.metadata?.duration || 'Duration not specified'}</span>
                   </div>
                   <div className="text-blue-600 dark:text-blue-400 font-semibold">
-                    ₦{program.metadata.price?.toLocaleString() ?? 'Free'}
+                    ₦{program.metadata?.price?.toLocaleString() ?? 'Free'}
                   </div>
                 </div>
                 <button
@@ -225,15 +230,15 @@ export function ProgramList() {
                   <div className="flex flex-wrap gap-4">
                     <div className="flex items-center text-gray-500 dark:text-gray-400">
                       <Clock className="h-4 w-4 mr-1" />
-                      <span className="text-sm">{program.metadata.duration}</span>
+                      <span className="text-sm">{program.metadata?.duration || 'Duration not specified'}</span>
                     </div>
                     <div className="flex items-center text-gray-500 dark:text-gray-400">
                       <BookOpen className="h-4 w-4 mr-1" />
-                      <span className="text-sm">{program.metadata.level}</span>
+                      <span className="text-sm">{program.metadata?.level || 'Level not specified'}</span>
                     </div>
                     <div className="flex items-center text-gray-500 dark:text-gray-400">
                       <DollarSign className="h-4 w-4 mr-1" />
-                      <span className="text-sm">₦{program.metadata.price?.toLocaleString() ?? 'Free'}</span>
+                      <span className="text-sm">₦{program.metadata?.price?.toLocaleString() ?? 'Free'}</span>
                     </div>
                   </div>
                 </div>

@@ -1,16 +1,8 @@
-import { usePrograms } from '../../lib/api/hooks';
 import { ProgramList } from '../../components/programs/ProgramList';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
-import { ErrorMessage } from '../../components/ErrorMessage';
 
 export default function Programs() {
-  const { data: programs, isLoading, error } = usePrograms();
-
-  if (error) {
-    return <ErrorMessage error={error} />;
-  }
-
   return (
     <>
       <Helmet>
@@ -24,7 +16,7 @@ export default function Programs() {
         exit={{ opacity: 0 }}
         transition={{ duration: 0.3 }}
       >
-        <ProgramList programs={programs} isLoading={isLoading} />
+        <ProgramList />
       </motion.div>
     </>
   );

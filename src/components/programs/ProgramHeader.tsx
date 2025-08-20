@@ -22,7 +22,7 @@ export function ProgramHeader({ program, isLoading = false }: ProgramHeaderProps
       <div className="relative">
         <div className="h-64 sm:h-72 md:h-96 w-full">
           <img
-            src={program.metadata.image || 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3'}
+            src={program.metadata?.image || 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3'}
             alt={program.name}
             className="w-full h-full object-cover"
           />
