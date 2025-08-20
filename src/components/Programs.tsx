@@ -34,7 +34,14 @@ const programIcons = {
 };
 
 const getUrlSlug = (title: string): string => {
-  return title.toLowerCase().replace(/\s+/g, '-');
+  // Map specific program titles to their correct route paths
+  const routeMap: Record<string, string> = {
+    'Computer Technology': 'computer-technology',
+    'Vocational Studies': 'vocational-studies',
+    'Manufacturing & Construction': 'construction-technologies'
+  };
+  
+  return routeMap[title] || title.toLowerCase().replace(/\s+/g, '-');
 };
 
 export function Programs() {
