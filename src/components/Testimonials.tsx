@@ -4,17 +4,17 @@ import { Star } from 'lucide-react';
 const testimonials = [
   {
     id: 1,
-    quote: "The hands-on learning approach at FolioTech Institute prepared me for real-world challenges in software development.",
-    author: "Aisha Williams",
-    role: "Software Engineer",
-    image: "https://images.unsplash.com/photo-1589156280159-27698a70f29e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=686&q=80"
+    quote: "At Folio Tech Institute, I, Adamas Ingah, honed my welding and fabrication skills from February to November 2022. Mentored by M.D. Baba Olumide and Baba Akintoye, I learned leadership, safety, and organization. Folio Tech is a family that shaped my life, and I am proud to be part of it.",
+    author:"Adamas Ingah",
+    role:  "Welding and Fabrication Student",
+    image: "https://res.cloudinary.com/dtzv2ckwm/image/upload/v1755792725/studen1_fofpa5.jpg"
   },
   {
     id: 2,
-    quote: "The faculty's industry experience and mentorship were invaluable in shaping my career in data science.",
-    author: "Adebayo Johnson",
-    role: "Data Scientist",
-    image: "https://images.unsplash.com/photo-1507152832244-10d45c7eda57?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80"
+    quote: "When I enrolled for tailoring, I just wanted to learn how to cut and sew clothes, but the CEO called me and told me that I could be a designer as well. From that day, I took on myself to be a fashion designer",
+    author: "Ms. Peace David",
+    role: "Fashion Design Student",
+    image: "https://res.cloudinary.com/dtzv2ckwm/image/upload/v1755791195/student2_l87vcc.jpg"
   }
 ];
 

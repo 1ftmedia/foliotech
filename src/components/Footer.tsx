@@ -108,18 +108,15 @@ export function Footer() {
             </h3>
             <ul className="space-y-2">
               {[
-                { title: 'Programs', href: '/programs' },
-                { title: 'About', href: '/about' },
-                { title: 'Admissions', href: '/apply' },
-                { title: 'Contact', href: '#contact' },
-                { title: 'Career Development', href: '/career-development' }
+                { title: 'About Us', href: '/about' },
+                { title: 'Apply Now', href: '/apply' }
               ].map((item) => (
                 <li key={item.title}>
                   <Link
                     to={item.href}
                     className="text-[#0066cc] hover:text-[#004d99] dark:text-[#66b3ff] dark:hover:text-[#99ccff] 
                       transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-[#0066cc] dark:focus:ring-[#66b3ff] 
-                      rounded"
+                      rounded hover:underline"
                   >
                     {item.title}
                   </Link>
@@ -135,10 +132,11 @@ export function Footer() {
             </h3>
             <ul className="space-y-2">
               {[
-                { title: 'Student Portal', href: '/dashboard' },
-                { title: 'Applications', href: '/applications' },
+                { title: 'Volunteer to Teach', href: '/volunteer-to-teach' },
+                { title: 'Hire Our Graduates', href: '/hire-a-graduate' },
+                { title: 'Partnership Inquiry', href: '/partnership-inquiry' },
                 { title: 'Sponsorships', href: '/sponsorships' },
-                { title: 'Support', href: '/give' },
+                { title: 'Support Us', href: '/give' },
                 { title: 'FAQs', href: '/faq' }
               ].map((item) => (
                 <li key={item.title}>
@@ -146,7 +144,7 @@ export function Footer() {
                     to={item.href}
                     className="text-[#0066cc] hover:text-[#004d99] dark:text-[#66b3ff] dark:hover:text-[#99ccff] 
                       transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-[#0066cc] dark:focus:ring-[#66b3ff] 
-                      rounded"
+                      rounded hover:underline"
                   >
                     {item.title}
                   </Link>

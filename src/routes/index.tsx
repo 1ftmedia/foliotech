@@ -100,6 +100,10 @@ const CareerDevelopment = lazyWithRetry(() =>
   import('../pages/CareerDevelopment').then(module => ({ default: module.default }))
 );
 
+const Contact = lazyWithRetry(() => 
+  import('../components/Contact').then(module => ({ default: module.Contact }))
+);
+
 const VolunteerToTeach = lazyWithRetry(() => 
   import('../pages/volunteer-to-teach').then(module => ({ default: module.default }))
 );
@@ -333,6 +337,18 @@ const router = createBrowserRouter([
         <ErrorBoundary>
           <SuspenseWrapper>
             <CareerDevelopment />
+          </SuspenseWrapper>
+        </ErrorBoundary>
+      </Layout>
+    ),
+  },
+  {
+    path: '/contact',
+    element: (
+      <Layout>
+        <ErrorBoundary>
+          <SuspenseWrapper>
+            <Contact />
           </SuspenseWrapper>
         </ErrorBoundary>
       </Layout>
