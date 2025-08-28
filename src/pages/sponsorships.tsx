@@ -6,49 +6,34 @@ import { Helmet } from 'react-helmet-async';
 const tiers = [
   {
     name: 'Bronze Partner',
-    price: '₦500,000',
+    price: '₦600,000',
     icon: Shield,
     features: [
-      'Recognition in annual report',
-      'Social media mentions',
-      'Invitation to partner events',
       'Scholars Initiative: 6-month introductory course sponsorship for one individual'
     ]
   },
   {
     name: 'Silver Partner',
-    price: '₦1,000,000',
+    price: '₦1,200,000',
     icon: Award,
     features: [
-      'All Bronze benefits',
-      'Featured in newsletters',
-      'Campus recruitment priority',
-      'Sponsored content opportunities',
-      'Learning Fellowship: 1-year course sponsorship for one individual with access to mentorship'
+      'Learning Fellowship: 1-year course sponsorship for one individual with access to mentorship or 6-month course sponsorship for two individuals'
     ]
   },
   {
     name: 'Gold Partner',
-    price: '₦2,000,000',
+    price: '₦2,400,000',
     icon: Trophy,
     features: [
-      'All Silver benefits',
-      'Named scholarship program',
-      'Industry talk opportunities',
-      'Exclusive networking events',
-      'Scholars Program: 1-year course sponsorship for two individuals with career networking support'
+      'Scholars Program: 1-year course sponsorship for two individuals with career networking support or 6-month course sponsorship for four individuals'
     ]
   },
   {
     name: 'Platinum Partner',
-    price: '₦5,000,000',
+    price: '₦6,000,000',
     icon: Star,
     features: [
-      'All Gold benefits',
-      'Innovation lab naming rights',
-      'Board membership opportunity',
-      'Strategic partnership status',
-      'Elite Future Leaders Sponsorship: 2-year course sponsorship for two individuals & 1-year sponsorship for one individual with internship opportunities'
+      'Elite Future Leaders Sponsorship: 1-year course sponsorship for five individuals & 6-months sponsorship for ten individual with internship opportunities'
     ]
   }
 ];
