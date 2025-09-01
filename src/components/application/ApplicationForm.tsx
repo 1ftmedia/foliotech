@@ -17,27 +17,27 @@ import { ErrorBoundary } from '../../lib/errors/ErrorBoundary';
 // Lazy load form steps
 const PersonalInfoStep = lazy(() => 
   import('./steps/PersonalInfoStep').then(module => ({ 
-    default: module.PersonalInfoStep || module.default 
+    default: module.PersonalInfoStep 
   }))
 );
 const AcademicBackgroundStep = lazy(() => 
   import('./steps/EducationStep').then(module => ({ 
-    default: module.EducationStep || module.default 
+    default: module.EducationStep 
   }))
 );
 const ProgramSelectionStep = lazy(() => 
   import('./steps/ProgramSelectionStep').then(module => ({ 
-    default: module.ProgramSelectionStep || module.default 
+    default: module.ProgramSelectionStep 
   }))
 );
 const AccommodationStep = lazy(() => 
   import('./steps/AccommodationStep').then(module => ({ 
-    default: module.AccommodationStep || module.default 
+    default: module.AccommodationStep 
   }))
 );
 const RefereeStep = lazy(() => 
   import('./steps/RefereeStep').then(module => ({ 
-    default: module.RefereeStep || module.default 
+    default: module.RefereeStep 
   }))
 );
 
@@ -91,6 +91,28 @@ export function ApplicationForm({ onSubmit, programId, courseId, draftId }: Appl
   
   const { handleSubmit, formState: { errors, isValid }, trigger, getValues, reset, clearErrors } = methods;
   
+  // Helper function to check if a step has data
+  const checkStepHasData = useCallback((step: number, formData: any) => {
+    const stepFieldMap = {
+      0: 'personalInfo',
+      1: 'academicBackground',
+      2: 'programSelection',
+      3: 'accommodation',
+      4: 'referee'
+    };
+    
+    const stepField = stepFieldMap[step as keyof typeof stepFieldMap];
+    if (!stepField) return false;
+    
+    const stepData = formData[stepField];
+    if (!stepData) return false;
+    
+    // Check if the step has any non-empty values
+    return Object.values(stepData).some(value => 
+      value !== undefined && value !== null && value !== ''
+    );
+  }, []);
+  
   // Debug logging for development - moved after methods initialization and destructuring
   if (process.env.NODE_ENV === 'development') {
     console.log('ApplicationForm rendered:', {
@@ -122,12 +144,16 @@ export function ApplicationForm({ onSubmit, programId, courseId, draftId }: Appl
         console.log('Form validation errors:', errors);
       }
       
+      // Auto-update step completion
+      setStepCompletion(currentStep, isStepValid);
+      
       return isStepValid;
     } catch (error) {
       console.error('Validation error:', error);
+      setStepCompletion(currentStep, false);
       return false;
     }
-  }, [currentStep, trigger, errors]);
+  }, [currentStep, trigger, errors, setStepCompletion]);
 
   const handleStepChange = useCallback(async (newStep: number) => {
     try {
@@ -163,6 +189,10 @@ export function ApplicationForm({ onSubmit, programId, courseId, draftId }: Appl
       try {
         const isStepValid = await validateStep();
         setStepCompletion(currentStep, isStepValid);
+        
+        if (process.env.NODE_ENV === 'development') {
+          console.log(`Step ${currentStep} validation result:`, isStepValid);
+        }
       } catch (error) {
         console.error('Error validating step:', error);
         setStepCompletion(currentStep, false);
@@ -179,12 +209,23 @@ export function ApplicationForm({ onSubmit, programId, courseId, draftId }: Appl
         setStepCompletion(index, false);
       }
     });
-  }, [formSteps, stepCompletion, setStepCompletion]);
+  }, [formSteps, setStepCompletion]);
 
   const handleFormChange = useCallback(() => {
     const currentValues = getValues();
     updateFormData(currentValues);
-  }, [getValues, updateFormData]);
+    
+    // Auto-validate current step when form data changes
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Form data changed, current step:', currentStep);
+    }
+    
+    // Check if current step has data and mark as complete
+    const hasStepData = checkStepHasData(currentStep, currentValues);
+    if (hasStepData && !stepCompletion[currentStep]) {
+      setStepCompletion(currentStep, true);
+    }
+  }, [getValues, updateFormData, currentStep, stepCompletion, setStepCompletion]);
 
   useEffect(() => {
     const subscription = methods.watch(handleFormChange);

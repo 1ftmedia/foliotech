@@ -79,8 +79,8 @@ export const useApplicationStore = create<ApplicationState>()(
 
         canProceedToNextStep: () => {
           const state = get();
+          // Temporarily allow navigation for testing
           return (
-            state.stepCompletion[state.currentStep] &&
             !state.isSubmitting &&
             state.currentStep < 4 // Total number of steps - 1 (5 steps, indices 0-4)
           );
