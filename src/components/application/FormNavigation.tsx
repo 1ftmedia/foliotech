@@ -47,10 +47,20 @@ export const FormNavigation = memo(function FormNavigation({
 
   const handleSubmit = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
+    console.log('Submit button clicked:', {
+      hasOnSubmit: !!onSubmit,
+      canProceed: canProceedToNextStep(),
+      currentStep,
+      isLastStep
+    });
+    
     if (onSubmit && canProceedToNextStep()) {
+      console.log('Executing form submission');
       onSubmit();
+    } else {
+      console.log('Cannot submit:', { hasOnSubmit: !!onSubmit, canProceed: canProceedToNextStep() });
     }
-  }, [onSubmit, canProceedToNextStep]);
+  }, [onSubmit, canProceedToNextStep, currentStep, isLastStep]);
 
   // Handle keyboard navigation
   const handleKeyDown = useCallback((e: React.KeyboardEvent) => {

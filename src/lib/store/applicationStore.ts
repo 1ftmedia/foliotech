@@ -79,11 +79,8 @@ export const useApplicationStore = create<ApplicationState>()(
 
         canProceedToNextStep: () => {
           const state = get();
-          // Temporarily allow navigation for testing
-          return (
-            !state.isSubmitting &&
-            state.currentStep < 4 // Total number of steps - 1 (5 steps, indices 0-4)
-          );
+          // Allow navigation on all steps except when submitting
+          return !state.isSubmitting;
         },
 
         getCompletionPercentage: () => {

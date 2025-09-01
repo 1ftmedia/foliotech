@@ -233,7 +233,7 @@ export function ApplicationForm({ onSubmit, programId, courseId, draftId }: Appl
     if (hasStepData && !stepCompletion[currentStep]) {
       setStepCompletion(currentStep, true);
     }
-  }, [getValues, updateFormData, currentStep, stepCompletion, setStepCompletion]);
+  }, [getValues, updateFormData, currentStep, stepCompletion, setStepCompletion, checkStepHasData]);
 
   useEffect(() => {
     const subscription = methods.watch(handleFormChange);
@@ -268,6 +268,7 @@ export function ApplicationForm({ onSubmit, programId, courseId, draftId }: Appl
 
   const handleFormSubmit = async (data: ApplicationFormData) => {
     try {
+      console.log('Form submission started with data:', data);
       setIsSubmitting(true);
       setError(null);
       
@@ -283,9 +284,13 @@ export function ApplicationForm({ onSubmit, programId, courseId, draftId }: Appl
           };
           
           const fieldsToValidate = stepFieldMap[index as keyof typeof stepFieldMap];
-          return await trigger(fieldsToValidate as any);
+          const isValid = await trigger(fieldsToValidate as any);
+          console.log(`Step ${index} validation:`, isValid);
+          return isValid;
         })
       );
+      
+      console.log('All steps validation results:', allStepsValid);
       
       if (!allStepsValid.every(Boolean)) {
         throw new Error('Please complete all required fields before submitting');
@@ -432,14 +437,19 @@ export function ApplicationForm({ onSubmit, programId, courseId, draftId }: Appl
             </motion.div>
           </AnimatePresence>
 
-          <FormNavigation
-            currentStep={currentStep}
-            totalSteps={formSteps.length}
-            onPrevious={handlePrevious}
-            onNext={handleNext}
-            isSubmitting={isSubmitting}
-            onSubmit={handleSubmit(handleFormSubmit)}
-          />
+                     <FormNavigation
+             currentStep={currentStep}
+             totalSteps={formSteps.length}
+             onPrevious={handlePrevious}
+             onNext={handleNext}
+             isSubmitting={isSubmitting}
+             onSubmit={() => {
+               console.log('FormNavigation onSubmit called');
+               const formData = getValues();
+               console.log('Current form data:', formData);
+               handleFormSubmit(formData);
+             }}
+           />
 
           {/* Submission overlay */}
           <AnimatePresence>
