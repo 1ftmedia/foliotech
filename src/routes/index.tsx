@@ -4,6 +4,7 @@ import { ErrorBoundary } from '../components/ErrorBoundary';
 import { LoadingSpinner } from '../components/LoadingSpinner';
 import { Layout } from '../components/Layout';
 import { AuthProvider } from '../lib/hooks/useAuth';
+import { ScrollToTop } from '../components/ScrollToTop';
 import App from '../App';
 
 // Helper function to handle lazy imports with retry logic
@@ -81,7 +82,7 @@ const Dashboard = lazyWithRetry(() =>
 );
 
 const AuthCallback = lazyWithRetry(() => 
-  import('../pages/auth/Callback').then(module => ({ default: module.default }))
+  import('../pages/auth/callback').then(module => ({ default: module.default }))
 );
 
 const ResetPassword = lazyWithRetry(() => 
@@ -414,6 +415,18 @@ const router = createBrowserRouter([
 
 export function AppRouter() {
   return (
-    <RouterProvider router={router} />
+    <>
+      <ScrollToTop 
+        smooth={true}
+        instantScrollRoutes={['/dashboard', '/admin']}
+        customScrollBehavior={{
+          '/applications': 'smooth',
+          '/profile': 'smooth',
+          '/settings': 'smooth'
+        }}
+        scrollOnHashChange={false}
+      />
+      <RouterProvider router={router} />
+    </>
   );
 }

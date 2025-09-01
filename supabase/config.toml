@@ -1,0 +1,88 @@
+# A string used to distinguish different Supabase projects on the same host. Defaults to the workspace name.
+project_id = "foliotech"
+
+[api]
+enabled = true
+port = 54321
+schemas = ["public", "storage", "graphql_public"]
+extra_search_path = ["public", "extensions"]
+max_rows = 1000
+
+[db]
+port = 54322
+shadow_port = 54320
+major_version = 15
+
+[db.pooler]
+enabled = false
+port = 54329
+pool_mode = "transaction"
+default_pool_size = 15
+
+[realtime]
+enabled = true
+port = 54323
+
+[studio]
+enabled = true
+port = 54323
+api_url = "http://127.0.0.1:54321"
+
+[inbucket]
+enabled = true
+port = 54324
+smtp_port = 54325
+pop3_port = 54326
+
+[storage]
+enabled = true
+port = 54325
+
+[auth]
+enabled = true
+port = 54324
+site_url = "https://foliotechinstitute.com"
+additional_redirect_urls = ["http://localhost:3000", "http://localhost:3000/auth/callback"]
+jwt_expiry = 3600
+refresh_token_rotation_enabled = true
+security_update_password_require_reauthentication = true
+
+[auth.email]
+enable_signup = true
+double_confirm_changes = true
+enable_confirmations = true
+
+# SMTP settings for custom email templates
+[auth.email.smtp]
+host = "smtp.gmail.com"
+port = 587
+user = "noreply@foliotechinstitute.com"
+pass = ""
+admin_email = "admin@foliotechinstitute.com"
+sender_name = "FolioTech Institute"
+
+# Custom email templates
+[auth.email.template.invite]
+subject = "You have been invited to join FolioTech Institute"
+content_path = "./templates/invite.html"
+
+[auth.email.template.confirmation]
+subject = "Confirm your email address - FolioTech Institute"
+content_path = "./templates/confirmation.html"
+
+[auth.email.template.recovery]
+subject = "Reset your password - FolioTech Institute"
+content_path = "./templates/recovery.html"
+
+[auth.email.template.email_change]
+subject = "Confirm your new email address - FolioTech Institute"
+content_path = "./templates/email_change.html"
+
+[auth.email.template.magic_link]
+subject = "Your magic link - FolioTech Institute"
+content_path = "./templates/magic_link.html"
+
+[edge_runtime]
+enabled = true
+port = 54325
+
