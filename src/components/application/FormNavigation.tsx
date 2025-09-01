@@ -31,10 +31,19 @@ export const FormNavigation = memo(function FormNavigation({
 
   const handleNext = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
+    console.log('Next button clicked:', {
+      isLastStep,
+      canProceed: canProceedToNextStep(),
+      currentStep
+    });
+    
     if (!isLastStep && canProceedToNextStep()) {
+      console.log('Proceeding to next step');
       onNext();
+    } else {
+      console.log('Cannot proceed:', { isLastStep, canProceed: canProceedToNextStep() });
     }
-  }, [isLastStep, onNext, canProceedToNextStep]);
+  }, [isLastStep, onNext, canProceedToNextStep, currentStep]);
 
   const handleSubmit = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
