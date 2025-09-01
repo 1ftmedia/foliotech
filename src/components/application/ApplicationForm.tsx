@@ -78,16 +78,6 @@ export function ApplicationForm({ onSubmit, programId, courseId, draftId }: Appl
     stepCompletion
   } = useApplicationStore();
   
-  // Debug logging for development
-  if (process.env.NODE_ENV === 'development') {
-    console.log('🎯 ApplicationForm rendered - Debug info:', {
-      currentStep,
-      stepCompletion,
-      formStepsLength: formSteps.length,
-      formErrors: methods.formState.errors
-    });
-  }
-  
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [currentDraftId, setCurrentDraftId] = useState<string | undefined>(draftId);
@@ -98,6 +88,16 @@ export function ApplicationForm({ onSubmit, programId, courseId, draftId }: Appl
     mode: 'onBlur',
     reValidateMode: 'onChange',
   });
+  
+  // Debug logging for development - moved after methods initialization
+  if (process.env.NODE_ENV === 'development') {
+    console.log('🎯 ApplicationForm rendered - Debug info:', {
+      currentStep,
+      stepCompletion,
+      formStepsLength: formSteps.length,
+      formErrors: methods.formState.errors
+    });
+  }
 
   const { handleSubmit, formState: { errors, isValid }, trigger, getValues, reset, clearErrors } = methods;
 
