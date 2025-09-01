@@ -2,6 +2,9 @@ import { supabase } from '../supabase/client';
 import { ApplicationFormData } from '../validation/application';
 import { toast } from 'react-hot-toast';
 
+// Import email service for application confirmations
+import { sendApplicationConfirmationEmails } from '../../server/services/applicationEmailService.js';
+
 /**
  * Submits a student application to Supabase
  * @param formData The application form data
@@ -33,7 +36,7 @@ export async function submitApplication(formData: ApplicationFormData): Promise<
     const { data, error } = await supabase
       .from('applications')
       .insert(applicationData)
-      .select('id')
+      .select('*')
       .single();
 
     if (error) {
@@ -41,8 +44,23 @@ export async function submitApplication(formData: ApplicationFormData): Promise<
       throw new Error(error.message);
     }
 
+    // Send confirmation emails (non-blocking)
+    try {
+      console.log('Sending application confirmation emails...');
+      const emailResult = await sendApplicationConfirmationEmails(data);
+      
+      if (emailResult.success) {
+        console.log('✅ Application confirmation emails sent successfully');
+      } else {
+        console.warn('⚠️ Email sending failed but application was saved:', emailResult.message);
+      }
+    } catch (emailError) {
+      console.error('❌ Error sending confirmation emails:', emailError);
+      // Don't block the application submission if emails fail
+    }
+
     // Show success toast
-    toast.success('Application submitted successfully!');
+    toast.success('Application submitted successfully! Check your email for confirmation.');
     
     // Return success result
     return {
