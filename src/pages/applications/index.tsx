@@ -44,6 +44,10 @@ export default function ApplicationsPage() {
   const [applications, setApplications] = useState<Application[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  
+  // Debug logging
+  console.log('ApplicationsPage component rendered');
+  console.log('Current state:', { isLoading, error, applicationsCount: applications.length });
 
   useEffect(() => {
     const fetchApplications = async () => {
@@ -84,10 +88,26 @@ export default function ApplicationsPage() {
         <title>My Applications | FolioTech Institute</title>
         <meta name="description" content="View and manage your applications to FolioTech Institute" />
       </Helmet>
+      
+      {/* Debug: Check if component is rendering */}
+      {process.env.NODE_ENV === 'development' && (
+        <div className="fixed top-20 right-4 z-50 p-2 bg-red-500 text-white text-xs rounded">
+          Applications Page Rendered
+        </div>
+      )}
 
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center mb-8">
+          {/* Debug info - remove after fixing */}
+          {process.env.NODE_ENV === 'development' && (
+            <div className="mb-4 p-4 bg-yellow-100 border border-yellow-300 rounded-lg">
+              <p className="text-yellow-800">Debug: Header section should be visible</p>
+              <p className="text-yellow-800">Current step: {currentStep}</p>
+              <p className="text-yellow-800">Applications count: {applications.length}</p>
+            </div>
+          )}
+          
+          <div className="flex justify-between items-center mb-8 border-2 border-red-500 p-4 bg-blue-50">
             <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
               My Applications
             </h1>
