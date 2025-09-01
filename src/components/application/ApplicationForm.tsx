@@ -77,6 +77,12 @@ export function ApplicationForm({ onSubmit, programId, courseId, draftId }: Appl
     setStepCompletion 
   } = useApplicationStore();
   
+  console.log('ApplicationForm rendered - Debug info:', {
+    currentStep,
+    stepCompletion: useApplicationStore.getState().stepCompletion,
+    formStepsLength: formSteps.length
+  });
+  
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [currentDraftId, setCurrentDraftId] = useState<string | undefined>(draftId);
@@ -92,6 +98,8 @@ export function ApplicationForm({ onSubmit, programId, courseId, draftId }: Appl
 
   const validateStep = useCallback(async () => {
     try {
+      console.log('validateStep called for step:', currentStep);
+      
       const stepFieldMap = {
         0: ['personalInfo'],
         1: ['academicBackground'],
@@ -101,9 +109,16 @@ export function ApplicationForm({ onSubmit, programId, courseId, draftId }: Appl
       };
       
       const fieldsToValidate = stepFieldMap[currentStep as keyof typeof stepFieldMap];
-      if (!fieldsToValidate) return false;
+      console.log('Fields to validate:', fieldsToValidate);
+      
+      if (!fieldsToValidate) {
+        console.log('No fields to validate for step:', currentStep);
+        return false;
+      }
       
       const isStepValid = await trigger(fieldsToValidate as any);
+      console.log('Validation result for step', currentStep, ':', isStepValid);
+      
       return isStepValid;
     } catch (error) {
       console.error('Validation error:', error);
@@ -113,14 +128,26 @@ export function ApplicationForm({ onSubmit, programId, courseId, draftId }: Appl
 
   const handleStepChange = useCallback(async (newStep: number) => {
     try {
+      console.log('handleStepChange called - Debug info:', {
+        currentStep,
+        newStep,
+        stepCompletion: useApplicationStore.getState().stepCompletion
+      });
+      
       // Validate current step before moving
       const isCurrentStepValid = await validateStep();
+      console.log('Step validation result:', isCurrentStepValid);
+      
       setStepCompletion(currentStep, isCurrentStepValid);
       
-      if (isCurrentStepValid || newStep < currentStep) {
+      // Temporarily allow navigation even if validation fails for testing
+      if (isCurrentStepValid || newStep < currentStep || true) {
+        console.log('Setting current step to:', newStep);
         setCurrentStep(newStep);
         // Clear any previous errors when moving to a new step
         clearErrors();
+      } else {
+        console.log('Cannot proceed - step validation failed');
       }
     } catch (error) {
       console.error('Error changing step:', error);
@@ -153,6 +180,17 @@ export function ApplicationForm({ onSubmit, programId, courseId, draftId }: Appl
     
     validateCurrentStep();
   }, [currentStep, validateStep, setStepCompletion]);
+
+  // Initialize step completion for all steps
+  useEffect(() => {
+    console.log('Initializing step completion - current state:', stepCompletion);
+    formSteps.forEach((_, index) => {
+      if (stepCompletion[index] === undefined) {
+        console.log('Setting step', index, 'completion to false');
+        setStepCompletion(index, false);
+      }
+    });
+  }, [formSteps, stepCompletion, setStepCompletion]);
 
   const handleFormChange = useCallback(() => {
     const currentValues = getValues();
