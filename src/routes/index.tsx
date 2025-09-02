@@ -4,6 +4,7 @@ import { ErrorBoundary } from '../components/ErrorBoundary';
 import { LoadingSpinner } from '../components/LoadingSpinner';
 import { Layout } from '../components/Layout';
 import { AuthProvider } from '../lib/hooks/useAuth';
+import { RouteWrapper } from '../components/RouteWrapper';
 import { ScrollToTop } from '../components/ScrollToTop';
 import App from '../App';
 
@@ -82,7 +83,7 @@ const Dashboard = lazyWithRetry(() =>
 );
 
 const AuthCallback = lazyWithRetry(() => 
-  import('../pages/auth/callback').then(module => ({ default: module.default }))
+  import('../pages/auth/Callback').then(module => ({ default: module.default }))
 );
 
 const ResetPassword = lazyWithRetry(() => 
@@ -136,31 +137,39 @@ function SuspenseWrapper({ children }: { children: React.ReactNode }) {
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <App />,
+    element: (
+      <RouteWrapper>
+        <App />
+      </RouteWrapper>
+    ),
     errorElement: <ErrorBoundary />,
   },
   {
     path: '/about',
     element: (
-      <Layout>
-        <ErrorBoundary>
-          <SuspenseWrapper>
-            <About />
-          </SuspenseWrapper>
-        </ErrorBoundary>
-      </Layout>
+      <RouteWrapper>
+        <Layout>
+          <ErrorBoundary>
+            <SuspenseWrapper>
+              <About />
+            </SuspenseWrapper>
+          </ErrorBoundary>
+        </Layout>
+      </RouteWrapper>
     ),
   },
   {
     path: '/programs',
     element: (
-      <Layout>
-        <ErrorBoundary>
-          <SuspenseWrapper>
-            <Programs />
-          </SuspenseWrapper>
-        </ErrorBoundary>
-      </Layout>
+      <RouteWrapper>
+        <Layout>
+          <ErrorBoundary>
+            <SuspenseWrapper>
+              <Programs />
+            </SuspenseWrapper>
+          </ErrorBoundary>
+        </Layout>
+      </RouteWrapper>
     ),
   },
   {
@@ -298,13 +307,15 @@ const router = createBrowserRouter([
   {
     path: '/dashboard',
     element: (
-      <Layout>
-        <ErrorBoundary>
-          <SuspenseWrapper>
-            <Dashboard />
-          </SuspenseWrapper>
-        </ErrorBoundary>
-      </Layout>
+      <RouteWrapper>
+        <Layout>
+          <ErrorBoundary>
+            <SuspenseWrapper>
+              <Dashboard />
+            </SuspenseWrapper>
+          </ErrorBoundary>
+        </Layout>
+      </RouteWrapper>
     ),
   },
   {
@@ -418,12 +429,7 @@ export function AppRouter() {
     <>
       <ScrollToTop 
         smooth={true}
-        instantScrollRoutes={['/dashboard', '/admin']}
-        customScrollBehavior={{
-          '/applications': 'smooth',
-          '/profile': 'smooth',
-          '/settings': 'smooth'
-        }}
+        instantScrollRoutes={['/dashboard', '/profile', '/settings', '/applications']}
         scrollOnHashChange={false}
       />
       <RouterProvider router={router} />

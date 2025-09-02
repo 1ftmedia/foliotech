@@ -1,0 +1,130 @@
+# Production Supabase Configuration for FolioTech Institute
+# This file contains production-ready settings
+
+[api]
+enabled = true
+schemas = ["public", "storage", "graphql_public"]
+extra_search_path = ["public", "extensions"]
+max_rows = 1000
+
+[db]
+major_version = 15
+
+[realtime]
+enabled = true
+
+[storage]
+enabled = true
+
+[auth]
+enabled = true
+# Production site URL - this is the main URL for your application
+site_url = "https://foliotechinstitute.com"
+
+# All redirect URLs for authentication flows
+additional_redirect_urls = [
+    "https://foliotechinstitute.com/auth/callback",
+    "https://foliotechinstitute.com/dashboard",
+    "https://foliotechinstitute.com/profile",
+    "https://foliotechinstitute.com/settings",
+    "https://foliotechinstitute.com/applications",
+    "https://foliotechinstitute.com/courses",
+    "https://foliotechinstitute.com/programs",
+    "https://foliotechinstitute.com/about",
+    "https://foliotechinstitute.com/contact",
+    "https://foliotechinstitute.com/faq",
+    "https://foliotechinstitute.com/give",
+    "https://foliotechinstitute.com/hire-a-graduate",
+    "https://foliotechinstitute.com/partnership-inquiry",
+    "https://foliotechinstitute.com/sponsorships",
+    "https://foliotechinstitute.com/volunteer-to-teach",
+    "https://foliotechinstitute.com/career-development"
+]
+
+# JWT and security settings
+jwt_expiry = 3600
+refresh_token_rotation_enabled = true
+security_update_password_require_reauthentication = true
+
+[auth.email]
+enable_signup = true
+double_confirm_changes = true
+enable_confirmations = true
+
+# Production SMTP settings (configure in Supabase dashboard)
+[auth.email.smtp]
+host = "smtp.gmail.com"
+port = 587
+user = "noreply@foliotechinstitute.com"
+pass = ""  # Set this in Supabase dashboard
+admin_email = "admin@foliotechinstitute.com"
+sender_name = "FolioTech Institute"
+
+# Custom email templates for production
+[auth.email.template.invite]
+subject = "You have been invited to join FolioTech Institute"
+content_path = "./templates/invite.html"
+
+[auth.email.template.confirmation]
+subject = "Confirm your email address - FolioTech Institute"
+content_path = "./templates/confirmation.html"
+
+[auth.email.template.recovery]
+subject = "Reset your password - FolioTech Institute"
+content_path = "./templates/recovery.html"
+
+[auth.email.template.email_change]
+subject = "Confirm your new email address - FolioTech Institute"
+content_path = "./templates/email_change.html"
+
+[auth.email.template.magic_link]
+subject = "Your magic link - FolioTech Institute"
+content_path = "./templates/magic_link.html"
+
+# Edge functions for production
+[edge_runtime]
+enabled = true
+
+# Production-specific settings
+[production]
+# Enable production optimizations
+enable_compression = true
+enable_caching = true
+enable_monitoring = true
+
+# Security headers
+security_headers = [
+    "X-Frame-Options: DENY",
+    "X-Content-Type-Options: nosniff",
+    "X-XSS-Protection: 1; mode=block",
+    "Referrer-Policy: strict-origin-when-cross-origin",
+    "Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://api.supabase.co wss://api.supabase.co;"
+]
+
+# Rate limiting for production
+[rate_limiting]
+enabled = true
+requests_per_minute = 100
+burst_size = 20
+
+# Email delivery settings
+[email]
+# Production email delivery
+delivery_retry_attempts = 3
+delivery_timeout_seconds = 30
+bounce_handling_enabled = true
+spam_protection_enabled = true
+
+# Monitoring and logging
+[monitoring]
+enabled = true
+log_level = "info"
+performance_monitoring = true
+error_tracking = true
+
+# Backup and recovery
+[backup]
+enabled = true
+retention_days = 30
+automated_backups = true
+point_in_time_recovery = true

@@ -5,7 +5,6 @@ import { Programs } from './components/Programs';
 import { Stats } from './components/Stats';
 import { Testimonials } from './components/Testimonials';
 import { AdmissionProcess } from './components/AdmissionProcess';
-import { Contact } from './components/Contact';
 import { ErrorBoundary } from './lib/errors/ErrorBoundary';
 import { LoadingSpinner } from './components/LoadingSpinner';
 import { WelcomeModal } from './components/WelcomeModal';
@@ -42,9 +41,6 @@ function App() {
         <AdmissionProcess onApplyClick={handleSignUpClick} />
       </ErrorBoundary>
       <ErrorBoundary>
-      </ErrorBoundary>
-      <ErrorBoundary>
-        <Contact />
       </ErrorBoundary>
     </Layout>
   );

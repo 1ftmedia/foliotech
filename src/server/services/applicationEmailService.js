@@ -1,5 +1,5 @@
 import nodemailer from 'nodemailer';
-import { createApplicationEmail } from '../config/applicationEmail.js';
+import { createApplicationEmail } from '../config/applicationEmail.ts';
 
 // Create reusable transporter object using SMTP transport
 const createTransporter = () => {

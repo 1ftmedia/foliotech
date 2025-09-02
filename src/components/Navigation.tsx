@@ -143,21 +143,6 @@ export function Navigation() {
 
   return (
     <>
-      {/* Debug element - remove after fixing */}
-      <div style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        background: 'red',
-        color: 'white',
-        padding: '10px',
-        zIndex: 9999,
-        textAlign: 'center'
-      }}>
-        Navigation Component is Rendering - Debug Mode
-      </div>
-      
       <nav
         className={`fixed w-full z-50 transition-all duration-300 ${
           isScrolled 

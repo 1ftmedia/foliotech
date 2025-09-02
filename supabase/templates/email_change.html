@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirm your new email address - FolioTech Institute</title>
+    <style>
+        /* Reset and base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8fafc;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        /* Container */
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        
+        .header p {
+            font-size: 16px;
+            opacity: 0.9;
+            font-weight: 400;
+        }
+        
+        /* Content */
+        .content {
+            padding: 40px 30px;
+        }
+        
+        .greeting {
+            font-size: 20px;
+            color: #1f2937;
+            margin-bottom: 24px;
+            font-weight: 600;
+        }
+        
+        .message {
+            font-size: 16px;
+            line-height: 1.7;
+            color: #4b5563;
+            margin-bottom: 32px;
+        }
+        
+        /* Button */
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+            color: white;
+            text-decoration: none;
+            padding: 16px 32px;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            text-align: center;
+            margin: 24px 0;
+            box-shadow: 0 4px 6px rgba(5, 150, 105, 0.25);
+            transition: all 0.3s ease;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(5, 150, 105, 0.3);
+        }
+        
+        /* Security notice */
+        .security-notice {
+            background-color: #fef3c7;
+            border: 1px solid #f59e0b;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 32px 0;
+            color: #92400e;
+        }
+        
+        .security-notice p {
+            margin: 0;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        /* Important info */
+        .important-info {
+            background-color: #ecfdf5;
+            border: 1px solid #10b981;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 32px 0;
+            color: #065f46;
+        }
+        
+        .important-info h3 {
+            margin-top: 0;
+            margin-bottom: 12px;
+            font-size: 16px;
+        }
+        
+        .important-info ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+        
+        .important-info li {
+            margin-bottom: 8px;
+        }
+        
+        /* Footer */
+        .footer {
+            background-color: #f8fafc;
+            padding: 30px;
+            text-align: center;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        .footer h3 {
+            color: #1f2937;
+            font-size: 18px;
+            margin-bottom: 12px;
+        }
+        
+        .footer p {
+            color: #6b7280;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+        
+        .contact-info {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        .contact-info a {
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .contact-info a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            
+            .email-container {
+                border-radius: 8px;
+            }
+            
+            .header {
+                padding: 30px 20px;
+            }
+            
+            .header h1 {
+                font-size: 24px;
+            }
+            
+            .content {
+                padding: 30px 20px;
+            }
+            
+            .cta-button {
+                display: block;
+                width: 100%;
+                padding: 18px 24px;
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <!-- Header -->
+        <div class="header">
+            <h1>📧 Email Address Update</h1>
+            <p>FolioTech Institute - Account Verification</p>
+        </div>
+        
+        <!-- Content -->
+        <div class="content">
+            <div class="greeting">
+                Hello there!
+            </div>
+            
+            <div class="message">
+                You requested to change the email address associated with your FolioTech Institute account. To complete this change, please confirm your new email address by clicking the button below.
+            </div>
+            
+            <!-- Confirmation Button -->
+            <div style="text-align: center;">
+                <a href="{{ .ConfirmationURL }}" class="cta-button">
+                    Confirm New Email Address
+                </a>
+                <p style="margin-top: 16px; font-size: 14px; color: #6b7280;">
+                    This confirmation link will expire in 24 hours for security reasons.
+                </p>
+            </div>
+            
+            <!-- Important Information -->
+            <div class="important-info">
+                <h3>📋 What Happens Next:</h3>
+                <ul>
+                    <li>Once confirmed, your new email address will be updated in your account</li>
+                    <li>You'll receive a confirmation email at your new address</li>
+                    <li>Your old email address will no longer be associated with this account</li>
+                    <li>All future communications will be sent to your new email address</li>
+                </ul>
+            </div>
+            
+            <!-- Security Notice -->
+            <div class="security-notice">
+                <p><strong>🔒 Security Notice:</strong> If you didn't request this email address change, please contact our support team immediately. Your account security may be at risk.</p>
+            </div>
+            
+            <div class="message">
+                If you have any questions about this change or need assistance, please don't hesitate to contact our support team.
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <h3>FolioTech Institute</h3>
+            <p>Empowering the next generation of technology professionals</p>
+            
+            <div class="contact-info">
+                <p>📧 <a href="mailto:info@foliotechinstitute.com">info@foliotechinstitute.com</a></p>
+                <p>📱 <a href="tel:+2347088616350">+234 708 861 6350</a></p>
+                <p>📍 1, Sunmonu Animashaun St, Zina Estate, Addo Rd, Ajah, Lagos, Nigeria</p>
+            </div>
+            
+            <p style="margin-top: 20px; color: #9ca3af;">© {{ .CurrentYear }} FolioTech Institute. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>
+

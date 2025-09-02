@@ -1,11 +1,28 @@
 import React from 'react';
 import { Facebook, Linkedin, Instagram, Briefcase, Youtube } from 'lucide-react';
 import { useTheme } from './ThemeProvider';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { NewsletterForm } from './NewsletterForm';
+import { useScrollToTop } from '../lib/hooks/useScrollToTop';
 
 export function Footer() {
   const { theme } = useTheme();
+  const navigate = useNavigate();
+  const { scrollToTop } = useScrollToTop();
+
+  // Enhanced navigation handler that ensures scroll to top
+  const handleNavigation = (to: string) => {
+    // If it's an external link, let the browser handle it
+    if (to.startsWith('http')) {
+      console.log(`🔗 External link clicked: ${to}`);
+      return;
+    }
+    
+    // For internal navigation, ensure scroll to top
+    console.log(`🏠 Internal navigation to: ${to}`);
+    navigate(to);
+    // The ScrollToTop component will handle the actual scrolling
+  };
 
   return (
     <footer 
@@ -72,23 +89,18 @@ export function Footer() {
                     <feGaussianBlur stdDeviation="25"/>
                     <feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1"/>
                     <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.75 0"/>
-                    <feBlend mode="normal" in2="effect1_innerShadow_7_21" result="effect2_innerShadow_7_21"/>
+                    <feBlend mode="normal" in2="shape" result="effect2_innerShadow_7_21"/>
                   </filter>
                   <filter id="filter1_ii_7_21" x="236.932" y="221.45" width="853.526" height="794.754" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
                     <feFlood flood-opacity="0" result="BackgroundImageFix"/>
                     <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
-                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
-                    <feOffset dy="4"/>
-                    <feGaussianBlur stdDeviation="25"/>
-                    <feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1"/>
-                    <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.5 0"/>
                     <feBlend mode="normal" in2="shape" result="effect1_innerShadow_7_21"/>
                     <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
                     <feOffset dy="4"/>
                     <feGaussianBlur stdDeviation="25"/>
                     <feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1"/>
                     <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.75 0"/>
-                    <feBlend mode="normal" in2="effect1_innerShadow_7_21" result="effect2_innerShadow_7_21"/>
+                    <feBlend mode="normal" in2="shape" result="effect2_innerShadow_7_21"/>
                   </filter>
                 </defs>
               </svg>
@@ -117,6 +129,7 @@ export function Footer() {
                     className="text-[#0066cc] hover:text-[#004d99] dark:text-[#66b3ff] dark:hover:text-[#99ccff] 
                       transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-[#0066cc] dark:focus:ring-[#66b3ff] 
                       rounded hover:underline"
+                    onClick={() => handleNavigation(item.href)}
                   >
                     {item.title}
                   </Link>
@@ -145,6 +158,7 @@ export function Footer() {
                     className="text-[#0066cc] hover:text-[#004d99] dark:text-[#66b3ff] dark:hover:text-[#99ccff] 
                       transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-[#0066cc] dark:focus:ring-[#66b3ff] 
                       rounded hover:underline"
+                    onClick={() => handleNavigation(item.href)}
                   >
                     {item.title}
                   </Link>
@@ -175,6 +189,7 @@ export function Footer() {
                     transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-[#0066cc] dark:focus:ring-[#66b3ff] 
                     rounded-full p-1"
                   aria-label={`Visit our ${label} page`}
+                  onClick={url.startsWith('http') ? undefined : () => handleNavigation(url)}
                 >
                   <Icon 
                     className="h-6 w-6 transform hover:scale-110 transition-transform duration-300 will-change-transform" 

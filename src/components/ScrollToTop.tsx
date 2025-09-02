@@ -68,12 +68,16 @@ export function ScrollToTop({
   useEffect(() => {
     // Only scroll if the pathname has changed (not just hash)
     if (previousPathname.current !== pathname) {
+      console.log(`🔄 Route changed from ${previousPathname.current} to ${pathname}`);
+      
       const shouldScrollSmooth = getScrollBehavior(
         pathname,
         smooth,
         instantScrollRoutes,
         customScrollBehavior
       );
+
+      console.log(`📜 Scrolling to top with ${shouldScrollSmooth ? 'smooth' : 'instant'} behavior`);
 
       // Scroll to top on route change
       window.scrollTo({
@@ -88,6 +92,8 @@ export function ScrollToTop({
 
     // Handle hash changes if enabled
     if (scrollOnHashChange && previousHash.current !== hash) {
+      console.log(`🔗 Hash changed from ${previousHash.current} to ${hash}`);
+      
       // For hash changes, we might want to scroll to the element instead of top
       if (hash) {
         const element = document.querySelector(hash);

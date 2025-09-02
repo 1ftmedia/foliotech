@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirm your email address - FolioTech Institute</title>
+    <style>
+        /* Reset and base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8fafc;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        /* Container */
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        
+        .header p {
+            font-size: 16px;
+            opacity: 0.9;
+            font-weight: 400;
+        }
+        
+        /* Content */
+        .content {
+            padding: 40px 30px;
+        }
+        
+        .greeting {
+            font-size: 20px;
+            color: #1f2937;
+            margin-bottom: 24px;
+            font-weight: 600;
+        }
+        
+        .message {
+            font-size: 16px;
+            line-height: 1.7;
+            color: #4b5563;
+            margin-bottom: 32px;
+        }
+        
+        /* Button */
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            text-decoration: none;
+            padding: 16px 32px;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            text-align: center;
+            margin: 24px 0;
+            box-shadow: 0 4px 6px rgba(16, 185, 129, 0.25);
+            transition: all 0.3s ease;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(16, 185, 129, 0.3);
+        }
+        
+        /* Security notice */
+        .security-notice {
+            background-color: #fef3c7;
+            border: 1px solid #f59e0b;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 32px 0;
+            color: #92400e;
+        }
+        
+        .security-notice p {
+            margin: 0;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        /* Footer */
+        .footer {
+            background-color: #f8fafc;
+            padding: 30px;
+            text-align: center;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        .footer h3 {
+            color: #1f2937;
+            font-size: 18px;
+            margin-bottom: 12px;
+        }
+        
+        .footer p {
+            color: #6b7280;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+        
+        .contact-info {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        .contact-info a {
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .contact-info a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            
+            .email-container {
+                border-radius: 8px;
+            }
+            
+            .header {
+                padding: 30px 20px;
+            }
+            
+            .header h1 {
+                font-size: 24px;
+            }
+            
+            .content {
+                padding: 30px 20px;
+            }
+            
+            .cta-button {
+                display: block;
+                width: 100%;
+                padding: 18px 24px;
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🎓 FolioTech Institute</h1>
+            <p>Empowering the next generation of technology professionals</p>
+        </div>
+        
+        <!-- Content -->
+        <div class="content">
+            <div class="greeting">
+                Welcome to FolioTech Institute!
+            </div>
+            
+            <div class="message">
+                Thank you for signing up! To complete your registration and access your account, please confirm your email address by clicking the button below.
+            </div>
+            
+            <!-- Confirmation Button -->
+            <div style="text-align: center;">
+                <a href="{{ .ConfirmationURL }}" class="cta-button">
+                    Confirm Email Address
+                </a>
+            </div>
+            
+            <!-- Security Notice -->
+            <div class="security-notice">
+                <p><strong>🔒 Security Notice:</strong> If you didn't create an account with FolioTech Institute, you can safely ignore this email. Your account will not be activated until you confirm your email address.</p>
+            </div>
+            
+            <div class="message">
+                Once confirmed, you'll have access to our comprehensive technology programs, resources, and learning platform. We're excited to have you join our community!
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <h3>FolioTech Institute</h3>
+            <p>Empowering the next generation of technology professionals</p>
+            
+            <div class="contact-info">
+                <p>📧 <a href="mailto:info@foliotechinstitute.com">info@foliotechinstitute.com</a></p>
+                <p>📱 <a href="tel:+2347088616350">+234 708 861 6350</a></p>
+                <p>📍 1, Sunmonu Animashaun St, Zina Estate, Addo Rd, Ajah, Lagos, Nigeria</p>
+            </div>
+            
+            <p style="margin-top: 20px; color: #9ca3af;">© {{ .CurrentYear }} FolioTech Institute. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>
+
