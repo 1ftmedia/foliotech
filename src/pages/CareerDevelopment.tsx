@@ -483,7 +483,7 @@ export default function CareerDevelopment() {
       duration: '6 months',
       salary_range: '₦250,000 - ₦700,000',
       demand_level: 'high',
-      tools: ['React Native', 'Flutter', 'Android Studio', 'Xcode', 'Firebase'],
+      tools: ['React Native', 'Flutter', 'Android Studio', 'Xcode'],
       certifications: ['Google Associate Android Developer', 'React Native Certification'],
       icon: 'briefcase'
     },

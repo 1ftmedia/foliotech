@@ -27,10 +27,7 @@ export default defineConfig({
       'react-dom',
       'react-router-dom',
       '@tanstack/react-query',
-      'framer-motion',
-      'firebase/app',
-      'firebase/auth',
-      'firebase/firestore'
+      'framer-motion'
     ],
     exclude: ['lucide-react']
   },
@@ -40,15 +37,13 @@ export default defineConfig({
     outDir: 'dist',
     assetsDir: 'assets',
     commonjsOptions: {
-      include: [/firebase/, /node_modules/],
       transformMixedEsModules: true
     },
     rollupOptions: {
       output: {
         manualChunks: {
           'react-vendor': ['react', 'react-dom', 'react-router-dom'],
-          'ui-vendor': ['@tanstack/react-query', 'framer-motion', 'lucide-react'],
-          'firebase-vendor': ['firebase/app', 'firebase/auth', 'firebase/firestore']
+          'ui-vendor': ['@tanstack/react-query', 'framer-motion', 'lucide-react']
         }
       }
     }

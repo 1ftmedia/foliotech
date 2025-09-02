@@ -63,19 +63,6 @@ export function initializeErrorMonitoring(): void {
     console.error('Root element not found! This may cause rendering issues.');
   }
 
-  // Check for required environment variables
-  const requiredEnvVars = [
-    'VITE_FIREBASE_API_KEY',
-    'VITE_FIREBASE_AUTH_DOMAIN',
-    'VITE_FIREBASE_PROJECT_ID'
-  ];
-
-  requiredEnvVars.forEach(varName => {
-    if (!import.meta.env[varName]) {
-      console.error(`Missing required environment variable: ${varName}`);
-    }
-  });
-
   // Check browser compatibility
   const compatibility = {
     modules: 'noModule' in document.createElement('script'),

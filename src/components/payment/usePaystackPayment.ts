@@ -1,7 +1,6 @@
 import { useCallback } from 'react';
 import PaystackPop from '@paystack/inline-js';
-import { db } from '../../lib/firebase';
-import { collection, addDoc } from 'firebase/firestore';
+import { supabase } from '../../lib/supabase/client';
 import { useAuth } from '../auth/AuthContext';
 import { handleError } from '../../lib/errors/ErrorHandler';
 
@@ -30,19 +29,25 @@ export function usePaystackPayment() {
 
   const handleSuccess = async (response: any) => {
     try {
-      if (!user?.uid) {
+      if (!user?.id) {
         throw new Error('User not authenticated');
       }
 
-      // Store transaction details in Firestore
-      await addDoc(collection(db, 'transactions'), {
-        userId: user.uid,
-        reference: response.reference,
-        amount: response.amount / 100, // Convert back from kobo
-        status: 'success',
-        metadata: response.metadata,
-        createdAt: new Date(),
-      });
+      // Store transaction details in Supabase
+      const { error } = await supabase
+        .from('transactions')
+        .insert({
+          user_id: user.id,
+          reference: response.reference,
+          amount: response.amount / 100, // Convert back from kobo
+          status: 'success',
+          metadata: response.metadata,
+          created_at: new Date().toISOString(),
+        });
+
+      if (error) {
+        throw error;
+      }
 
       // Clear stored payment details
       sessionStorage.removeItem('paymentDetails');
