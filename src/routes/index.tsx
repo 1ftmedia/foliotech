@@ -425,14 +425,5 @@ const router = createBrowserRouter([
 ]);
 
 export function AppRouter() {
-  return (
-    <>
-      <ScrollToTop 
-        smooth={true}
-        instantScrollRoutes={['/dashboard', '/profile', '/settings', '/applications']}
-        scrollOnHashChange={false}
-      />
-      <RouterProvider router={router} />
-    </>
-  );
+  return <RouterProvider router={router} />;
 }
