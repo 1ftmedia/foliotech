@@ -23,8 +23,7 @@ const menuItems = [
     href: '#',
     icon: Bell,
     children: [
-      { title: 'Sponsorships', href: '/sponsorships', icon: Shield },
-      { title: 'Give', href: '/give', icon: ChevronRight }
+      { title: 'Sponsorships', href: '/sponsorships', icon: Shield }
     ]
   },
   { title: 'Contact', href: '#contact', icon: Mail }

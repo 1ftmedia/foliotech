@@ -114,7 +114,7 @@ export function Footer() {
               </span>
             </div>
             <p className="mt-4 text-[#555555] dark:text-[#cccccc] transition-colors duration-300">
-              Pursuing Excellence, with Passion and Integrity
+              Pursuing Excellence, with Passion and Integrity.
             </p>
           </div>
 
@@ -154,7 +154,6 @@ export function Footer() {
                 { title: 'Hire Our Graduates', href: '/hire-a-graduate' },
                 { title: 'Partnership Inquiry', href: '/partnership-inquiry' },
                 { title: 'Sponsorships', href: '/sponsorships' },
-                { title: 'Support Us', href: '/give' },
                 { title: 'FAQs', href: '/faq' }
               ].map((item) => (
                 <li key={item.title}>

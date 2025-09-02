@@ -21,7 +21,6 @@ const navItems: NavItem[] = [
     href: "#",
     children: [
       { title: "Sponsor a Student", href: "/sponsorships" },
-      { title: "Donate Equipment", href: "/give" },
       { title: "Volunteer to Teach", href: "/volunteer-to-teach" },
       { title: "Partnership", href: "/partnership-inquiry" }
     ]
