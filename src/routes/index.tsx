@@ -175,133 +175,155 @@ const router = createBrowserRouter([
   {
     path: '/programs/computer-technology',
     element: (
-      <Layout>
-        <ErrorBoundary>
-          <SuspenseWrapper>
-            <ComputerTechnology />
-          </SuspenseWrapper>
-        </ErrorBoundary>
-      </Layout>
+      <RouteWrapper>
+        <Layout>
+          <ErrorBoundary>
+            <SuspenseWrapper>
+              <ComputerTechnology />
+            </SuspenseWrapper>
+          </ErrorBoundary>
+        </Layout>
+      </RouteWrapper>
     ),
   },
   {
     path: '/programs/vocational-studies',
     element: (
-      <Layout>
-        <ErrorBoundary>
-          <SuspenseWrapper>
-            <VocationalStudies />
-          </SuspenseWrapper>
-        </ErrorBoundary>
-      </Layout>
+      <RouteWrapper>
+        <Layout>
+          <ErrorBoundary>
+            <SuspenseWrapper>
+              <VocationalStudies />
+            </SuspenseWrapper>
+          </ErrorBoundary>
+        </Layout>
+      </RouteWrapper>
     ),
   },
   {
     path: '/programs/construction-technologies',
     element: (
-      <Layout>
-        <ErrorBoundary>
-          <SuspenseWrapper>
-            <ConstructionTechnologies />
-          </SuspenseWrapper>
-        </ErrorBoundary>
-      </Layout>
+      <RouteWrapper>
+        <Layout>
+          <ErrorBoundary>
+            <SuspenseWrapper>
+              <ConstructionTechnologies />
+            </SuspenseWrapper>
+          </ErrorBoundary>
+        </Layout>
+      </RouteWrapper>
     ),
   },
   {
     path: '/programs/:id',
     element: (
-      <Layout>
-        <ErrorBoundary>
-          <SuspenseWrapper>
-            <ProgramDetail />
-          </SuspenseWrapper>
-        </ErrorBoundary>
-      </Layout>
+      <RouteWrapper>
+        <Layout>
+          <ErrorBoundary>
+            <SuspenseWrapper>
+              <ProgramDetail />
+            </SuspenseWrapper>
+          </ErrorBoundary>
+        </Layout>
+      </RouteWrapper>
     ),
   },
   {
     path: '/programs/:programId/courses/:courseId',
     element: (
-      <Layout>
-        <ErrorBoundary>
-          <SuspenseWrapper>
-            <CourseDetail />
-          </SuspenseWrapper>
-        </ErrorBoundary>
-      </Layout>
+      <RouteWrapper>
+        <Layout>
+          <ErrorBoundary>
+            <SuspenseWrapper>
+              <CourseDetail />
+            </SuspenseWrapper>
+          </ErrorBoundary>
+        </Layout>
+      </RouteWrapper>
     ),
   },
   {
     path: '/sponsorships',
     element: (
-      <Layout>
-        <ErrorBoundary>
-          <SuspenseWrapper>
-            <Sponsorships />
-          </SuspenseWrapper>
-        </ErrorBoundary>
-      </Layout>
+      <RouteWrapper>
+        <Layout>
+          <ErrorBoundary>
+            <SuspenseWrapper>
+              <Sponsorships />
+            </SuspenseWrapper>
+          </ErrorBoundary>
+        </Layout>
+      </RouteWrapper>
     ),
   },
   {
     path: '/partnership-inquiry',
     element: (
-      <Layout>
-        <ErrorBoundary>
-          <SuspenseWrapper>
-            <PartnershipInquiry />
-          </SuspenseWrapper>
-        </ErrorBoundary>
-      </Layout>
+      <RouteWrapper>
+        <Layout>
+          <ErrorBoundary>
+            <SuspenseWrapper>
+              <PartnershipInquiry />
+            </SuspenseWrapper>
+          </ErrorBoundary>
+        </Layout>
+      </RouteWrapper>
     ),
   },
   {
     path: '/give',
     element: (
-      <Layout>
-        <ErrorBoundary>
-          <SuspenseWrapper>
-            <Give />
-          </SuspenseWrapper>
-        </ErrorBoundary>
-      </Layout>
+      <RouteWrapper>
+        <Layout>
+          <ErrorBoundary>
+            <SuspenseWrapper>
+              <Give />
+            </SuspenseWrapper>
+          </ErrorBoundary>
+        </Layout>
+      </RouteWrapper>
     ),
   },
   {
     path: '/apply',
     element: (
-      <Layout>
-        <ErrorBoundary>
-          <SuspenseWrapper>
-            <Apply />
-          </SuspenseWrapper>
-        </ErrorBoundary>
-      </Layout>
+      <RouteWrapper>
+        <Layout>
+          <ErrorBoundary>
+            <SuspenseWrapper>
+              <Apply />
+            </SuspenseWrapper>
+          </ErrorBoundary>
+        </Layout>
+      </RouteWrapper>
     ),
   },
   {
     path: '/profile',
     element: (
-      <Layout>
-        <ErrorBoundary>
-          <SuspenseWrapper>
-            <Profile />
-          </SuspenseWrapper>
-        </ErrorBoundary>
-      </Layout>
+      <RouteWrapper>
+        <Layout>
+          <ErrorBoundary>
+            <SuspenseWrapper>
+              <Profile />
+            </SuspenseWrapper>
+          </ErrorBoundary>
+        </Layout>
+      </RouteWrapper>
     ),
   },
   {
     path: '/settings',
     element: (
-      <Layout>
-        <ErrorBoundary>
-          <SuspenseWrapper>
-            <Settings />
-          </SuspenseWrapper>
-        </ErrorBoundary>
-      </Layout>
+      <RouteWrapper>
+        <Layout>
+          <ErrorBoundary>
+            <SuspenseWrapper>
+              <Settings />
+            </SuspenseWrapper>
+          </ErrorBoundary>
+        </Layout>
+      </RouteWrapper>
     ),
   },
   {
@@ -321,105 +343,123 @@ const router = createBrowserRouter([
   {
     path: '/applications',
     element: (
-      <Layout>
-        <ErrorBoundary>
-          <SuspenseWrapper>
-            <ApplicationsPage />
-          </SuspenseWrapper>
-        </ErrorBoundary>
-      </Layout>
+      <RouteWrapper>
+        <Layout>
+          <ErrorBoundary>
+            <SuspenseWrapper>
+              <ApplicationsPage />
+            </SuspenseWrapper>
+          </ErrorBoundary>
+        </Layout>
+      </RouteWrapper>
     ),
   },
   {
     path: '/applications/:id',
     element: (
-      <Layout>
-        <ErrorBoundary>
-          <SuspenseWrapper>
-            <ApplicationDetailPage />
-          </SuspenseWrapper>
-        </ErrorBoundary>
-      </Layout>
+      <RouteWrapper>
+        <Layout>
+          <ErrorBoundary>
+            <SuspenseWrapper>
+              <ApplicationDetailPage />
+            </SuspenseWrapper>
+          </ErrorBoundary>
+        </Layout>
+      </RouteWrapper>
     ),
   },
   {
     path: '/career-development',
     element: (
-      <Layout>
-        <ErrorBoundary>
-          <SuspenseWrapper>
-            <CareerDevelopment />
-          </SuspenseWrapper>
-        </ErrorBoundary>
-      </Layout>
+      <RouteWrapper>
+        <Layout>
+          <ErrorBoundary>
+            <SuspenseWrapper>
+              <CareerDevelopment />
+            </SuspenseWrapper>
+          </ErrorBoundary>
+        </Layout>
+      </RouteWrapper>
     ),
   },
   {
     path: '/contact',
     element: (
-      <Layout>
-        <ErrorBoundary>
-          <SuspenseWrapper>
-            <Contact />
-          </SuspenseWrapper>
-        </ErrorBoundary>
-      </Layout>
+      <RouteWrapper>
+        <Layout>
+          <ErrorBoundary>
+            <SuspenseWrapper>
+              <Contact />
+            </SuspenseWrapper>
+          </ErrorBoundary>
+        </Layout>
+      </RouteWrapper>
     ),
   },
   {
     path: '/volunteer-to-teach',
     element: (
-      <Layout>
-        <ErrorBoundary>
-          <SuspenseWrapper>
-            <VolunteerToTeach />
-          </SuspenseWrapper>
-        </ErrorBoundary>
-      </Layout>
+      <RouteWrapper>
+        <Layout>
+          <ErrorBoundary>
+            <SuspenseWrapper>
+              <VolunteerToTeach />
+            </SuspenseWrapper>
+          </ErrorBoundary>
+        </Layout>
+      </RouteWrapper>
     ),
   },
   {
     path: '/faq',
     element: (
-      <Layout>
-        <ErrorBoundary>
-          <SuspenseWrapper>
-            <FAQ />
-          </SuspenseWrapper>
-        </ErrorBoundary>
-      </Layout>
+      <RouteWrapper>
+        <Layout>
+          <ErrorBoundary>
+            <SuspenseWrapper>
+              <FAQ />
+            </SuspenseWrapper>
+          </ErrorBoundary>
+        </Layout>
+      </RouteWrapper>
     ),
   },
   {
     path: '/hire-a-graduate',
     element: (
-      <Layout>
-        <ErrorBoundary>
-          <SuspenseWrapper>
-            <HireAGraduate />
-          </SuspenseWrapper>
-        </ErrorBoundary>
-      </Layout>
+      <RouteWrapper>
+        <Layout>
+          <ErrorBoundary>
+            <SuspenseWrapper>
+              <HireAGraduate />
+            </SuspenseWrapper>
+          </ErrorBoundary>
+        </Layout>
+      </RouteWrapper>
     ),
   },
   {
     path: '/auth/callback',
     element: (
-      <ErrorBoundary>
-        <SuspenseWrapper>
-          <AuthCallback />
-        </SuspenseWrapper>
-      </ErrorBoundary>
+      <RouteWrapper>
+        <ErrorBoundary>
+          <SuspenseWrapper>
+            <AuthCallback />
+          </SuspenseWrapper>
+        </ErrorBoundary>
+      </RouteWrapper>
     ),
   },
   {
     path: '/auth/reset-password',
     element: (
-      <ErrorBoundary>
-        <SuspenseWrapper>
-          <ResetPassword />
-        </SuspenseWrapper>
-      </ErrorBoundary>
+      <RouteWrapper>
+        <ErrorBoundary>
+          <SuspenseWrapper>
+            <ResetPassword />
+          </SuspenseWrapper>
+        </ErrorBoundary>
+      </RouteWrapper>
     ),
   },
 ]);
