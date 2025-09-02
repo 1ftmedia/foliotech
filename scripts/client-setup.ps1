@@ -42,12 +42,6 @@ ADMIN_EMAIL=admin@foliotechinstitute.com
 
 # Other Services
 VITE_PAYSTACK_PUBLIC_KEY=your-paystack-key-here
-VITE_FIREBASE_API_KEY=your-firebase-key-here
-VITE_FIREBASE_AUTH_DOMAIN=your-project.firebaseapp.com
-VITE_FIREBASE_PROJECT_ID=your-project-id-here
-VITE_FIREBASE_STORAGE_BUCKET=your-project.appspot.com
-VITE_FIREBASE_MESSAGING_SENDER_ID=your-sender-id-here
-VITE_FIREBASE_APP_ID=your-app-id-here
 
 # IMPORTANT: Replace 'your-new-anon-key-here' with the actual anon key from your Supabase dashboard
 # Go to: Settings > API > Project API keys > anon public

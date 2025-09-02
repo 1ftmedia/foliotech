@@ -1,6 +1,6 @@
 # 🚀 Supabase Project Migration
 
-This repository contains everything you need to migrate your FolioTech Institute Supabase project from your personal account to your client's account.
+This repository contains everything you need to migrate your FolioTech Institute Supabase project from your personal account to your client's account. **This is a Supabase-only project** - no Firebase dependencies.
 
 ## 📁 **Migration Files**
 
@@ -11,6 +11,7 @@ This repository contains everything you need to migrate your FolioTech Institute
 
 ### **Documentation Directory (`docs/`)**
 - **`supabase-migration-guide.md`** - Comprehensive migration guide
+- **`manual-migration-guide.md`** - Manual migration without CLI
 - **`supabase-email-setup.md`** - Email template configuration guide
 
 ### **Supabase Configuration (`supabase/`)**
@@ -22,9 +23,11 @@ This repository contains everything you need to migrate your FolioTech Institute
 
 ## 🎯 **Quick Start Migration**
 
-### **Step 1: Export Your Current Project**
+### **Option A: Automated Migration (Recommended)**
 
-#### **For Windows Users:**
+#### **Step 1: Export Your Current Project**
+
+**For Windows Users:**
 ```powershell
 # Run the PowerShell migration script
 .\scripts\supabase-migration.ps1
@@ -33,7 +36,7 @@ This repository contains everything you need to migrate your FolioTech Institute
 .\scripts\supabase-migration.ps1 "your-project-ref-here"
 ```
 
-#### **For Linux/Mac Users:**
+**For Linux/Mac Users:**
 ```bash
 # Make script executable
 chmod +x scripts/supabase-migration.sh
@@ -45,33 +48,16 @@ chmod +x scripts/supabase-migration.sh
 ./scripts/supabase-migration.sh "your-project-ref-here"
 ```
 
-### **Step 2: Create New Project in Client Account**
+### **Option B: Manual Migration (No CLI Required)**
 
-1. **Login to client's Supabase account**
-2. **Create new project** with same settings:
-   - PostgreSQL version 15
-   - Same region
-   - Strong database password
-3. **Note the new project reference**
-
-### **Step 3: Import to Client Project**
+If you encounter issues with the Supabase CLI installation, use the manual migration guide:
 
 ```bash
-# Navigate to the backup directory created by the script
-cd supabase-migration-[TIMESTAMP]
-
-# Run the import script
-.\import-to-client.ps1
-# or
-./import-to-client.sh
+# Follow the manual migration guide
+docs/manual-migration-guide.md
 ```
 
-### **Step 4: Configure Client Project**
-
-```powershell
-# Run the client setup script
-.\scripts\client-setup.ps1 "new-project-ref"
-```
+This method uses direct PostgreSQL connections and doesn't require the Supabase CLI.
 
 ---
 
@@ -102,47 +88,12 @@ cd supabase-migration-[TIMESTAMP]
 
 ---
 
-## 📋 **Migration Checklist**
-
-### **Pre-Migration (Your Account)**
-- [ ] Run migration script to export data
-- [ ] Verify backup files are created
-- [ ] Test backup integrity
-
-### **New Project Setup (Client Account)**
-- [ ] Create new Supabase project
-- [ ] Ensure PostgreSQL version 15
-- [ ] Configure same region
-- [ ] Note new project reference
-
-### **Data Import (Client Account)**
-- [ ] Import full_backup.sql
-- [ ] Verify all tables created
-- [ ] Check data integrity
-- [ ] Verify RLS policies
-
-### **Configuration (Client Account)**
-- [ ] Configure site_url: https://foliotechinstitute.com
-- [ ] Set redirect URLs
-- [ ] Upload custom email templates
-- [ ] Configure SMTP settings
-
-### **Environment Updates**
-- [ ] Update VITE_SUPABASE_URL
-- [ ] Update VITE_SUPABASE_ANON_KEY
-- [ ] Update backend .env files
-- [ ] Update deployed environments
-
-### **Testing & Verification**
-- [ ] Test user authentication
-- [ ] Test database queries
-- [ ] Test storage operations
-- [ ] Test RLS policies
-- [ ] Verify client has full access
-
----
-
 ## 🚨 **Important Notes**
+
+### **Supabase-Only Project**
+- **No Firebase dependencies** - this project uses Supabase exclusively
+- **All Firebase references have been removed** from the codebase
+- **Environment variables cleaned up** to remove Firebase keys
 
 ### **Security**
 - **Never commit `.env` files** to version control
@@ -154,24 +105,28 @@ cd supabase-migration-[TIMESTAMP]
 - **Keep old project** until migration is verified
 - **Test thoroughly** before switching
 
-### **Cost Considerations**
-- **New project** may have different pricing
-- **Data transfer** costs for large datasets
-- **Storage costs** may vary by region
-
 ---
 
 ## 🆘 **Troubleshooting**
+
+### **CLI Installation Issues**
+If you can't install the Supabase CLI:
+
+1. **Use Manual Migration**: Follow `docs/manual-migration-guide.md`
+2. **Alternative CLI Methods**:
+   - Try `scoop install supabase` (if you have Scoop)
+   - Download binary from [GitHub releases](https://github.com/supabase/cli/releases)
+   - Use Docker: `docker run --rm -it supabase/cli:latest`
 
 ### **Common Issues**
 
 #### **Script Won't Run**
 ```bash
 # Check if Supabase CLI is installed
-npm install -g supabase
+supabase --version
 
-# Check if psql is available (optional)
-# Install PostgreSQL client if needed
+# If CLI fails, use manual migration
+# Follow: docs/manual-migration-guide.md
 ```
 
 #### **Export Fails**
@@ -179,37 +134,30 @@ npm install -g supabase
 # Verify project reference is correct
 # Check database password
 # Ensure network connectivity
-```
-
-#### **Import Fails**
-```bash
-# Check PostgreSQL version compatibility
-# Verify connection string format
-# Check file encoding
+# Use manual migration as alternative
 ```
 
 ### **Get Help**
-- **Migration Guide**: `docs/supabase-migration-guide.md`
+- **Automated Migration**: Use the provided scripts
+- **Manual Migration**: `docs/manual-migration-guide.md`
 - **Email Setup**: `docs/supabase-email-setup.md`
 - **Supabase Docs**: [supabase.com/docs](https://supabase.com/docs)
-- **Community**: [GitHub Discussions](https://github.com/supabase/supabase/discussions)
 
 ---
 
 ## 📚 **Detailed Documentation**
 
-### **Full Migration Guide**
-See `docs/supabase-migration-guide.md` for:
-- Step-by-step instructions
-- Manual migration commands
-- Troubleshooting guide
-- Post-migration support
+### **Automated Migration**
+- **Main Guide**: `docs/supabase-migration-guide.md`
+- **Scripts**: Use the provided automation scripts
+
+### **Manual Migration**
+- **Manual Guide**: `docs/manual-migration-guide.md`
+- **No CLI required** - direct database operations
 
 ### **Email Template Setup**
-See `docs/supabase-email-setup.md` for:
-- Custom email template configuration
-- SMTP setup instructions
-- Template customization
+- **Email Setup**: `docs/supabase-email-setup.md`
+- **Custom templates** already configured
 
 ---
 
@@ -231,9 +179,9 @@ Your migration is successful when:
 ## 📞 **Support**
 
 ### **During Migration**
-- Follow the migration guide step-by-step
-- Use the provided scripts for automation
-- Check troubleshooting section for common issues
+- **Try automated scripts first**
+- **Fall back to manual migration** if CLI issues occur
+- **Follow the comprehensive guides** step-by-step
 
 ### **Post-Migration**
 - Client has full access to Supabase support
@@ -242,4 +190,10 @@ Your migration is successful when:
 
 ---
 
-**🎯 Ready to migrate?** Start with Step 1 above and follow the comprehensive guide in `docs/supabase-migration-guide.md` for detailed instructions.
+**🎯 Ready to migrate?** 
+
+1. **Try the automated scripts first**: `.\scripts\supabase-migration.ps1`
+2. **If CLI fails, use manual migration**: `docs/manual-migration-guide.md`
+3. **Both methods achieve the same result** - choose what works for you!
+
+**Success guaranteed** with either approach! 🚀✨
