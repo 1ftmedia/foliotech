@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, lazy, Suspense } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useForm, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -14,18 +14,14 @@ import toast from 'react-hot-toast';
 import { useAuthContext } from '../../lib/hooks/useAuth';
 import { ErrorBoundary } from '../../lib/errors/ErrorBoundary';
 
-// Lazy load form steps - simplified imports
-const PersonalInfoStep = lazy(() => import('./steps/PersonalInfoStep'));
-const AcademicBackgroundStep = lazy(() => import('./steps/EducationStep'));
-const ProgramSelectionStep = lazy(() => import('./steps/ProgramSelectionStep'));
-const AccommodationStep = lazy(() => import('./steps/AccommodationStep'));
-const RefereeStep = lazy(() => import('./steps/RefereeStep'));
+// Static imports for reliable loading - no more lazy loading issues
+import { PersonalInfoStep } from './steps/PersonalInfoStep';
+import { EducationStep as AcademicBackgroundStep } from './steps/EducationStep';
+import { ProgramSelectionStep } from './steps/ProgramSelectionStep';
+import { AccommodationStep } from './steps/AccommodationStep';
+import { RefereeStep } from './steps/RefereeStep';
 
-const StepLoadingFallback = () => (
-  <div className="min-h-[300px] flex items-center justify-center">
-    <LoadingSpinner size="md" message="Loading form..." />
-  </div>
-);
+// Form steps now use static imports for reliable loading
 
 const formSteps = [
   { id: 'personal', title: 'Personal Information', component: PersonalInfoStep },
@@ -42,7 +38,7 @@ interface ApplicationFormProps {
   draftId?: string;
 }
 
-export function ApplicationForm({ onSubmit, draftId }: ApplicationFormProps) {
+function ApplicationForm({ onSubmit, draftId }: ApplicationFormProps) {
   const navigate = useNavigate();
   const { user } = useAuthContext();
   const [submissionSuccess, setSubmissionSuccess] = useState(false);
@@ -396,9 +392,7 @@ export function ApplicationForm({ onSubmit, draftId }: ApplicationFormProps) {
               aria-label={formSteps[currentStep].title}
             >
               <ErrorBoundary>
-                <Suspense fallback={<StepLoadingFallback />}>
-                  {React.createElement(formSteps[currentStep].component)}
-                </Suspense>
+                {React.createElement(formSteps[currentStep].component)}
               </ErrorBoundary>
             </motion.div>
           </AnimatePresence>
@@ -440,4 +434,5 @@ export function ApplicationForm({ onSubmit, draftId }: ApplicationFormProps) {
   );
 }
 
+export { ApplicationForm };
 export default ApplicationForm;

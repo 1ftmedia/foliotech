@@ -1,13 +1,11 @@
-import React, { Suspense, lazy, useState } from 'react';
+import React, { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
 import { LoadingSpinner } from '../components/LoadingSpinner';
 import { ErrorBoundary } from '../lib/errors/ErrorBoundary';
 import { useAuthContext } from '../lib/hooks/useAuth';
 import { AuthDialog } from '../components/auth/AuthDialog';
-
-// Lazy load the ApplicationForm component
-const ApplicationForm = lazy(() => import('../components/application/ApplicationForm'));
+import { ApplicationForm } from '../components/application/ApplicationForm';
 
 export default function Apply() {
   const { user, loading } = useAuthContext();
@@ -63,13 +61,7 @@ export default function Apply() {
               
               <ErrorBoundary>
                 {user ? (
-                  <Suspense fallback={
-                    <div className="min-h-[400px] flex items-center justify-center">
-                      <LoadingSpinner size="lg" message="Loading application form..." />
-                    </div>
-                  }>
-                    <ApplicationForm />
-                  </Suspense>
+                  <ApplicationForm />
                 ) : (
                   <div className="text-center py-12">
                     <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
