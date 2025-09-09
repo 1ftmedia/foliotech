@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '../supabase/client';
 import React, { createContext, useContext } from 'react';
+import { getAndClearRedirectUrl } from '../utils/redirects';
 
 interface AuthState {
   user: User | null;
@@ -65,6 +66,17 @@ export function useAuth(): AuthState {
           loading: false,
           error: null
         });
+
+        // Handle redirect after successful sign in (for immediate logins, not email confirmations)
+        if (event === 'SIGNED_IN' && session?.user && !window.location.pathname.includes('/auth/')) {
+          const storedRedirectUrl = getAndClearRedirectUrl();
+          if (storedRedirectUrl) {
+            // Use setTimeout to avoid navigation during render
+            setTimeout(() => {
+              window.location.href = storedRedirectUrl;
+            }, 100);
+          }
+        }
       }
     );
 

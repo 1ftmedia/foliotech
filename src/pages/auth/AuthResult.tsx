@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { supabase } from '../../lib/supabase/client';
 import { getRedirectPathForEmail } from '../../lib/auth/redirects';
+import { getAndClearRedirectUrl } from '../../lib/utils/redirects';
 
 type StatusKind = 'confirmed' | 'password_reset' | 'magic_link' | 'authenticated';
 
@@ -44,7 +45,10 @@ export default function AuthResult() {
     const start = async () => {
       const { data } = await supabase.auth.getSession();
       const email = emailFromParam || data.session?.user?.email || null;
-      const path = getRedirectPathForEmail(email || undefined);
+      
+      // First check if there's a stored redirect URL from before auth
+      const storedRedirectUrl = getAndClearRedirectUrl();
+      const path = storedRedirectUrl || getRedirectPathForEmail(email || undefined);
 
       timer = window.setInterval(() => setCountdown((c) => Math.max(0, c - 1)), 1000);
       const to = window.setTimeout(() => {

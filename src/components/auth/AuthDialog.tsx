@@ -7,6 +7,7 @@ import { z } from 'zod';
 import { toast } from 'react-hot-toast';
 import { Provider } from '@supabase/supabase-js';
 import { signUp, signIn, signInWithSocial, resetPassword, resendConfirmation } from '../../lib/supabase/auth';
+import { storeRedirectUrl } from '../../lib/utils/redirects';
 
 // Validation schemas
 const emailSchema = z.string().email('Invalid email address');
@@ -62,6 +63,13 @@ export function AuthDialog({ isOpen, onClose, defaultMode = 'signin', nonDismiss
   const [userName, setUserName] = useState<string>('');
   const dialogRef = useRef<HTMLDivElement>(null);
   const initialFocusRef = useRef<HTMLInputElement>(null);
+
+  // Store redirect URL when dialog opens
+  useEffect(() => {
+    if (isOpen) {
+      storeRedirectUrl();
+    }
+  }, [isOpen]);
 
   const signInForm = useForm<SignInFormData>({
     resolver: zodResolver(signInSchema),
