@@ -9,10 +9,14 @@ import { ErrorBoundary } from './lib/errors/ErrorBoundary';
 import { ThemeProvider } from './components/ThemeProvider';
 import { AuthProvider } from './lib/hooks/useAuth';
 import { Toaster } from 'react-hot-toast';
+import { bustImportCache } from './lib/utils/cache-busting';
 import './index.css';
 
 // Add console logs for debugging
 console.log('Starting application initialization...');
+
+// Initialize cache busting
+bustImportCache();
 
 // Initialize error monitoring
 initializeErrorMonitoring();

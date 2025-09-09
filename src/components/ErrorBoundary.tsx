@@ -26,6 +26,10 @@ export class ErrorBoundary extends Component<Props, State> {
 
   private handleRetry = () => {
     this.setState({ hasError: false, error: undefined });
+    // Force a page reload if it's a dynamic import error
+    if (this.state.error?.message.includes('Failed to fetch dynamically imported module')) {
+      window.location.reload();
+    }
   };
 
   public render() {
@@ -38,8 +42,15 @@ export class ErrorBoundary extends Component<Props, State> {
               Something went wrong
             </h1>
             <p className="mt-2 text-gray-600 dark:text-gray-400">
-              {this.state.error?.message || 'An unexpected error occurred'}
+              {this.state.error?.message.includes('Failed to fetch dynamically imported module') 
+                ? 'Failed to load page content. This might be due to a network issue or browser cache.'
+                : this.state.error?.message || 'An unexpected error occurred'}
             </p>
+            {this.state.error?.message.includes('Failed to fetch dynamically imported module') && (
+              <p className="mt-1 text-sm text-gray-500 dark:text-gray-500">
+                Try refreshing the page or clearing your browser cache.
+              </p>
+            )}
             <button
               onClick={this.handleRetry}
               className="mt-6 inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"

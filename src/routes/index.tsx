@@ -8,16 +8,24 @@ import { RouteWrapper } from '../components/RouteWrapper';
 import { ScrollToTop } from '../components/ScrollToTop';
 import App from '../App';
 
-// Helper function to handle lazy imports with retry logic
+// Enhanced helper function to handle lazy imports with retry logic and better error handling
 function lazyWithRetry(importFn: () => Promise<any>, retries = 3) {
   return lazy(() => {
     const retry = (attempt: number): Promise<any> =>
       importFn().catch((error) => {
+        console.warn(`Dynamic import failed (attempt ${attempt + 1}/${retries + 1}):`, error);
+        
         if (attempt >= retries) {
-          throw error;
+          // Log final error for debugging
+          console.error('Dynamic import failed after all retries:', error);
+          throw new Error(`Failed to load module after ${retries + 1} attempts: ${error.message}`);
         }
-        // Exponential backoff
-        const delay = Math.min(1000 * Math.pow(2, attempt), 5000);
+        
+        // Exponential backoff with jitter
+        const baseDelay = 1000 * Math.pow(2, attempt);
+        const jitter = Math.random() * 500; // Add randomness to prevent thundering herd
+        const delay = Math.min(baseDelay + jitter, 5000);
+        
         return new Promise(resolve => setTimeout(resolve, delay)).then(() => retry(attempt + 1));
       });
 

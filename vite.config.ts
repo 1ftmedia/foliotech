@@ -36,6 +36,7 @@ export default defineConfig({
     target: 'es2020',
     outDir: 'dist',
     assetsDir: 'assets',
+    chunkSizeWarningLimit: 1000,
     commonjsOptions: {
       transformMixedEsModules: true
     },
@@ -44,7 +45,8 @@ export default defineConfig({
         manualChunks: {
           'react-vendor': ['react', 'react-dom', 'react-router-dom'],
           'ui-vendor': ['@tanstack/react-query', 'framer-motion', 'lucide-react']
-        }
+        },
+        chunkFileNames: 'assets/[name]-[hash].js'
       }
     }
   }
