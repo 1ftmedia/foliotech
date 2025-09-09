@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Mail, Phone, MapPin, Send, AlertCircle, CheckCircle, Loader2, WifiOff } from 'lucide-react';
 import { contactFormSchema, submitContactForm, type ContactFormData } from '../lib/api/contact';
 
-export function Contact() {
+function Contact() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitResult, setSubmitResult] = useState<{ success: boolean; message: string } | null>(null);
   const [apiStatus, setApiStatus] = useState<'checking' | 'online' | 'offline'>('checking');
@@ -385,3 +385,6 @@ export function Contact() {
     </section>
   );
 }
+
+export { Contact };
+export default Contact;

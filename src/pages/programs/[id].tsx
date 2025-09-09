@@ -13,9 +13,7 @@ const CourseList = lazy(() => retryImport(() =>
 ));
 
 const ProgramHeader = lazy(() => retryImport(() => 
-  import('../../components/programs/ProgramHeader').then(mod => ({ 
-    default: mod.ProgramHeader 
-  }))
+  import('../../components/programs/ProgramHeader')
 ));
 
 // Retry logic for dynamic imports

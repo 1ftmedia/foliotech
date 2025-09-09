@@ -21,7 +21,7 @@ function isValidCourse(course: any): course is Course {
   );
 }
 
-export function CourseList({ courses = [], isLoading = false, onCourseClick }: CourseListProps) {
+function CourseList({ courses = [], isLoading = false, onCourseClick }: CourseListProps) {
   // Add debug logging in development
   if (process.env.NODE_ENV === 'development') {
     console.debug('CourseList received courses:', courses);
@@ -92,3 +92,6 @@ export function CourseList({ courses = [], isLoading = false, onCourseClick }: C
     </div>
   );
 }
+
+export { CourseList };
+export default CourseList;

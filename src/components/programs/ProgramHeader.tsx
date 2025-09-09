@@ -8,7 +8,7 @@ interface ProgramHeaderProps {
   isLoading?: boolean;
 }
 
-export function ProgramHeader({ program, isLoading = false }: ProgramHeaderProps) {
+function ProgramHeader({ program, isLoading = false }: ProgramHeaderProps) {
   if (isLoading) {
     return <LoadingSpinner />;
   }
@@ -84,3 +84,6 @@ export function ProgramHeader({ program, isLoading = false }: ProgramHeaderProps
     </div>
   );
 }
+
+export { ProgramHeader };
+export default ProgramHeader;

@@ -26,101 +26,32 @@ function lazyWithRetry(importFn: () => Promise<any>, retries = 3) {
 }
 
 // Lazy-loaded components with retry logic
-const Programs = lazyWithRetry(() => 
-  import('../pages/programs').then(module => ({ default: module.default }))
-);
+const Programs = lazyWithRetry(() => import('../pages/programs'));
+const ProgramDetail = lazyWithRetry(() => import('../pages/programs/[id]'));
+const CourseDetail = lazyWithRetry(() => import('../pages/programs/[programId]/courses/[courseId]'));
+const Sponsorships = lazyWithRetry(() => import('../pages/sponsorships'));
+const PartnershipInquiry = lazyWithRetry(() => import('../pages/partnership-inquiry'));
+const Give = lazyWithRetry(() => import('../pages/give'));
+const ComputerTechnology = lazyWithRetry(() => import('../pages/programs/computer-technology'));
+const VocationalStudies = lazyWithRetry(() => import('../pages/programs/vocational-studies'));
+const ConstructionTechnologies = lazyWithRetry(() => import('../pages/programs/construction-technologies'));
+const About = lazyWithRetry(() => import('../pages/about'));
+const Apply = lazyWithRetry(() => import('../pages/apply'));
 
-const ProgramDetail = lazyWithRetry(() => 
-  import('../pages/programs/[id]').then(module => ({ default: module.default }))
-);
+const Profile = lazyWithRetry(() => import('../pages/Profile'));
+const Settings = lazyWithRetry(() => import('../pages/Settings'));
+const Dashboard = lazyWithRetry(() => import('../pages/Dashboard'));
+const AuthCallback = lazyWithRetry(() => import('../pages/auth/Callback'));
+const ResetPassword = lazyWithRetry(() => import('../pages/auth/ResetPassword'));
+const AuthResult = lazyWithRetry(() => import('../pages/auth/AuthResult'));
+const ApplicationsPage = lazyWithRetry(() => import('../pages/applications'));
+const ApplicationDetailPage = lazyWithRetry(() => import('../pages/applications/[id]'));
+const CareerDevelopment = lazyWithRetry(() => import('../pages/CareerDevelopment'));
+const Contact = lazyWithRetry(() => import('../components/Contact'));
+const VolunteerToTeach = lazyWithRetry(() => import('../pages/volunteer-to-teach'));
+const HireAGraduate = lazyWithRetry(() => import('../pages/hire-a-graduate'));
 
-const CourseDetail = lazyWithRetry(() => 
-  import('../pages/programs/[programId]/courses/[courseId]').then(module => ({ default: module.default }))
-);
-
-const Sponsorships = lazyWithRetry(() => 
-  import('../pages/sponsorships').then(module => ({ default: module.default }))
-);
-
-const PartnershipInquiry = lazyWithRetry(() => 
-  import('../pages/partnership-inquiry').then(module => ({ default: module.default }))
-);
-
-const Give = lazyWithRetry(() => 
-  import('../pages/give').then(module => ({ default: module.default }))
-);
-
-const ComputerTechnology = lazyWithRetry(() => 
-  import('../pages/programs/computer-technology').then(module => ({ default: module.default }))
-);
-
-const VocationalStudies = lazyWithRetry(() => 
-  import('../pages/programs/vocational-studies').then(module => ({ default: module.default }))
-);
-
-const ConstructionTechnologies = lazyWithRetry(() => 
-  import('../pages/programs/construction-technologies').then(module => ({ default: module.default }))
-);
-
-const About = lazyWithRetry(() => 
-  import('../pages/about').then(module => ({ default: module.default }))
-);
-
-const Apply = lazyWithRetry(() => 
-  import('../pages/apply').then(module => ({ default: module.default }))
-);
-
-const Profile = lazyWithRetry(() => 
-  import('../pages/Profile').then(module => ({ default: module.default }))
-);
-
-const Settings = lazyWithRetry(() => 
-  import('../pages/Settings').then(module => ({ default: module.default }))
-);
-
-const Dashboard = lazyWithRetry(() => 
-  import('../pages/Dashboard').then(module => ({ default: module.default }))
-);
-
-const AuthCallback = lazyWithRetry(() => 
-  import('../pages/auth/Callback').then(module => ({ default: module.default }))
-);
-
-const ResetPassword = lazyWithRetry(() => 
-  import('../pages/auth/ResetPassword').then(module => ({ default: module.default }))
-);
-
-const AuthResult = lazyWithRetry(() => 
-  import('../pages/auth/AuthResult').then(module => ({ default: module.default }))
-);
-
-const ApplicationsPage = lazyWithRetry(() => 
-  import('../pages/applications').then(module => ({ default: module.default }))
-);
-
-const ApplicationDetailPage = lazyWithRetry(() => 
-  import('../pages/applications/[id]').then(module => ({ default: module.default }))
-);
-
-const CareerDevelopment = lazyWithRetry(() => 
-  import('../pages/CareerDevelopment').then(module => ({ default: module.default }))
-);
-
-const Contact = lazyWithRetry(() => 
-  import('../components/Contact').then(module => ({ default: module.Contact }))
-);
-
-const VolunteerToTeach = lazyWithRetry(() => 
-  import('../pages/volunteer-to-teach').then(module => ({ default: module.default }))
-);
-
-const HireAGraduate = lazyWithRetry(() => 
-  import('../pages/hire-a-graduate').then(module => ({ default: module.default }))
-);
-
-const FAQ = lazyWithRetry(() => 
-  import('../pages/faq').then(module => ({ default: module.default }))
-);
+const FAQ = lazyWithRetry(() => import('../pages/faq'));
 
 // Enhanced Suspense wrapper with error handling
 function SuspenseWrapper({ children }: { children: React.ReactNode }) {
