@@ -3,7 +3,7 @@ import { useFormContext } from 'react-hook-form';
 import { Building2, User, Phone, DollarSign, Info } from 'lucide-react';
 import type { ApplicationFormData } from '../../../lib/validation/application';
 
-export function AccommodationStep() {
+function AccommodationStep() {
   const { register, watch, formState: { errors } } = useFormContext<ApplicationFormData>();
   const needsAccommodation = watch('accommodation.needsAccommodation');
   const sponsorshipType = watch('accommodation.sponsorshipType');
@@ -186,4 +186,5 @@ export function AccommodationStep() {
   );
 }
 
+export { AccommodationStep };
 export default AccommodationStep;

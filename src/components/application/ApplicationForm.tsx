@@ -14,32 +14,12 @@ import toast from 'react-hot-toast';
 import { useAuthContext } from '../../lib/hooks/useAuth';
 import { ErrorBoundary } from '../../lib/errors/ErrorBoundary';
 
-// Lazy load form steps
-const PersonalInfoStep = lazy(() => 
-  import('./steps/PersonalInfoStep').then(module => ({ 
-    default: module.PersonalInfoStep 
-  }))
-);
-const AcademicBackgroundStep = lazy(() => 
-  import('./steps/EducationStep').then(module => ({ 
-    default: module.EducationStep 
-  }))
-);
-const ProgramSelectionStep = lazy(() => 
-  import('./steps/ProgramSelectionStep').then(module => ({ 
-    default: module.ProgramSelectionStep 
-  }))
-);
-const AccommodationStep = lazy(() => 
-  import('./steps/AccommodationStep').then(module => ({ 
-    default: module.AccommodationStep 
-  }))
-);
-const RefereeStep = lazy(() => 
-  import('./steps/RefereeStep').then(module => ({ 
-    default: module.RefereeStep 
-  }))
-);
+// Lazy load form steps - simplified imports
+const PersonalInfoStep = lazy(() => import('./steps/PersonalInfoStep'));
+const AcademicBackgroundStep = lazy(() => import('./steps/EducationStep'));
+const ProgramSelectionStep = lazy(() => import('./steps/ProgramSelectionStep'));
+const AccommodationStep = lazy(() => import('./steps/AccommodationStep'));
+const RefereeStep = lazy(() => import('./steps/RefereeStep'));
 
 const StepLoadingFallback = () => (
   <div className="min-h-[300px] flex items-center justify-center">

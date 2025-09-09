@@ -3,7 +3,7 @@ import { useFormContext, useFieldArray } from 'react-hook-form';
 import { GraduationCap, Plus, Award, Trash2 } from 'lucide-react';
 import type { ApplicationFormData } from '../../../lib/validation/application';
 
-export function EducationStep() {
+function EducationStep() {
   const { register, control, watch, formState: { errors } } = useFormContext<ApplicationFormData>();
   
   const educationLevel = watch('academicBackground.educationLevel');
@@ -168,4 +168,5 @@ export function EducationStep() {
   );
 }
 
+export { EducationStep };
 export default EducationStep;

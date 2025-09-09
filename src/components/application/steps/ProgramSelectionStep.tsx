@@ -3,7 +3,7 @@ import { useFormContext } from 'react-hook-form';
 import { Calendar, BookOpen, Clock, Target, Lightbulb } from 'lucide-react';
 import type { ApplicationFormData } from '../../../lib/validation/application';
 
-export function ProgramSelectionStep() {
+function ProgramSelectionStep() {
   const { register, watch, formState: { errors } } = useFormContext<ApplicationFormData>();
   const selectedProgram = watch('programSelection.program');
 
@@ -189,4 +189,5 @@ export function ProgramSelectionStep() {
   );
 }
 
+export { ProgramSelectionStep };
 export default ProgramSelectionStep;

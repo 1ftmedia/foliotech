@@ -3,7 +3,7 @@ import { useFormContext } from 'react-hook-form';
 import { User, Mail, Phone, MapPin, Users } from 'lucide-react';
 import type { Referee } from '../../../lib/validation/application';
 
-export function RefereeStep() {
+function RefereeStep() {
   const { register, formState: { errors } } = useFormContext<{ referee: Referee }>();
 
   return (
@@ -153,4 +153,5 @@ export function RefereeStep() {
   );
 }
 
+export { RefereeStep };
 export default RefereeStep;

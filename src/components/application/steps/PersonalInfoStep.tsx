@@ -3,7 +3,7 @@ import { useFormContext } from 'react-hook-form';
 import { User, Mail, Phone, MapPin, Calendar, Globe, Building, Heart } from 'lucide-react';
 import type { PersonalInfo } from '../../../lib/validation/application';
 
-export function PersonalInfoStep() {
+function PersonalInfoStep() {
   const { register, formState: { errors } } = useFormContext<{ personalInfo: PersonalInfo }>();
 
   return (
@@ -327,3 +327,6 @@ export function PersonalInfoStep() {
     </div>
   );
 }
+
+export { PersonalInfoStep };
+export default PersonalInfoStep;
