@@ -3,7 +3,7 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { LogOut, ChevronDown, User } from "lucide-react";
 import { NavItem } from "../types";
-import { useAuth } from "./auth/AuthProvider";
+import { useAuthContext } from "../lib/hooks/useAuth";
 import { ThemeToggle, useTheme } from "./ThemeProvider";
 import { MenuToggle } from './Navigation/MenuToggle';
 import { MobileMenu } from './Navigation/MobileMenu';
@@ -51,7 +51,7 @@ export function Navigation() {
   const menuRef = useRef<HTMLDivElement>(null);
   const profileMenuRef = useRef<HTMLDivElement>(null);
   const { theme } = useTheme();
-  const { user } = useAuth();
+  const { user } = useAuthContext();
   const { startTour } = useTourContext();
 
   useEffect(() => {

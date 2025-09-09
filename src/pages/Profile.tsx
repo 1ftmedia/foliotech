@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { User, Mail, Globe, Camera, Loader2, Save, AlertCircle } from 'lucide-react';
-import { useAuth } from '../components/auth/AuthContext';
+import { useAuthContext } from '../lib/hooks/useAuth';
 import { updateProfile, uploadAvatar, getProfile } from '../lib/supabase/auth';
 import { ProtectedRoute } from '../components/ProtectedRoute';
 import { LoadingSpinner } from '../components/LoadingSpinner';
@@ -19,7 +19,7 @@ const profileSchema = z.object({
 type ProfileFormData = z.infer<typeof profileSchema>;
 
 export default function Profile() {
-  const { user } = useAuth();
+  const { user } = useAuthContext();
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);

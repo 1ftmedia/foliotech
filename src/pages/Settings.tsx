@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Eye, EyeOff, Lock, Loader2, AlertCircle, ShieldCheck } from 'lucide-react';
-import { useAuth } from '../components/auth/AuthContext';
+import { useAuthContext } from '../lib/hooks/useAuth';
 import { updatePassword } from '../lib/supabase/auth';
 import { ProtectedRoute } from '../components/ProtectedRoute';
 import { toast } from 'react-hot-toast';
@@ -25,7 +25,7 @@ const passwordSchema = z.object({
 type PasswordFormData = z.infer<typeof passwordSchema>;
 
 export default function Settings() {
-  const { user } = useAuth();
+  const { user } = useAuthContext();
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);

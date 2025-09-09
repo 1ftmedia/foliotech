@@ -90,6 +90,10 @@ const ResetPassword = lazyWithRetry(() =>
   import('../pages/auth/ResetPassword').then(module => ({ default: module.default }))
 );
 
+const AuthResult = lazyWithRetry(() => 
+  import('../pages/auth/AuthResult').then(module => ({ default: module.default }))
+);
+
 const ApplicationsPage = lazyWithRetry(() => 
   import('../pages/applications').then(module => ({ default: module.default }))
 );
@@ -457,6 +461,18 @@ const router = createBrowserRouter([
         <ErrorBoundary>
           <SuspenseWrapper>
             <ResetPassword />
+          </SuspenseWrapper>
+        </ErrorBoundary>
+      </RouteWrapper>
+    ),
+  },
+  {
+    path: '/auth/success',
+    element: (
+      <RouteWrapper>
+        <ErrorBoundary>
+          <SuspenseWrapper>
+            <AuthResult />
           </SuspenseWrapper>
         </ErrorBoundary>
       </RouteWrapper>

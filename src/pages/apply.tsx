@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
 import { LoadingSpinner } from '../components/LoadingSpinner';
 import { ErrorBoundary } from '../lib/errors/ErrorBoundary';
-import { useAuth } from '../lib/hooks/useAuth';
+import { useAuthContext } from '../lib/hooks/useAuth';
 import { AuthDialog } from '../components/auth/AuthDialog';
 
 // Lazy load the ApplicationForm component
@@ -17,7 +17,7 @@ const ApplicationForm = lazy(() =>
 );
 
 export default function Apply() {
-  const { user, loading } = useAuth();
+  const { user, loading } = useAuthContext();
   const [showAuthDialog, setShowAuthDialog] = useState(!user);
 
   // Close auth dialog when user becomes authenticated

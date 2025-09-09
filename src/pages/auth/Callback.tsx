@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { supabase } from '../../lib/supabase/client';
+import { getRedirectPathForEmail } from '../../lib/auth/redirects';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { motion } from 'framer-motion';
 
@@ -59,11 +60,10 @@ export default function AuthCallback() {
             if (data.session) {
               setStatus('success');
               setMessage('Authentication successful! Redirecting...');
-              
-              // Redirect to dashboard or intended page
+              const email = data.session.user?.email ?? '';
               setTimeout(() => {
-                navigate('/dashboard', { replace: true });
-              }, 1500);
+                navigate(`/auth/success?status=confirmed&email=${encodeURIComponent(email)}`, { replace: true });
+              }, 1200);
             } else {
               throw new Error('No session data received');
             }
@@ -78,11 +78,10 @@ export default function AuthCallback() {
             if (data.session) {
               setStatus('success');
               setMessage('Authentication successful! Redirecting...');
-              
-              // Redirect to dashboard or intended page
+              const email = data.session.user?.email ?? '';
               setTimeout(() => {
-                navigate('/dashboard', { replace: true });
-              }, 1500);
+                navigate(`/auth/success?status=confirmed&email=${encodeURIComponent(email)}`, { replace: true });
+              }, 1200);
             } else {
               throw new Error('No session data received');
             }
@@ -98,10 +97,10 @@ export default function AuthCallback() {
           if (data.session) {
             setStatus('success');
             setMessage('Already authenticated! Redirecting...');
-            
+            const email = data.session.user?.email ?? '';
             setTimeout(() => {
-              navigate('/dashboard', { replace: true });
-            }, 1500);
+              navigate(`/auth/success?status=authenticated&email=${encodeURIComponent(email)}`, { replace: true });
+            }, 1200);
           } else {
             throw new Error('No authentication data found');
           }

@@ -6,6 +6,8 @@ import { z } from 'zod';
 import { Eye, EyeOff, Lock, Loader2, AlertCircle, CheckCircle } from 'lucide-react';
 import { updatePassword } from '../../lib/supabase/auth';
 import { useNavigate } from 'react-router-dom';
+import { supabase } from '../../lib/supabase/client';
+import { getRedirectPathForEmail } from '../../lib/auth/redirects';
 
 const resetPasswordSchema = z.object({
   password: z.string()
@@ -40,9 +42,12 @@ export default function ResetPassword() {
       await updatePassword(data.password);
       setSuccess(true);
       
-      // Redirect after a short delay
+      // Redirect after a short delay using the authenticated user's email domain
+      const { data: sessionData } = await supabase.auth.getSession();
+      const email = sessionData.session?.user?.email ?? null;
+      const path = getRedirectPathForEmail(email);
       setTimeout(() => {
-        navigate('/');
+        navigate(path, { replace: true });
       }, 3000);
     } catch (err) {
       console.error('Error resetting password:', err);

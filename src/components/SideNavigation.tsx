@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, ChevronRight, User, Settings, Bell, BookOpen, LogOut } from 'lucide-react';
-import { useAuth } from './auth/AuthContext';
+import { useAuthContext } from '../lib/hooks/useAuth';
 import { ThemeToggle } from './ThemeProvider';
 import { signOut } from '../lib/supabase/auth';
 import { AuthDialog } from './auth/AuthDialog';
@@ -32,7 +32,7 @@ const menuItems = [
 export function SideNavigation({ isOpen, onClose }: SideNavigationProps) {
   const location = useLocation();
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user } = useAuthContext();
   const menuRef = useRef<HTMLDivElement>(null);
   const firstFocusableRef = useRef<HTMLButtonElement>(null);
   const lastFocusableRef = useRef<HTMLAnchorElement>(null);

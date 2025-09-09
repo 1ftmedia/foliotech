@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ChevronDown, Home, Briefcase, Mail, Shield, GraduationCap, HelpCircle, LogOut } from "lucide-react";
-import { useAuth } from "./auth/AuthContext";
+import { useAuthContext } from "../lib/hooks/useAuth";
 import { ThemeToggle } from "./ThemeProvider";
 import { NavItem } from "../types";
 
@@ -15,7 +15,7 @@ interface MobileNavigationProps {
 export function MobileNavigation({ isOpen, onClose, navItems }: MobileNavigationProps) {
   const location = useLocation();
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user } = useAuthContext();
   const drawerRef = useRef<HTMLDivElement>(null);
   const firstFocusableRef = useRef<HTMLButtonElement>(null);
   const lastFocusableRef = useRef<HTMLAnchorElement | HTMLButtonElement>(null);
