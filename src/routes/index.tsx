@@ -8,6 +8,13 @@ import { RouteWrapper } from '../components/RouteWrapper';
 import { ScrollToTop } from '../components/ScrollToTop';
 import App from '../App';
 
+// Critical routes - static imports for reliability
+import Apply from '../pages/apply';
+import Dashboard from '../pages/Dashboard';
+import Profile from '../pages/Profile';
+import AuthCallback from '../pages/auth/Callback';
+import AuthResult from '../pages/auth/AuthResult';
+
 // Enhanced helper function to handle lazy imports with retry logic and better error handling
 function lazyWithRetry(importFn: () => Promise<any>, retries = 3) {
   return lazy(() => {
@@ -44,14 +51,10 @@ const ComputerTechnology = lazyWithRetry(() => import('../pages/programs/compute
 const VocationalStudies = lazyWithRetry(() => import('../pages/programs/vocational-studies'));
 const ConstructionTechnologies = lazyWithRetry(() => import('../pages/programs/construction-technologies'));
 const About = lazyWithRetry(() => import('../pages/about'));
-const Apply = lazyWithRetry(() => import('../pages/apply'));
+// Critical routes now use static imports - Apply, Dashboard, Profile, AuthCallback, AuthResult are imported above
 
-const Profile = lazyWithRetry(() => import('../pages/Profile'));
 const Settings = lazyWithRetry(() => import('../pages/Settings'));
-const Dashboard = lazyWithRetry(() => import('../pages/Dashboard'));
-const AuthCallback = lazyWithRetry(() => import('../pages/auth/Callback'));
 const ResetPassword = lazyWithRetry(() => import('../pages/auth/ResetPassword'));
-const AuthResult = lazyWithRetry(() => import('../pages/auth/AuthResult'));
 const ApplicationsPage = lazyWithRetry(() => import('../pages/applications'));
 const ApplicationDetailPage = lazyWithRetry(() => import('../pages/applications/[id]'));
 const CareerDevelopment = lazyWithRetry(() => import('../pages/CareerDevelopment'));
@@ -233,9 +236,7 @@ const router = createBrowserRouter([
       <RouteWrapper>
         <Layout>
           <ErrorBoundary>
-            <SuspenseWrapper>
-              <Apply />
-            </SuspenseWrapper>
+            <Apply />
           </ErrorBoundary>
         </Layout>
       </RouteWrapper>
@@ -247,9 +248,7 @@ const router = createBrowserRouter([
       <RouteWrapper>
         <Layout>
           <ErrorBoundary>
-            <SuspenseWrapper>
-              <Profile />
-            </SuspenseWrapper>
+            <Profile />
           </ErrorBoundary>
         </Layout>
       </RouteWrapper>
@@ -275,9 +274,7 @@ const router = createBrowserRouter([
       <RouteWrapper>
         <Layout>
           <ErrorBoundary>
-            <SuspenseWrapper>
-              <Dashboard />
-            </SuspenseWrapper>
+            <Dashboard />
           </ErrorBoundary>
         </Layout>
       </RouteWrapper>
@@ -386,9 +383,7 @@ const router = createBrowserRouter([
     element: (
       <RouteWrapper>
         <ErrorBoundary>
-          <SuspenseWrapper>
-            <AuthCallback />
-          </SuspenseWrapper>
+          <AuthCallback />
         </ErrorBoundary>
       </RouteWrapper>
     ),
@@ -410,9 +405,7 @@ const router = createBrowserRouter([
     element: (
       <RouteWrapper>
         <ErrorBoundary>
-          <SuspenseWrapper>
-            <AuthResult />
-          </SuspenseWrapper>
+          <AuthResult />
         </ErrorBoundary>
       </RouteWrapper>
     ),
