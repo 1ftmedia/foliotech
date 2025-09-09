@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { LogOut, ChevronDown, User } from "lucide-react";
+import { ChevronDown, User } from "lucide-react";
 import { NavItem } from "../types";
 import { useAuthContext } from "../lib/hooks/useAuth";
 import { ThemeToggle, useTheme } from "./ThemeProvider";
@@ -37,8 +37,6 @@ const navItems: NavItem[] = [
 ];
 
 export function Navigation() {
-  console.log('Navigation component rendering...');
-  
   const navigate = useNavigate();
   const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
@@ -50,7 +48,7 @@ export function Navigation() {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
   const profileMenuRef = useRef<HTMLDivElement>(null);
-  const { theme } = useTheme();
+  useTheme(); // For theme context
   const { user } = useAuthContext();
   const { startTour } = useTourContext();
 

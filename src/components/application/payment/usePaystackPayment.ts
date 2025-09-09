@@ -57,7 +57,7 @@ export function usePaystackPayment() {
   };
 
   const handleClose = () => {
-    console.log('Payment modal closed');
+    // Payment modal closed
   };
 
   return useCallback((config: PaystackProps) => {

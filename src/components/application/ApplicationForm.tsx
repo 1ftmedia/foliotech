@@ -11,7 +11,7 @@ import { FormNavigation } from './FormNavigation';
 import { LoadingSpinner } from '../LoadingSpinner';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
-import { useAuth } from '../auth/AuthContext';
+import { useAuthContext } from '../../lib/hooks/useAuth';
 import { ErrorBoundary } from '../../lib/errors/ErrorBoundary';
 
 // Lazy load form steps
@@ -62,12 +62,12 @@ interface ApplicationFormProps {
   draftId?: string;
 }
 
-export function ApplicationForm({ onSubmit, programId, courseId, draftId }: ApplicationFormProps) {
+export function ApplicationForm({ onSubmit, draftId }: ApplicationFormProps) {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user } = useAuthContext();
   const [submissionSuccess, setSubmissionSuccess] = useState(false);
   const [draftSaved, setDraftSaved] = useState(false);
-  const [draftSaving, setDraftSaving] = useState(false);
+  const [, setDraftSaving] = useState(false);
   const { 
     currentStep, 
     setCurrentStep, 
@@ -89,7 +89,7 @@ export function ApplicationForm({ onSubmit, programId, courseId, draftId }: Appl
     reValidateMode: 'onChange',
   });
   
-  const { handleSubmit, formState: { errors, isValid }, trigger, getValues, reset, clearErrors } = methods;
+  const { handleSubmit, formState: { errors }, trigger, getValues, reset, clearErrors } = methods;
   
   // Helper function to check if a step has data
   const checkStepHasData = useCallback((step: number, formData: any) => {
@@ -113,14 +113,7 @@ export function ApplicationForm({ onSubmit, programId, courseId, draftId }: Appl
     );
   }, []);
   
-  // Debug logging for development - moved after methods initialization and destructuring
-  if (process.env.NODE_ENV === 'development') {
-    console.log('ApplicationForm rendered:', {
-      currentStep,
-      stepCompletion,
-      formStepsLength: formSteps.length
-    });
-  }
+  // ApplicationForm component initialized
 
   const validateStep = useCallback(async () => {
     try {
@@ -139,10 +132,7 @@ export function ApplicationForm({ onSubmit, programId, courseId, draftId }: Appl
       
       const isStepValid = await trigger(fieldsToValidate as any);
       
-      // Log form errors for debugging in development
-      if (process.env.NODE_ENV === 'development' && Object.keys(errors).length > 0) {
-        console.log('Form validation errors:', errors);
-      }
+      // Form validation completed
       
       // Auto-update step completion
       setStepCompletion(currentStep, isStepValid);
@@ -157,22 +147,22 @@ export function ApplicationForm({ onSubmit, programId, courseId, draftId }: Appl
 
   const handleStepChange = useCallback(async (newStep: number) => {
     try {
-      console.log('handleStepChange called:', { currentStep, newStep });
+      // Handle step change
       
       // Validate current step before moving
       const isCurrentStepValid = await validateStep();
-      console.log('Step validation result:', isCurrentStepValid);
+      // Step validation completed
       
       setStepCompletion(currentStep, isCurrentStepValid);
       
       // Temporarily allow navigation even if validation fails for testing
       if (isCurrentStepValid || newStep < currentStep || true) {
-        console.log('Setting current step to:', newStep);
+        // Setting current step
         setCurrentStep(newStep);
         // Clear any previous errors when moving to a new step
         clearErrors();
       } else {
-        console.log('Cannot proceed - validation failed');
+        // Cannot proceed - validation failed
       }
     } catch (error) {
       console.error('Error changing step:', error);
@@ -198,9 +188,7 @@ export function ApplicationForm({ onSubmit, programId, courseId, draftId }: Appl
         const isStepValid = await validateStep();
         setStepCompletion(currentStep, isStepValid);
         
-        if (process.env.NODE_ENV === 'development') {
-          console.log(`Step ${currentStep} validation result:`, isStepValid);
-        }
+        // Step validation completed
       } catch (error) {
         console.error('Error validating step:', error);
         setStepCompletion(currentStep, false);
@@ -224,9 +212,7 @@ export function ApplicationForm({ onSubmit, programId, courseId, draftId }: Appl
     updateFormData(currentValues);
     
     // Auto-validate current step when form data changes
-    if (process.env.NODE_ENV === 'development') {
-      console.log('Form data changed, current step:', currentStep);
-    }
+    // Form data changed
     
     // Check if current step has data and mark as complete
     const hasStepData = checkStepHasData(currentStep, currentValues);
@@ -268,7 +254,7 @@ export function ApplicationForm({ onSubmit, programId, courseId, draftId }: Appl
 
   const handleFormSubmit = async (data: ApplicationFormData) => {
     try {
-      console.log('Form submission started with data:', data);
+      // Form submission started
       setIsSubmitting(true);
       setError(null);
       
@@ -285,12 +271,12 @@ export function ApplicationForm({ onSubmit, programId, courseId, draftId }: Appl
           
           const fieldsToValidate = stepFieldMap[index as keyof typeof stepFieldMap];
           const isValid = await trigger(fieldsToValidate as any);
-          console.log(`Step ${index} validation:`, isValid);
+          // Step validation completed
           return isValid;
         })
       );
       
-      console.log('All steps validation results:', allStepsValid);
+      // All steps validation completed
       
       if (!allStepsValid.every(Boolean)) {
         throw new Error('Please complete all required fields before submitting');
@@ -444,9 +430,9 @@ export function ApplicationForm({ onSubmit, programId, courseId, draftId }: Appl
              onNext={handleNext}
              isSubmitting={isSubmitting}
              onSubmit={() => {
-               console.log('FormNavigation onSubmit called');
+               // Form navigation submit
                const formData = getValues();
-               console.log('Current form data:', formData);
+               // Current form data retrieved
                handleFormSubmit(formData);
              }}
            />

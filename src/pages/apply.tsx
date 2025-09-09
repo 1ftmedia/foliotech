@@ -7,14 +7,7 @@ import { useAuthContext } from '../lib/hooks/useAuth';
 import { AuthDialog } from '../components/auth/AuthDialog';
 
 // Lazy load the ApplicationForm component
-const ApplicationForm = lazy(() => 
-  import('../components/application/ApplicationForm')
-    .then(module => ({ default: module.default || module.ApplicationForm }))
-    .catch(error => {
-      console.error('Error loading ApplicationForm:', error);
-      throw error;
-    })
-);
+const ApplicationForm = lazy(() => import('../components/application/ApplicationForm'));
 
 export default function Apply() {
   const { user, loading } = useAuthContext();

@@ -1,12 +1,6 @@
-import { createClient } from '@supabase/supabase-js';
 import { validateUUID, ensureUUID } from './validation';
 import type { Program, Course, Student, Enrollment, Resource, ApiError } from './types';
-
-// Default to demo mode if env vars are not set
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://demo.supabase.co';
-const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'demo-mode';
-
-const supabase = createClient(supabaseUrl, supabaseKey);
+import { supabase } from '../supabase/client';
 
 export const api = {
   // Programs
