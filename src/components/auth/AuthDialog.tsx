@@ -158,11 +158,13 @@ export function AuthDialog({ isOpen, onClose, defaultMode = 'signin', nonDismiss
       setUserName(firstName);
       setSignInSuccess(true);
       
-      // Close dialog after showing success message
+      // Show success message and close dialog
+      toast.success('Successfully signed in!');
+      
+      // Close the dialog after a short delay to show success message
       setTimeout(() => {
-        toast.success('Successfully signed in!');
         onClose();
-      }, 2000);
+      }, 1000);
       
     } catch (err) {
       console.error('Sign in error:', err);

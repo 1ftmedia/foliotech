@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { Layout } from './components/Layout';
 import { Hero } from './components/Hero';
 import { Programs } from './components/Programs';
 import { Stats } from './components/Stats';
 import { Testimonials } from './components/Testimonials';
 import { AdmissionProcess } from './components/AdmissionProcess';
-import { ErrorBoundary } from './lib/errors/ErrorBoundary';
+import { ErrorBoundary } from './components/ErrorBoundary';
 import { LoadingSpinner } from './components/LoadingSpinner';
 import { WelcomeModal } from './components/WelcomeModal';
 
@@ -21,7 +20,7 @@ function App() {
   };
 
   return (
-    <Layout>
+    <>
       {showWelcomeModal && (
         <WelcomeModal onClose={() => setShowWelcomeModal(false)} />
       )}
@@ -40,9 +39,7 @@ function App() {
       <ErrorBoundary>
         <AdmissionProcess onApplyClick={handleSignUpClick} />
       </ErrorBoundary>
-      <ErrorBoundary>
-      </ErrorBoundary>
-    </Layout>
+    </>
   );
 }
 

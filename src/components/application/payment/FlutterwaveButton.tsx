@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { CreditCard, Loader2, AlertCircle } from 'lucide-react';
 import type { PaymentDetails, FlutterwaveResponse } from '../../../types';
-import { useAuth } from '../../auth/AuthContext';
+import { useAuth } from '../../../lib/hooks/useAuth';
 import { initializePayment } from '../../../lib/api/payment';
 
 interface FlutterwaveButtonProps {

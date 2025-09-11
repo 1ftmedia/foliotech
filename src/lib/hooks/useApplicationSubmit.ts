@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../supabase/client';
-import { useAuth } from '../../components/auth/AuthContext';
+import { useAuth } from './useAuth';
 import type { ApplicationFormData } from '../validation/application';
 import { toast } from 'react-hot-toast';
 

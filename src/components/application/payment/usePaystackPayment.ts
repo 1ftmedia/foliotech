@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { supabase } from '../../../lib/supabase/client';
-import { useAuth } from '../../auth/AuthContext';
+import { useAuth } from '../../../lib/hooks/useAuth';
 import { handleError } from '../../../lib/errors/ErrorHandler';
 
 const PAYSTACK_PUBLIC_KEY = import.meta.env.VITE_PAYSTACK_PUBLIC_KEY;

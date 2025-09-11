@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { User, LogOut, Settings, ChevronDown, Bell, BookOpen } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { signOut } from '../../lib/supabase/auth';
-import { useAuth } from './AuthContext';
+import { useAuth } from '../../lib/hooks/useAuth';
 import { toast } from 'react-hot-toast';
 
 export function UserMenu() {

@@ -3,14 +3,14 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, User } from "lucide-react";
 import { NavItem } from "../types";
-import { useAuthContext } from "../lib/hooks/useAuth";
+import { useAuth } from "../lib/hooks/useAuth";
 import { ThemeToggle, useTheme } from "./ThemeProvider";
 import { MenuToggle } from './Navigation/MenuToggle';
 import { MobileMenu } from './Navigation/MobileMenu';
-import { AuthDialog } from './auth/AuthDialog';
 import { toast } from 'react-hot-toast';
 import { signOut } from '../lib/supabase/auth';
 import { useTourContext } from '../context/TourContext';
+import { useAuthModal } from '../context/AuthModalContext';
 
 const navItems: NavItem[] = [
   { title: "Programs", href: "/#featured-programs" },
@@ -33,7 +33,7 @@ const navItems: NavItem[] = [
       { title: "Hire a Graduate", href: "/hire-a-graduate" }
     ]
   },
-  { title: "Contact", href: "#contact" },
+  { title: "Contact", href: "/contact" },
 ];
 
 export function Navigation() {
@@ -42,15 +42,15 @@ export function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
-  const [showAuthDialog, setShowAuthDialog] = useState(false);
-  const [authMode, setAuthMode] = useState<'signin' | 'signup'>('signin');
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
   const profileMenuRef = useRef<HTMLDivElement>(null);
   useTheme(); // For theme context
-  const { user } = useAuthContext();
+  const { user } = useAuth();
   const { startTour } = useTourContext();
+  const { openAuthModal } = useAuthModal();
+
 
   useEffect(() => {
     const handleScroll = () => {
@@ -338,19 +338,13 @@ export function Navigation() {
               ) : (
                 <div className="flex items-center space-x-4 flex-nowrap">
                   <button
-                    onClick={() => {
-                      setAuthMode('signin');
-                      setShowAuthDialog(true);
-                    }}
+                    onClick={() => openAuthModal('signin')}
                     className="px-4 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 rounded-lg transition-colors whitespace-nowrap"
                   >
                     Sign In
                   </button>
                   <button
-                    onClick={() => {
-                      setAuthMode('signup');
-                      setShowAuthDialog(true);
-                    }}
+                    onClick={() => openAuthModal('signup')}
                     className="px-4 py-2 text-white bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 rounded-lg transition-colors whitespace-nowrap"
                   >
                     Get Started
@@ -384,13 +378,11 @@ export function Navigation() {
           items={navItems}
           onSignIn={() => {
             setIsOpen(false);
-            setAuthMode('signin');
-            setShowAuthDialog(true);
+            openAuthModal('signin');
           }}
           onSignUp={() => {
             setIsOpen(false);
-            setAuthMode('signup');
-            setShowAuthDialog(true);
+            openAuthModal('signup');
           }}
           user={user}
           onSignOut={handleSignOut}
@@ -400,12 +392,6 @@ export function Navigation() {
           }}
         />
       </nav>
-
-      <AuthDialog
-        isOpen={showAuthDialog}
-        onClose={() => setShowAuthDialog(false)}
-        defaultMode={authMode}
-      />
     </>
   );
 }

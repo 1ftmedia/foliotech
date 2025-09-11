@@ -11,8 +11,8 @@ import { FormNavigation } from './FormNavigation';
 import { LoadingSpinner } from '../LoadingSpinner';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
-import { useAuthContext } from '../../lib/hooks/useAuth';
-import { ErrorBoundary } from '../../lib/errors/ErrorBoundary';
+import { useAuth } from '../../lib/hooks/useAuth';
+import { ErrorBoundary } from '../ErrorBoundary';
 
 // Static imports for reliable loading - no more lazy loading issues
 import { PersonalInfoStep } from './steps/PersonalInfoStep';
@@ -40,7 +40,7 @@ interface ApplicationFormProps {
 
 function ApplicationForm({ onSubmit, draftId }: ApplicationFormProps) {
   const navigate = useNavigate();
-  const { user } = useAuthContext();
+  const { user } = useAuth();
   const [submissionSuccess, setSubmissionSuccess] = useState(false);
   const [draftSaved, setDraftSaved] = useState(false);
   const [, setDraftSaving] = useState(false);

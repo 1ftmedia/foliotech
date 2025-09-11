@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
 import { BookOpen, Clock, Award, Calendar, ArrowRight, Bell } from 'lucide-react';
-import { useAuthContext } from '../lib/hooks/useAuth';
+import { useAuth } from '../lib/hooks/useAuth';
 import { ProtectedRoute } from '../components/ProtectedRoute';
 import { LoadingSpinner } from '../components/LoadingSpinner';
 import { Link } from 'react-router-dom';
 
 export default function Dashboard() {
-  const { user } = useAuthContext();
+  const { user } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
   const [greeting, setGreeting] = useState('');
 

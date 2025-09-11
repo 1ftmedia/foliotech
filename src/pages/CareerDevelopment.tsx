@@ -8,7 +8,7 @@ import {
 } from 'lucide-react';
 import { supabase } from '../lib/supabase/client';
 import { LoadingSpinner } from '../components/LoadingSpinner';
-import { useAuthContext } from '../lib/hooks/useAuth';
+import { useAuth } from '../lib/hooks/useAuth';
 import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 
@@ -41,7 +41,7 @@ interface Resource {
 
 // Main Component
 export default function CareerDevelopment() {
-  const { user } = useAuthContext();
+  const { user } = useAuth();
   const [activeTab, setActiveTab] = useState<'tracks' | 'resources'>('tracks');
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

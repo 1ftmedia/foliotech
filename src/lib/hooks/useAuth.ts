@@ -19,8 +19,8 @@ const AuthContext = createContext<AuthState>({
   error: null
 });
 
-// Hook for components that need auth state
-export function useAuth(): AuthState {
+// Provider component for auth context
+export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [state, setState] = useState<AuthState>({
     user: null,
     session: null,
@@ -68,13 +68,16 @@ export function useAuth(): AuthState {
         });
 
         // Handle redirect after successful sign in (for immediate logins, not email confirmations)
-        if (event === 'SIGNED_IN' && session?.user && !window.location.pathname.includes('/auth/')) {
+        if (event === 'SIGNED_IN' && session?.user) {
           const storedRedirectUrl = getAndClearRedirectUrl();
           if (storedRedirectUrl) {
-            // Use setTimeout to avoid navigation during render
-            setTimeout(() => {
-              window.location.href = storedRedirectUrl;
-            }, 100);
+            // Only redirect if we're not already on the target page
+            if (window.location.pathname !== storedRedirectUrl) {
+              // Use a longer delay to ensure auth state is fully updated
+              setTimeout(() => {
+                window.location.href = storedRedirectUrl;
+              }, 1000);
+            }
           }
         }
       }
@@ -85,15 +88,8 @@ export function useAuth(): AuthState {
     };
   }, []);
 
-  return state;
-}
-
-// Provider component for auth context
-export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const auth = useAuth();
-  
-  return React.createElement(AuthContext.Provider, { value: auth }, children);
+  return React.createElement(AuthContext.Provider, { value: state }, children);
 }
 
 // Hook to use auth context
-export const useAuthContext = () => useContext(AuthContext);
+export const useAuth = () => useContext(AuthContext);

@@ -5,7 +5,7 @@ import { z } from 'zod';
 import { PaystackButton } from './PaystackButton';
 import { AlertCircle, CreditCard, Building2 } from 'lucide-react';
 import type { PaymentDetails, PaymentBreakdown } from '../../types';
-import { useAuth } from '../auth/AuthContext';
+import { useAuth } from '../../lib/hooks/useAuth';
 
 const TUITION_FEE = 40000; // ₦40,000/month
 const ACCOMMODATION_FEE = 30000; // ₦30,000/month

@@ -2,8 +2,7 @@ import { supabase } from '../supabase/client';
 import { ApplicationFormData } from '../validation/application';
 import { toast } from 'react-hot-toast';
 
-// Import email service for application confirmations
-import { sendApplicationConfirmationEmails } from '../../server/services/applicationEmailService.js';
+// Email sending will be handled by server-side API endpoint
 
 /**
  * Submits a student application to Supabase
@@ -44,15 +43,21 @@ export async function submitApplication(formData: ApplicationFormData): Promise<
       throw new Error(error.message);
     }
 
-    // Send confirmation emails (non-blocking)
+    // Send confirmation emails via server-side API (non-blocking)
     try {
       console.log('Sending application confirmation emails...');
-      const emailResult = await sendApplicationConfirmationEmails(data);
+      const response = await fetch('/api/send-application-emails', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ applicationId: data.id })
+      });
       
-      if (emailResult.success) {
+      if (response.ok) {
         console.log('✅ Application confirmation emails sent successfully');
       } else {
-        console.warn('⚠️ Email sending failed but application was saved:', emailResult.message);
+        console.warn('⚠️ Email sending failed but application was saved');
       }
     } catch (emailError) {
       console.error('❌ Error sending confirmation emails:', emailError);

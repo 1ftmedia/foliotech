@@ -3,7 +3,7 @@ import { X } from 'lucide-react';
 import { EmailSignIn } from './EmailSignIn';
 import { GoogleSignIn } from './GoogleSignIn';
 import { PhoneSignIn } from './PhoneSignIn';
-import { useAuth } from './AuthContext';
+import { useAuth } from '../../lib/hooks/useAuth';
 
 type AuthMethod = 'email' | 'google' | 'phone';
 

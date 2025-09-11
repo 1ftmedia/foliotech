@@ -85,10 +85,13 @@ const router = createBrowserRouter([
     path: '/',
     element: (
       <RouteWrapper>
-        <App />
+        <Layout>
+          <ErrorBoundary>
+            <App />
+          </ErrorBoundary>
+        </Layout>
       </RouteWrapper>
     ),
-    errorElement: <ErrorBoundary />,
   },
   {
     path: '/about',

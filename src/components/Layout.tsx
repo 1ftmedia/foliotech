@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { ErrorBoundary } from '../lib/errors/ErrorBoundary';
+import { ErrorBoundary } from './ErrorBoundary';
 import { Navigation } from './Navigation';
 import { Footer } from './Footer';
 import { BackToTop } from './BackToTop';
@@ -8,15 +8,25 @@ import { WhatsAppWidget } from './WhatsAppWidget';
 import { ThemeProvider } from './ThemeProvider';
 import { AuthDialog } from './auth/AuthDialog';
 import { TourProvider } from '../context/TourContext';
+import { AuthModalProvider, useAuthModal } from '../context/AuthModalContext';
+import { useAuth } from '../lib/hooks/useAuth';
 
 interface LayoutProps {
   children: React.ReactNode;
 }
 
-export function Layout({ children }: LayoutProps) {
+function LayoutContent({ children }: LayoutProps) {
   const location = useLocation();
-  const [showAuthModal, setShowAuthModal] = React.useState(false);
-  const [authMode, setAuthMode] = React.useState<'signin' | 'signup'>('signin');
+  const { showAuthModal, authMode, closeAuthModal } = useAuthModal();
+  const { user } = useAuth();
+
+  // Close auth modal when user successfully logs in
+  useEffect(() => {
+    if (user && showAuthModal) {
+      console.log('Layout: Closing auth modal due to user login');
+      closeAuthModal();
+    }
+  }, [user, showAuthModal, closeAuthModal]);
 
   useEffect(() => {
     // Handle scroll to section after navigation
@@ -47,25 +57,12 @@ export function Layout({ children }: LayoutProps) {
     }
   }, [location]);
 
-  const handleSignInClick = () => {
-    setAuthMode('signin');
-    setShowAuthModal(true);
-  };
-
-  const handleSignUpClick = () => {
-    setAuthMode('signup');
-    setShowAuthModal(true);
-  };
-
   return (
     <ErrorBoundary>
       <ThemeProvider>
         <TourProvider>
           <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors flex flex-col">
-            <Navigation 
-              onSignInClick={handleSignInClick}
-              onSignUpClick={handleSignUpClick}
-            />
+            <Navigation />
             <main className="flex-grow pt-safe-top pb-safe-bottom">
               {children}
             </main>
@@ -79,12 +76,20 @@ export function Layout({ children }: LayoutProps) {
 
             <AuthDialog 
               isOpen={showAuthModal}
-              onClose={() => setShowAuthModal(false)}
+              onClose={closeAuthModal}
               defaultMode={authMode}
             />
           </div>
         </TourProvider>
       </ThemeProvider>
     </ErrorBoundary>
+  );
+}
+
+export function Layout({ children }: LayoutProps) {
+  return (
+    <AuthModalProvider>
+      <LayoutContent>{children}</LayoutContent>
+    </AuthModalProvider>
   );
 }

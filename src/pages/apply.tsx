@@ -1,24 +1,36 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
 import { LoadingSpinner } from '../components/LoadingSpinner';
-import { ErrorBoundary } from '../lib/errors/ErrorBoundary';
-import { useAuthContext } from '../lib/hooks/useAuth';
-import { AuthDialog } from '../components/auth/AuthDialog';
+import { ErrorBoundary } from '../components/ErrorBoundary';
+import { useAuth } from '../lib/hooks/useAuth';
+import { useAuthModal } from '../context/AuthModalContext';
 import { ApplicationForm } from '../components/application/ApplicationForm';
 
 export default function Apply() {
-  const { user, loading } = useAuthContext();
-  const [showAuthDialog, setShowAuthDialog] = useState(!user);
+  const { user, loading } = useAuth();
+  const { openAuthModal } = useAuthModal();
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true);
 
-  // Close auth dialog when user becomes authenticated
-  React.useEffect(() => {
-    if (user) {
-      setShowAuthDialog(false);
+
+  // Add a small delay to ensure auth state is fully loaded
+  useEffect(() => {
+    if (!loading) {
+      const timer = setTimeout(() => {
+        setIsCheckingAuth(false);
+      }, 200);
+      return () => clearTimeout(timer);
     }
-  }, [user]);
+  }, [loading]);
 
-  if (loading) {
+  // Also check if user becomes available after initial load
+  useEffect(() => {
+    if (user && isCheckingAuth) {
+      setIsCheckingAuth(false);
+    }
+  }, [user, isCheckingAuth]);
+
+  if (loading || isCheckingAuth) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <LoadingSpinner size="lg" message="Loading..." />
@@ -33,18 +45,6 @@ export default function Apply() {
         <meta name="description" content="Apply to FolioTech Institute's programs and start your journey in technology education." />
       </Helmet>
 
-      {/* Auth Dialog */}
-      <AuthDialog 
-        isOpen={showAuthDialog} 
-        onClose={() => {
-          // Only allow closing if user is authenticated
-          if (user) {
-            setShowAuthDialog(false);
-          }
-        }}
-        defaultMode="signup"
-        nonDismissible={!user}
-      />
 
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-12">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -71,7 +71,7 @@ export default function Apply() {
                       Please sign in or create an account to access the application form.
                     </p>
                     <button
-                      onClick={() => setShowAuthDialog(true)}
+                      onClick={() => openAuthModal('signup')}
                       className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                     >
                       Sign In / Get Started

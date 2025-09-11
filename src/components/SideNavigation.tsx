@@ -1,16 +1,17 @@
 import React, { useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, ChevronRight, User, Settings, Bell, BookOpen, LogOut } from 'lucide-react';
-import { useAuthContext } from '../lib/hooks/useAuth';
+import { X, ChevronRight, User, Settings, Bell, BookOpen, LogOut, Home, Shield, Mail } from 'lucide-react';
+import { useAuth } from '../lib/hooks/useAuth';
 import { ThemeToggle } from './ThemeProvider';
 import { signOut } from '../lib/supabase/auth';
-import { AuthDialog } from './auth/AuthDialog';
 import { toast } from 'react-hot-toast';
 
 interface SideNavigationProps {
   isOpen: boolean;
   onClose: () => void;
+  onSignInClick: () => void;
+  onSignUpClick: () => void;
 }
 
 const menuItems = [
@@ -29,15 +30,13 @@ const menuItems = [
   { title: 'Contact', href: '#contact', icon: Mail }
 ];
 
-export function SideNavigation({ isOpen, onClose }: SideNavigationProps) {
+export function SideNavigation({ isOpen, onClose, onSignInClick, onSignUpClick }: SideNavigationProps) {
   const location = useLocation();
   const navigate = useNavigate();
-  const { user } = useAuthContext();
+  const { user } = useAuth();
   const menuRef = useRef<HTMLDivElement>(null);
   const firstFocusableRef = useRef<HTMLButtonElement>(null);
   const lastFocusableRef = useRef<HTMLAnchorElement>(null);
-  const [showAuthDialog, setShowAuthDialog] = React.useState(false);
-  const [authMode, setAuthMode] = React.useState<'signin' | 'signup'>('signin');
 
   useEffect(() => {
     if (isOpen) {
@@ -83,14 +82,12 @@ export function SideNavigation({ isOpen, onClose }: SideNavigationProps) {
   }, [isOpen, onClose]);
 
   const handleSignInClick = () => {
-    setAuthMode('signin');
-    setShowAuthDialog(true);
+    onSignInClick();
     onClose();
   };
 
   const handleSignUpClick = () => {
-    setAuthMode('signup');
-    setShowAuthDialog(true);
+    onSignUpClick();
     onClose();
   };
 
@@ -296,12 +293,6 @@ export function SideNavigation({ isOpen, onClose }: SideNavigationProps) {
         )}
       </AnimatePresence>
 
-      {/* Auth Dialog */}
-      <AuthDialog 
-        isOpen={showAuthDialog} 
-        onClose={() => setShowAuthDialog(false)} 
-        defaultMode={authMode}
-      />
     </>
   );
 }

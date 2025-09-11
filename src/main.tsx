@@ -5,7 +5,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AppRouter } from './routes';
 import { setupGlobalErrorHandlers } from './lib/errors/ErrorHandler';
 import { initializeErrorMonitoring } from './lib/errors/monitoring';
-import { ErrorBoundary } from './lib/errors/ErrorBoundary';
+import { ErrorBoundary } from './components/ErrorBoundary';
 import { ThemeProvider } from './components/ThemeProvider';
 import { AuthProvider } from './lib/hooks/useAuth';
 import { Toaster } from 'react-hot-toast';
