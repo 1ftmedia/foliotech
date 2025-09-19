@@ -194,8 +194,22 @@ export function AuthDialog({ isOpen, onClose, defaultMode = 'signin', nonDismiss
       }
       
       await signUp(data.email, data.password, data.fullName || undefined);
-      toast.success('Account created successfully! Please check your email to verify your account.');
-      onClose();
+      
+      // Show success message with better UX
+      toast.success('Account created successfully! Please check your email to verify your account.', {
+        duration: 8000,
+        icon: '📧',
+        style: {
+          background: '#10B981',
+          color: '#fff',
+        },
+      });
+      
+      // Close modal after a brief delay to show the success message
+      setTimeout(() => {
+        onClose();
+      }, 1500);
+      
     } catch (err) {
       console.error('Sign up error:', err);
       setError(err instanceof Error ? err.message : 'Failed to create account');
@@ -457,64 +471,82 @@ export function AuthDialog({ isOpen, onClose, defaultMode = 'signin', nonDismiss
                               exit={{ opacity: 0, x: -20 }}
                               transition={{ duration: 0.2 }}
                             >
-                              <form onSubmit={signUpForm.handleSubmit(handleSignUp)} className="space-y-6">
-                                <div>
-                                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                              <form onSubmit={signUpForm.handleSubmit(handleSignUp)} className="space-y-5">
+                                {/* Full Name Field */}
+                                <div className="space-y-2">
+                                  <label 
+                                    htmlFor="fullName" 
+                                    className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                                  >
                                     Full Name
                                   </label>
-                                  <div className="mt-1 relative">
+                                  <div className="relative">
                                     <input
                                       ref={initialFocusRef}
+                                      id="fullName"
                                       type="text"
                                       {...signUpForm.register('fullName')}
-                                      className="block w-full px-3 py-2 pl-10 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm placeholder-gray-400 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
-                                      placeholder="John Doe"
+                                      className="block w-full px-3 py-3 pl-11 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white transition-colors"
+                                      placeholder="Enter your full name"
+                                      aria-describedby="fullName-error"
                                     />
-                                    <User className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
+                                    <User className="absolute left-3 top-3.5 h-5 w-5 text-gray-400" />
                                   </div>
                                   {signUpForm.formState.errors.fullName && (
-                                    <p className="mt-1 text-sm text-red-600 dark:text-red-400">
+                                    <p id="fullName-error" className="text-sm text-red-600 dark:text-red-400">
                                       {signUpForm.formState.errors.fullName.message}
                                     </p>
                                   )}
                                 </div>
 
-                                <div>
-                                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                    Email
+                                {/* Email Field */}
+                                <div className="space-y-2">
+                                  <label 
+                                    htmlFor="email" 
+                                    className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                                  >
+                                    Email Address
                                   </label>
-                                  <div className="mt-1 relative">
+                                  <div className="relative">
                                     <input
+                                      id="email"
                                       type="email"
                                       {...signUpForm.register('email')}
-                                      className="block w-full px-3 py-2 pl-10 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm placeholder-gray-400 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                                      className="block w-full px-3 py-3 pl-11 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white transition-colors"
                                       placeholder="you@example.com"
+                                      aria-describedby="email-error"
                                     />
-                                    <Mail className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
+                                    <Mail className="absolute left-3 top-3.5 h-5 w-5 text-gray-400" />
                                   </div>
                                   {signUpForm.formState.errors.email && (
-                                    <p className="mt-1 text-sm text-red-600 dark:text-red-400">
+                                    <p id="email-error" className="text-sm text-red-600 dark:text-red-400">
                                       {signUpForm.formState.errors.email.message}
                                     </p>
                                   )}
                                 </div>
 
-                                <div>
-                                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                {/* Password Field */}
+                                <div className="space-y-2">
+                                  <label 
+                                    htmlFor="password" 
+                                    className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                                  >
                                     Password
                                   </label>
-                                  <div className="mt-1 relative">
+                                  <div className="relative">
                                     <input
+                                      id="password"
                                       type={showPassword ? 'text' : 'password'}
                                       {...signUpForm.register('password')}
-                                      className="block w-full px-3 py-2 pl-10 pr-10 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm placeholder-gray-400 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
-                                      placeholder="••••••••"
+                                      className="block w-full px-3 py-3 pl-11 pr-11 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white transition-colors"
+                                      placeholder="Create a strong password"
+                                      aria-describedby="password-error password-requirements"
                                     />
-                                    <Lock className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
+                                    <Lock className="absolute left-3 top-3.5 h-5 w-5 text-gray-400" />
                                     <button
                                       type="button"
                                       onClick={() => setShowPassword(!showPassword)}
-                                      className="absolute right-3 top-2.5 text-gray-400 hover:text-gray-500 transition-colors"
+                                      className="absolute right-3 top-3.5 text-gray-400 hover:text-gray-500 transition-colors"
                                       aria-label={showPassword ? "Hide password" : "Show password"}
                                     >
                                       {showPassword ? (
@@ -524,59 +556,97 @@ export function AuthDialog({ isOpen, onClose, defaultMode = 'signin', nonDismiss
                                       )}
                                     </button>
                                   </div>
+                                  
+                                  {/* Password Requirements */}
+                                  <div id="password-requirements" className="text-xs text-gray-500 dark:text-gray-400 space-y-1">
+                                    <p>Password must contain:</p>
+                                    <ul className="list-disc list-inside space-y-0.5 ml-2">
+                                      <li>At least 8 characters</li>
+                                      <li>One uppercase letter</li>
+                                      <li>One number</li>
+                                      <li>One special character</li>
+                                    </ul>
+                                  </div>
+                                  
                                   {signUpForm.formState.errors.password && (
-                                    <p className="mt-1 text-sm text-red-600 dark:text-red-400">
+                                    <p id="password-error" className="text-sm text-red-600 dark:text-red-400">
                                       {signUpForm.formState.errors.password.message}
                                     </p>
                                   )}
                                 </div>
 
-                                <div>
-                                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                {/* Confirm Password Field */}
+                                <div className="space-y-2">
+                                  <label 
+                                    htmlFor="confirmPassword" 
+                                    className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                                  >
                                     Confirm Password
                                   </label>
-                                  <div className="mt-1 relative">
+                                  <div className="relative">
                                     <input
+                                      id="confirmPassword"
                                       type={showPassword ? 'text' : 'password'}
                                       {...signUpForm.register('confirmPassword')}
-                                      className="block w-full px-3 py-2 pl-10 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm placeholder-gray-400 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
-                                      placeholder="••••••••"
+                                      className="block w-full px-3 py-3 pl-11 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white transition-colors"
+                                      placeholder="Confirm your password"
+                                      aria-describedby="confirmPassword-error"
                                     />
-                                    <Lock className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
+                                    <Lock className="absolute left-3 top-3.5 h-5 w-5 text-gray-400" />
                                   </div>
                                   {signUpForm.formState.errors.confirmPassword && (
-                                    <p className="mt-1 text-sm text-red-600 dark:text-red-400">
+                                    <p id="confirmPassword-error" className="text-sm text-red-600 dark:text-red-400">
                                       {signUpForm.formState.errors.confirmPassword.message}
                                     </p>
                                   )}
                                 </div>
 
-                                <div className="flex items-center">
+                                {/* Remember Me Checkbox */}
+                                <div className="flex items-center space-x-3">
                                   <input
                                     id="remember-me-signup"
                                     type="checkbox"
                                     {...signUpForm.register('rememberMe')}
                                     className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                                   />
-                                  <label htmlFor="remember-me-signup" className="ml-2 block text-sm text-gray-700 dark:text-gray-300">
-                                    Remember me
+                                  <label 
+                                    htmlFor="remember-me-signup" 
+                                    className="text-sm text-gray-700 dark:text-gray-300"
+                                  >
+                                    Remember me for 30 days
                                   </label>
                                 </div>
 
+                                {/* Submit Button */}
                                 <button
                                   type="submit"
                                   disabled={isLoading}
-                                  className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                                  className="w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
                                 >
                                   {isLoading ? (
                                     <>
                                       <Loader2 className="h-5 w-5 animate-spin mr-2" />
-                                      Creating account...
+                                      Creating your account...
                                     </>
                                   ) : (
-                                    'Create Account'
+                                    <>
+                                      <CheckSquare className="h-5 w-5 mr-2" />
+                                      Create Account
+                                    </>
                                   )}
                                 </button>
+
+                                {/* Terms and Privacy Notice */}
+                                <p className="text-xs text-gray-500 dark:text-gray-400 text-center">
+                                  By creating an account, you agree to our{' '}
+                                  <a href="/terms" className="text-blue-600 hover:text-blue-500 dark:text-blue-400">
+                                    Terms of Service
+                                  </a>{' '}
+                                  and{' '}
+                                  <a href="/privacy" className="text-blue-600 hover:text-blue-500 dark:text-blue-400">
+                                    Privacy Policy
+                                  </a>
+                                </p>
                               </form>
                             </motion.div>
                           )}
