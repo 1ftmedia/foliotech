@@ -46,14 +46,18 @@ export default function AuthResult() {
       const { data } = await supabase.auth.getSession();
       const email = emailFromParam || data.session?.user?.email || null;
       
+      console.log('AuthResult: Status:', status, 'Email:', email, 'Session:', !!data.session);
+      
       // For email confirmation, show the success message first
       if (status === 'confirmed') {
+        console.log('AuthResult: Email confirmation detected, showing success message for 5 seconds');
         // Show confirmation message for 5 seconds before redirecting
         timer = window.setInterval(() => setCountdown((c) => Math.max(0, c - 1)), 1000);
         const to = window.setTimeout(() => {
           // Check if there's a stored redirect URL from before auth
           const storedRedirectUrl = getAndClearRedirectUrl();
           const path = storedRedirectUrl || getRedirectPathForEmail(email || undefined);
+          console.log('AuthResult: Redirecting to:', path);
           navigate(path, { replace: true });
         }, 5000); // Increased to 5 seconds for email confirmation
 
@@ -68,6 +72,7 @@ export default function AuthResult() {
 
         timer = window.setInterval(() => setCountdown((c) => Math.max(0, c - 1)), 1000);
         const to = window.setTimeout(() => {
+          console.log('AuthResult: Redirecting to:', path);
           navigate(path, { replace: true });
         }, 3000);
 

@@ -59,6 +59,7 @@ export default function AuthCallback() {
               setStatus('success');
               setMessage('Authentication successful! Redirecting...');
               const email = data.session.user?.email ?? '';
+              console.log('Callback: Session found, redirecting to success page with email:', email);
               setTimeout(() => {
                 navigate(`/auth/success?status=confirmed&email=${encodeURIComponent(email)}`, { replace: true });
               }, 1200);
@@ -77,6 +78,7 @@ export default function AuthCallback() {
               setStatus('success');
               setMessage('Authentication successful! Redirecting...');
               const email = data.session.user?.email ?? '';
+              console.log('Callback: Session found via getSession, redirecting to success page with email:', email);
               setTimeout(() => {
                 navigate(`/auth/success?status=confirmed&email=${encodeURIComponent(email)}`, { replace: true });
               }, 1200);
