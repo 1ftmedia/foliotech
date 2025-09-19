@@ -1,221 +1,125 @@
 # Google OAuth Setup Guide for FolioTech Institute
 
-This guide will help you configure Google OAuth authentication for the FolioTech Institute application.
+## 🚨 Issue: "Continue with Google" Not Working
 
-## 🎯 Overview
+### **🎯 Root Cause**
+Google OAuth is not properly configured in your Supabase dashboard. This requires both Google Cloud Console setup and Supabase configuration.
 
-The Google OAuth implementation includes:
-- **Google Sign-In Button** in the authentication dialog
-- **Automatic redirect handling** after successful authentication
-- **User profile integration** with existing user management
-- **Development and production** environment support
+### **📋 Step-by-Step Fix**
 
-## 🚀 Quick Setup
+#### **1. Google Cloud Console Setup**
 
-### 1. Google Cloud Console Setup
+1. **Go to [Google Cloud Console](https://console.cloud.google.com/)**
+2. **Create a new project** or select existing one
+3. **Enable Google+ API:**
+   - Go to **APIs & Services** → **Library**
+   - Search for "Google+ API" and enable it
+4. **Create OAuth 2.0 Credentials:**
+   - Go to **APIs & Services** → **Credentials**
+   - Click **Create Credentials** → **OAuth 2.0 Client ID**
+   - Choose **Web application**
+   - Add these **Authorized redirect URIs:**
+     ```
+     https://your-project-ref.supabase.co/auth/v1/callback
+     http://localhost:54321/auth/v1/callback
+     ```
 
-#### Step 1: Create Google Cloud Project
-1. Go to [Google Cloud Console](https://console.cloud.google.com/)
-2. Click "Select a project" → "New Project"
-3. Enter project name: `FolioTech Institute`
-4. Click "Create"
+#### **2. Supabase Dashboard Configuration**
 
-#### Step 2: Enable Google+ API
-1. In the Google Cloud Console, go to **APIs & Services** > **Library**
-2. Search for "Google+ API"
-3. Click on it and press "Enable"
+1. **Go to your Supabase Dashboard**
+2. **Navigate to Authentication** → **Providers**
+3. **Enable Google Provider:**
+   - Toggle **Google** to **Enabled**
+   - Enter your **Google Client ID** from Google Cloud Console
+   - Enter your **Google Client Secret** from Google Cloud Console
+4. **Configure Redirect URLs:**
+   - Go to **Authentication** → **URL Configuration**
+   - Add these URLs to **Redirect URLs:**
+     ```
+     http://localhost:5173/auth/callback
+     http://localhost:5173/auth/success
+     https://foliotechinstitute.com/auth/callback
+     https://foliotechinstitute.com/auth/success
+     ```
 
-#### Step 3: Create OAuth 2.0 Credentials
-1. Go to **APIs & Services** > **Credentials**
-2. Click "Create Credentials" → "OAuth 2.0 Client IDs"
-3. Choose "Web application"
-4. Add the following **Authorized redirect URIs**:
+#### **3. Environment Variables (Optional)**
 
-**For Development:**
-```
-http://localhost:3000/auth/callback
-http://localhost:5173/auth/callback
-http://localhost:5174/auth/callback
-http://localhost:5175/auth/callback
-```
-
-**For Production:**
-```
-https://foliotechinstitute.com/auth/callback
-```
-
-5. Click "Create"
-6. Copy the **Client ID** and **Client Secret** (you'll need these for Supabase)
-
-### 2. Supabase Configuration
-
-#### Step 1: Enable Google Provider
-1. Go to your [Supabase Dashboard](https://supabase.com/dashboard)
-2. Navigate to **Authentication** > **Providers**
-3. Find "Google" in the list
-4. Toggle **Enable Google provider**
-
-#### Step 2: Configure Google OAuth
-1. In the Google provider settings, enter:
-   - **Client ID**: (from Google Cloud Console)
-   - **Client Secret**: (from Google Cloud Console)
-2. Click "Save"
-
-#### Step 3: Update Redirect URLs
-1. Go to **Authentication** > **URL Configuration**
-2. Ensure these URLs are in your **Redirect URLs** list:
-   ```
-   http://localhost:3000/auth/callback
-   http://localhost:5173/auth/callback
-   http://localhost:5174/auth/callback
-   http://localhost:5175/auth/callback
-   https://foliotechinstitute.com/auth/callback
-   ```
-
-### 3. Environment Variables
-
-Create a `.env` file in your project root (if it doesn't exist):
-
-```bash
-# Supabase Configuration
-VITE_SUPABASE_URL=your-supabase-url
-VITE_SUPABASE_ANON_KEY=your-supabase-anon-key
-
-# Google OAuth (optional - for additional configuration)
-VITE_GOOGLE_CLIENT_ID=your-google-client-id
+Add these to your `.env` file if needed:
+```env
+# Google OAuth (if using custom configuration)
+GOOGLE_CLIENT_ID=your-google-client-id
+GOOGLE_CLIENT_SECRET=your-google-client-secret
 ```
 
-## 🔧 Implementation Details
+### **🔧 Common Issues & Solutions**
 
-### Current Implementation
+#### **Issue 1: "Invalid redirect URI"**
+- **Solution:** Ensure redirect URIs in Google Cloud Console match Supabase callback URLs
+- **Format:** `https://your-project-ref.supabase.co/auth/v1/callback`
 
-The Google OAuth is already implemented in the codebase:
+#### **Issue 2: "OAuth consent screen not configured"**
+- **Solution:** Configure OAuth consent screen in Google Cloud Console
+- **Required:** App name, support email, authorized domains
 
-1. **AuthDialog Component** (`src/components/auth/AuthDialog.tsx`):
-   - Contains Google sign-in button
-   - Handles OAuth flow initiation
-   - Shows loading states and error handling
+#### **Issue 3: "Google+ API not enabled"**
+- **Solution:** Enable Google+ API in Google Cloud Console
+- **Location:** APIs & Services → Library → Google+ API
 
-2. **GoogleSignIn Component** (`src/components/auth/GoogleSignIn.tsx`):
-   - Dedicated Google sign-in component
-   - Proper Google branding and styling
-   - Error handling and loading states
+#### **Issue 4: "Rate limit exceeded"**
+- **Solution:** Wait a few minutes and try again
+- **Prevention:** Implement proper error handling
 
-3. **Social Auth Function** (`src/lib/supabase/auth.ts`):
-   - `signInWithSocial()` function handles OAuth flow
-   - Redirects to Google OAuth consent screen
-   - Handles redirect back to application
+### **✅ Testing Checklist**
 
-4. **Auth Callback** (`src/pages/auth/Callback.tsx`):
-   - Processes OAuth callback from Google
-   - Handles user creation and session management
-   - Redirects to appropriate page after authentication
+1. **Test Google OAuth in development:**
+   - Click "Continue with Google" button
+   - Should redirect to Google OAuth consent screen
+   - After authorization, should redirect back to your app
 
-### How It Works
+2. **Check browser console for errors:**
+   - Open Developer Tools → Console
+   - Look for OAuth-related errors
+   - Check network tab for failed requests
+
+3. **Verify Supabase configuration:**
+   - Check Authentication → Providers in Supabase dashboard
+   - Ensure Google is enabled and configured
+   - Verify redirect URLs are correct
+
+### **🎯 Current Implementation Status**
+
+✅ **Code Implementation:** Google OAuth is properly implemented in the codebase
+✅ **UI Components:** "Continue with Google" button is present and styled
+✅ **Error Handling:** Proper error handling and user feedback
+❌ **Supabase Configuration:** Google OAuth provider needs to be configured
+❌ **Google Cloud Console:** OAuth credentials need to be set up
+
+### **📱 User Experience Flow**
 
 1. **User clicks "Continue with Google"**
-2. **Application calls** `signInWithSocial('google')`
-3. **User is redirected** to Google OAuth consent screen
-4. **User grants permission** to the application
-5. **Google redirects back** to `/auth/callback` with authorization code
-6. **Supabase exchanges** the code for user information
-7. **User is signed in** and redirected to the intended page
+2. **Redirects to Google OAuth consent screen**
+3. **User authorizes the application**
+4. **Redirects back to `/auth/callback`**
+5. **Callback processes the OAuth response**
+6. **Redirects to `/auth/success`**
+7. **Success page shows confirmation and redirects to dashboard**
 
-## 🧪 Testing
+### **🚀 After Configuration**
 
-### Development Testing
+Once properly configured:
+- ✅ Google OAuth will work seamlessly
+- ✅ Users can sign in with their Google accounts
+- ✅ Proper redirect flow will be maintained
+- ✅ Session management will work correctly
 
-1. **Start the development server**:
-   ```bash
-   npm run dev
-   ```
+### **📞 Support**
 
-2. **Navigate to the application**:
-   - Go to `http://localhost:5173` (or whatever port Vite assigns)
-   - Click "Sign In" or "Get Started"
+If issues persist:
+1. Check browser console for specific error messages
+2. Verify all URLs are correctly configured
+3. Test with a fresh browser session
+4. Check Supabase logs for authentication errors
 
-3. **Test Google OAuth**:
-   - Click "Continue with Google"
-   - You should be redirected to Google's consent screen
-   - After granting permission, you should be redirected back to the app
+---
 
-### Production Testing
-
-1. **Deploy the application** to your production domain
-2. **Test the OAuth flow** on the live site
-3. **Verify user creation** in Supabase dashboard
-4. **Check redirect URLs** are working correctly
-
-## 🚨 Troubleshooting
-
-### Common Issues
-
-#### 1. "redirect_uri_mismatch" Error
-- **Cause**: The redirect URI in Google Cloud Console doesn't match the one in Supabase
-- **Solution**: Ensure both have the exact same URLs (including protocol and port)
-
-#### 2. "invalid_client" Error
-- **Cause**: Incorrect Client ID or Client Secret
-- **Solution**: Double-check the credentials in Supabase dashboard
-
-#### 3. "access_denied" Error
-- **Cause**: User denied permission or OAuth consent screen issues
-- **Solution**: Check Google Cloud Console OAuth consent screen configuration
-
-#### 4. Redirect Loop
-- **Cause**: Incorrect redirect URL configuration
-- **Solution**: Verify all redirect URLs in both Google Cloud Console and Supabase
-
-### Debug Steps
-
-1. **Check Browser Console** for JavaScript errors
-2. **Check Supabase Logs** in the dashboard
-3. **Verify Environment Variables** are set correctly
-4. **Test with Different Browsers** to rule out browser-specific issues
-
-## 📱 User Experience
-
-### What Users See
-
-1. **Sign In Dialog**: Clean, professional sign-in modal
-2. **Google Button**: Properly branded "Continue with Google" button
-3. **Loading States**: Clear feedback during the OAuth process
-4. **Error Handling**: User-friendly error messages
-5. **Success Flow**: Automatic redirect to intended page
-
-### User Data
-
-When users sign in with Google, the following information is collected:
-- **Email address** (primary identifier)
-- **Full name** (from Google profile)
-- **Profile picture** (if available)
-- **Google account ID** (for linking accounts)
-
-## 🔒 Security Considerations
-
-1. **HTTPS Required**: OAuth only works over HTTPS in production
-2. **Redirect URL Validation**: Only authorized URLs can be used
-3. **Client Secret Protection**: Never expose client secret in frontend code
-4. **Token Management**: Supabase handles token refresh automatically
-5. **User Data Privacy**: Only collect necessary user information
-
-## 📚 Additional Resources
-
-- [Google OAuth 2.0 Documentation](https://developers.google.com/identity/protocols/oauth2)
-- [Supabase Auth Documentation](https://supabase.com/docs/guides/auth)
-- [Google Cloud Console](https://console.cloud.google.com/)
-- [Supabase Dashboard](https://supabase.com/dashboard)
-
-## ✅ Checklist
-
-- [ ] Google Cloud Console project created
-- [ ] Google+ API enabled
-- [ ] OAuth 2.0 credentials created
-- [ ] Redirect URIs configured in Google Cloud Console
-- [ ] Google provider enabled in Supabase
-- [ ] Client ID and Secret added to Supabase
-- [ ] Redirect URLs added to Supabase
-- [ ] Development environment tested
-- [ ] Production environment tested
-- [ ] User flow verified end-to-end
-
+**The main issue is missing Google OAuth configuration in Supabase dashboard!** 🎯

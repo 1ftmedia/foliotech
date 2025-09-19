@@ -96,26 +96,42 @@ export async function resendConfirmation(email: string) {
 // Sign in with social provider
 export async function signInWithSocial(provider: Provider) {
   try {
+    console.log(`Initiating ${provider} OAuth...`);
+    
     // Store the current URL to redirect back after auth
     localStorage.setItem('authRedirectTo', window.location.pathname);
+    
+    const redirectUrl = `${window.location.origin}/auth/callback`;
+    console.log(`OAuth redirect URL: ${redirectUrl}`);
     
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider,
       options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
+        redirectTo: redirectUrl,
         // Set session persistence based on remember me preference
         // Default to true if not specified
         persistSession: localStorage.getItem('rememberMe') !== 'false'
       }
     });
 
-    if (error) throw error;
+    if (error) {
+      console.error(`${provider} OAuth error:`, error);
+      throw error;
+    }
+    
+    console.log(`${provider} OAuth URL generated:`, data.url);
     return { url: data.url };
   } catch (error) {
     console.error(`Error signing in with ${provider}:`, error);
     if (error instanceof Error) {
       if (error.message.includes('rate limit')) {
         throw new Error('Too many attempts. Please try again later.');
+      }
+      if (error.message.includes('Invalid redirect URI')) {
+        throw new Error('Google OAuth is not properly configured. Please contact support.');
+      }
+      if (error.message.includes('OAuth consent screen')) {
+        throw new Error('Google OAuth consent screen needs to be configured.');
       }
       throw error;
     }

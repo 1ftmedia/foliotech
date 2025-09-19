@@ -236,11 +236,29 @@ export function AuthDialog({ isOpen, onClose, defaultMode = 'signin', nonDismiss
     try {
       setIsLoading(true);
       setError(null);
+      console.log(`Starting ${provider} OAuth flow...`);
+      
       const { url } = await signInWithSocial(provider);
+      
+      console.log(`Redirecting to ${provider} OAuth URL:`, url);
       window.location.href = url;
     } catch (err) {
       console.error(`${provider} sign in error:`, err);
-      setError(err instanceof Error ? err.message : `Failed to sign in with ${provider}`);
+      
+      let errorMessage = `Failed to sign in with ${provider}`;
+      if (err instanceof Error) {
+        if (err.message.includes('not properly configured')) {
+          errorMessage = 'Google OAuth is not configured. Please contact support.';
+        } else if (err.message.includes('consent screen')) {
+          errorMessage = 'Google OAuth setup is incomplete. Please contact support.';
+        } else if (err.message.includes('rate limit')) {
+          errorMessage = 'Too many attempts. Please try again later.';
+        } else {
+          errorMessage = err.message;
+        }
+      }
+      
+      setError(errorMessage);
       setIsLoading(false);
     }
   };
