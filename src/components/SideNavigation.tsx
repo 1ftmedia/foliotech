@@ -1,11 +1,10 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, ChevronRight, User, Settings, Bell, BookOpen, LogOut, Home, Shield, Mail } from 'lucide-react';
 import { useAuth } from '../lib/hooks/useAuth';
 import { ThemeToggle } from './ThemeProvider';
 import { signOut } from '../lib/supabase/auth';
-import { toast } from 'react-hot-toast';
 
 interface SideNavigationProps {
   isOpen: boolean;
@@ -96,10 +95,9 @@ export function SideNavigation({ isOpen, onClose, onSignInClick, onSignUpClick }
       await signOut();
       onClose();
       navigate('/');
-      toast.success('You have been signed out');
     } catch (error) {
       console.error('Error signing out:', error);
-      toast.error('Failed to sign out');
+      // Error toast is already handled in signOut() function
     }
   };
 

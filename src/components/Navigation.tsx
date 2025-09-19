@@ -81,12 +81,11 @@ export function Navigation() {
   const handleSignOut = async () => {
     try {
       await signOut();
-      toast.success('Successfully signed out');
       setShowProfileMenu(false);
       navigate('/');
     } catch (error) {
       console.error("Error signing out:", error);
-      toast.error('Failed to sign out');
+      // Error toast is already handled in signOut() function
     }
   };
 
