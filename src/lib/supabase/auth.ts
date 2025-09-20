@@ -96,13 +96,19 @@ export async function resendConfirmation(email: string) {
 // Sign in with social provider
 export async function signInWithSocial(provider: Provider) {
   try {
-    console.log(`Initiating ${provider} OAuth...`);
+    console.log(`🚀 Initiating ${provider} OAuth...`);
+    console.log(`📍 Current URL: ${window.location.href}`);
+    console.log(`🌐 Origin: ${window.location.origin}`);
     
     // Store the current URL to redirect back after auth
     localStorage.setItem('authRedirectTo', window.location.pathname);
     
     const redirectUrl = `${window.location.origin}/auth/callback`;
-    console.log(`OAuth redirect URL: ${redirectUrl}`);
+    console.log(`🔄 OAuth redirect URL: ${redirectUrl}`);
+    
+    // Check Supabase client configuration
+    console.log(`🔧 Supabase URL: ${supabase.supabaseUrl}`);
+    console.log(`🔑 Supabase Key: ${supabase.supabaseKey ? 'Present' : 'Missing'}`);
     
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider,
@@ -115,23 +121,42 @@ export async function signInWithSocial(provider: Provider) {
     });
 
     if (error) {
-      console.error(`${provider} OAuth error:`, error);
+      console.error(`❌ ${provider} OAuth error:`, error);
+      console.error(`❌ Error details:`, {
+        message: error.message,
+        status: error.status,
+        statusText: error.statusText
+      });
       throw error;
     }
     
-    console.log(`${provider} OAuth URL generated:`, data.url);
+    console.log(`✅ ${provider} OAuth URL generated successfully:`, data.url);
+    console.log(`🔗 Redirecting to: ${data.url}`);
     return { url: data.url };
   } catch (error) {
-    console.error(`Error signing in with ${provider}:`, error);
+    console.error(`💥 Error signing in with ${provider}:`, error);
+    
     if (error instanceof Error) {
+      console.error(`💥 Error message: ${error.message}`);
+      console.error(`💥 Error stack: ${error.stack}`);
+      
       if (error.message.includes('rate limit')) {
         throw new Error('Too many attempts. Please try again later.');
       }
       if (error.message.includes('Invalid redirect URI')) {
-        throw new Error('Google OAuth is not properly configured. Please contact support.');
+        throw new Error('Google OAuth redirect URI is not configured correctly. Please check Google Cloud Console settings.');
       }
       if (error.message.includes('OAuth consent screen')) {
-        throw new Error('Google OAuth consent screen needs to be configured.');
+        throw new Error('Google OAuth consent screen needs to be configured in Google Cloud Console.');
+      }
+      if (error.message.includes('Client ID')) {
+        throw new Error('Google OAuth Client ID is not configured in Supabase dashboard.');
+      }
+      if (error.message.includes('Client Secret')) {
+        throw new Error('Google OAuth Client Secret is not configured in Supabase dashboard.');
+      }
+      if (error.message.includes('Google+ API')) {
+        throw new Error('Google+ API is not enabled. Please enable it in Google Cloud Console.');
       }
       throw error;
     }
