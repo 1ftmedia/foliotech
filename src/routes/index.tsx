@@ -64,6 +64,7 @@ const HireAGraduate = lazyWithRetry(() => import('../pages/hire-a-graduate'));
 
 const FAQ = lazyWithRetry(() => import('../pages/faq'));
 const GoogleOAuthTest = lazyWithRetry(() => import('../components/auth/GoogleOAuthTest'));
+const OAuthTestPage = lazyWithRetry(() => import('../pages/oauth-test'));
 
 // Enhanced Suspense wrapper with error handling
 function SuspenseWrapper({ children }: { children: React.ReactNode }) {
@@ -422,6 +423,20 @@ const router = createBrowserRouter([
           <ErrorBoundary>
             <SuspenseWrapper>
               <GoogleOAuthTest />
+            </SuspenseWrapper>
+          </ErrorBoundary>
+        </Layout>
+      </RouteWrapper>
+    ),
+  },
+  {
+    path: '/oauth-test',
+    element: (
+      <RouteWrapper>
+        <Layout>
+          <ErrorBoundary>
+            <SuspenseWrapper>
+              <OAuthTestPage />
             </SuspenseWrapper>
           </ErrorBoundary>
         </Layout>
