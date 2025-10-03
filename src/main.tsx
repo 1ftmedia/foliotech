@@ -65,7 +65,14 @@ try {
             <ThemeProvider>
               <AuthProvider>
                 <AppRouter />
-                <Toaster position="top-right" />
+                <Toaster
+                  position="top-right"
+                  toastOptions={{
+                    duration: 7000,
+                    success: { duration: 7000 },
+                    error: { duration: 7000 },
+                  }}
+                />
               </AuthProvider>
             </ThemeProvider>
           </QueryClientProvider>
