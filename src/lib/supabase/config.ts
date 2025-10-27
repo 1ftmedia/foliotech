@@ -17,8 +17,8 @@ export const isProduction = import.meta.env.PROD;
 // Site URLs based on environment
 export const siteConfig = {
   development: {
-    siteUrl: 'http://localhost:5174',
-    redirectUrl: 'http://localhost:5174/auth/callback',
+    siteUrl: 'http://localhost:5173',
+    redirectUrl: 'http://localhost:5173/auth/callback',
     supabaseUrl: import.meta.env.VITE_SUPABASE_URL || 'http://localhost:54321',
     supabaseAnonKey: import.meta.env.VITE_SUPABASE_ANON_KEY || 'your-local-anon-key'
   },

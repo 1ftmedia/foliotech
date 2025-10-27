@@ -247,14 +247,22 @@ export function AuthDialog({ isOpen, onClose, defaultMode = 'signin', nonDismiss
       
       let errorMessage = `Failed to sign in with ${provider}`;
       if (err instanceof Error) {
-        if (err.message.includes('not properly configured')) {
-          errorMessage = 'Google OAuth is not configured. Please contact support.';
-        } else if (err.message.includes('consent screen')) {
-          errorMessage = 'Google OAuth setup is incomplete. Please contact support.';
-        } else if (err.message.includes('rate limit')) {
+        const errorMsg = err.message.toLowerCase();
+        
+        if (errorMsg.includes('not properly configured') || errorMsg.includes('invalid_client')) {
+          errorMessage = 'Google OAuth is not configured. Please check your Supabase settings.';
+        } else if (errorMsg.includes('consent screen') || errorMsg.includes('access_denied')) {
+          errorMessage = 'Google OAuth consent screen needs to be configured.';
+        } else if (errorMsg.includes('rate limit') || errorMsg.includes('quota_exceeded')) {
           errorMessage = 'Too many attempts. Please try again later.';
+        } else if (errorMsg.includes('redirect_uri_mismatch')) {
+          errorMessage = 'Redirect URI mismatch. Please check your Google Cloud Console settings.';
+        } else if (errorMsg.includes('invalid_request') || errorMsg.includes('400')) {
+          errorMessage = 'Invalid OAuth request. Please check your configuration.';
+        } else if (errorMsg.includes('network') || errorMsg.includes('fetch')) {
+          errorMessage = 'Network error. Please check your internet connection.';
         } else {
-          errorMessage = err.message;
+          errorMessage = `Sign-in failed: ${err.message}`;
         }
       }
       

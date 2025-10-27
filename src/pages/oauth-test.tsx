@@ -1,6 +1,8 @@
 import React from 'react';
 import { OAuthTest } from '../components/auth/OAuthTest';
 import { OAuthDebugger } from '../components/auth/OAuthDebugger';
+import GoogleSignInTest from '../components/auth/GoogleSignInTest';
+import OAuthDiagnostic from '../components/auth/OAuthDiagnostic';
 
 /**
  * OAuth Test Page
@@ -13,6 +15,8 @@ export default function OAuthTestPage() {
         <h1 className="text-3xl font-bold text-center mb-8">OAuth Debugging Tools</h1>
         
         <div className="space-y-8">
+          <OAuthDiagnostic />
+          <GoogleSignInTest />
           <OAuthTest />
           <OAuthDebugger />
         </div>

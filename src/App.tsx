@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Hero } from './components/Hero';
 import { Programs } from './components/Programs';
-import { Stats } from './components/Stats';
 import { Testimonials } from './components/Testimonials';
 import { AdmissionProcess } from './components/AdmissionProcess';
 import { ErrorBoundary } from './components/ErrorBoundary';
@@ -29,9 +28,6 @@ function App() {
       </ErrorBoundary>
       <ErrorBoundary>
         <Programs />
-      </ErrorBoundary>
-      <ErrorBoundary>
-        <Stats />
       </ErrorBoundary>
       <ErrorBoundary>
         <Testimonials />
