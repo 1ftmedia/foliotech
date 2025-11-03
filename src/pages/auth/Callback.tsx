@@ -87,7 +87,10 @@ export default function AuthCallback() {
             }
           }
         } else {
-          // No hash fragment, try to get the current session
+          // No hash fragment - this could be from email verification
+          // Wait a moment for Supabase to process the verification
+          await new Promise(resolve => setTimeout(resolve, 1000));
+          
           const { data, error } = await supabase.auth.getSession();
           
           if (error) {
@@ -96,13 +99,20 @@ export default function AuthCallback() {
 
           if (data.session) {
             setStatus('success');
-            setMessage('Already authenticated! Redirecting...');
+            setMessage('Email verification successful! Redirecting...');
             const email = data.session.user?.email ?? '';
+            console.log('Callback: Email verification successful, redirecting to success page');
             setTimeout(() => {
-              navigate(`/auth/success?status=authenticated&email=${encodeURIComponent(email)}`, { replace: true });
+              navigate(`/auth/success?status=confirmed&email=${encodeURIComponent(email)}`, { replace: true });
             }, 1200);
           } else {
-            throw new Error('No authentication data found');
+            // No session found - this might be someone accessing callback directly
+            console.warn('Callback: No session found, redirecting to home');
+            setStatus('error');
+            setMessage('No active authentication session found. Redirecting to home page...');
+            setTimeout(() => {
+              navigate('/', { replace: true });
+            }, 2000);
           }
         }
       } catch (error) {
