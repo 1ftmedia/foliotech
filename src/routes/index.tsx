@@ -87,9 +87,11 @@ const router = createBrowserRouter([
     path: '/',
     element: (
       <RouteWrapper>
-        <ErrorBoundary>
-          <App />
-        </ErrorBoundary>
+        <Layout>
+          <ErrorBoundary>
+            <App />
+          </ErrorBoundary>
+        </Layout>
       </RouteWrapper>
     ),
   },

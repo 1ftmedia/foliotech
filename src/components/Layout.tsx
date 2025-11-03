@@ -9,7 +9,7 @@ import { ThemeProvider } from './ThemeProvider';
 import { AuthDialog } from './auth/AuthDialog';
 import { TourProvider } from '../context/TourContext';
 import { AuthModalProvider, useAuthModal } from '../context/AuthModalContext';
-import { useAuth } from '../lib/hooks/useAuth';
+import { useAuthContext } from '../lib/hooks/useAuth';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -18,12 +18,12 @@ interface LayoutProps {
 function LayoutContent({ children }: LayoutProps) {
   const location = useLocation();
   const { showAuthModal, authMode, closeAuthModal } = useAuthModal();
-  const { user } = useAuth();
+  const { user } = useAuthContext();
 
   // Close auth modal when user successfully logs in
   useEffect(() => {
     if (user && showAuthModal) {
-      console.log('Layout: Closing auth modal due to user login');
+      // Closing auth modal due to user login
       closeAuthModal();
     }
   }, [user, showAuthModal, closeAuthModal]);
