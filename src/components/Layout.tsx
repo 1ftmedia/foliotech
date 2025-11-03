@@ -17,8 +17,18 @@ interface LayoutProps {
 
 function LayoutContent({ children }: LayoutProps) {
   const location = useLocation();
-  const { showAuthModal, authMode, closeAuthModal } = useAuthModal();
+  const { showAuthModal, authMode, closeAuthModal, openAuthModal } = useAuthModal();
   const { user } = useAuthContext();
+
+  // Handle auth dialog from navigation state
+  useEffect(() => {
+    if (location.state && location.state.openAuthDialog) {
+      const mode = location.state.authMode || 'signin';
+      openAuthModal(mode);
+      // Clear the state to prevent reopening on subsequent renders
+      window.history.replaceState({}, document.title);
+    }
+  }, [location.state, openAuthModal]);
 
   // Close auth modal when user successfully logs in
   useEffect(() => {

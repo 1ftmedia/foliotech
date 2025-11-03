@@ -14,6 +14,8 @@ import Dashboard from '../pages/Dashboard';
 import Profile from '../pages/Profile';
 import AuthCallback from '../pages/auth/Callback';
 import AuthResult from '../pages/auth/AuthResult';
+import SignIn from '../pages/auth/signin';
+import SignUp from '../pages/auth/signup';
 
 // Enhanced helper function to handle lazy imports with retry logic and better error handling
 function lazyWithRetry(importFn: () => Promise<any>, retries = 3) {
@@ -378,6 +380,30 @@ const router = createBrowserRouter([
             <SuspenseWrapper>
               <HireAGraduate />
             </SuspenseWrapper>
+          </ErrorBoundary>
+        </Layout>
+      </RouteWrapper>
+    ),
+  },
+  {
+    path: '/auth/signin',
+    element: (
+      <RouteWrapper>
+        <Layout>
+          <ErrorBoundary>
+            <SignIn />
+          </ErrorBoundary>
+        </Layout>
+      </RouteWrapper>
+    ),
+  },
+  {
+    path: '/auth/signup',
+    element: (
+      <RouteWrapper>
+        <Layout>
+          <ErrorBoundary>
+            <SignUp />
           </ErrorBoundary>
         </Layout>
       </RouteWrapper>

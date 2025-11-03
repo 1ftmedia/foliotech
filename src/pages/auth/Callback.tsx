@@ -110,11 +110,11 @@ export default function AuthCallback() {
         setStatus('error');
         setMessage(`Authentication failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
         
-        // Redirect to login page after 3 seconds
+        // Redirect to home page after 3 seconds
         setTimeout(() => {
-          navigate('/auth/signin', { 
+          navigate('/', { 
             replace: true,
-            state: { error: error instanceof Error ? error.message : 'Unknown error' }
+            state: { openAuthDialog: true, authMode: 'signin', error: error instanceof Error ? error.message : 'Unknown error' }
           });
         }, 3000);
       }
