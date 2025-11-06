@@ -28,7 +28,7 @@ export default function AuthCallback() {
     
     let authStateSubscription: { unsubscribe: () => void } | null = null;
     let pollTimeout: NodeJS.Timeout | null = null;
-    let maxRetries = 10; // Poll for up to 10 seconds
+    let maxRetries = 15; // Poll for up to 15 seconds (increased to give Supabase more time)
     let retryCount = 0;
     
     const handleAuthCallback = async () => {
@@ -41,73 +41,61 @@ export default function AuthCallback() {
         // Check for query parameters (email verification flow)
         const queryParams = new URLSearchParams(window.location.search);
         
-        // Check for errors in hash or query
+        // Store error info for later, but don't act on it immediately
+        // Supabase might include error params even when verification succeeds
+        // We'll check for errors only AFTER attempting to get a session
         const error = hashParams?.get('error') || queryParams.get('error');
         const errorDescription = hashParams?.get('error_description') || queryParams.get('error_description');
-
-        if (error) {
-          console.error('Authentication error:', error, errorDescription);
-          
-          // Check if it's an expired/invalid link error
-          const isExpiredLink = error === 'access_denied' || 
-                               errorDescription?.toLowerCase().includes('expired') ||
-                               errorDescription?.toLowerCase().includes('invalid');
-          
-          // Try to extract email from URL params
-          const emailParam = searchParams.get('email') || queryParams.get('email') || window.location.search.match(/email=([^&]+)/)?.[1];
-          
-          if (isExpiredLink) {
-            setStatus('expired');
-            setMessage('This verification link has expired or is invalid.');
-            if (emailParam) {
-              setEmail(decodeURIComponent(emailParam));
-            }
-            return;
-          }
-          
-          setStatus('error');
-          setMessage(`Authentication failed: ${errorDescription || error}`);
-          
-          setTimeout(() => {
-            navigate('/', { 
-              replace: true,
-              state: { 
-                openAuthDialog: true, 
-                authMode: 'signin', 
-                error: errorDescription || error 
-              }
-            });
-          }, 3000);
-          return;
-        }
-
-        // Handle hash fragment with tokens (OAuth/PKCE)
+        const errorCode = hashParams?.get('error_code') || queryParams.get('error_code');
+        
+        console.log('Callback: Starting auth callback processing');
+        console.log('Callback: URL hash:', hash ? 'present' : 'none');
+        console.log('Callback: URL query:', window.location.search);
+        console.log('Callback: Error params found:', { error, errorCode, errorDescription });
+        
+        // Handle hash fragment with tokens FIRST (OAuth/PKCE) - highest priority
+        // Even if there are error params, check for tokens first - Supabase sometimes includes both
         if (hashParams) {
           const accessToken = hashParams.get('access_token');
           const refreshToken = hashParams.get('refresh_token');
           
+          // Prioritize tokens - if they exist, use them regardless of error params
           if (accessToken && refreshToken) {
+            console.log('Callback: Found tokens in hash, attempting to set session...');
             const { data, error: sessionError } = await supabase.auth.setSession({
               access_token: accessToken,
               refresh_token: refreshToken
             });
 
             if (sessionError) {
-              throw sessionError;
-            }
-
-            if (data.session) {
+              console.error('Callback: Error setting session from tokens:', sessionError);
+              // Don't throw yet - continue to try other methods
+            } else if (data.session) {
               isHandledRef.current = true;
               setStatus('success');
               setMessage('Authentication successful! Redirecting...');
               const email = data.session.user?.email ?? '';
-              console.log('Callback: Session set from hash tokens, email:', email);
+              console.log('Callback: Session set successfully from hash tokens, email:', email);
               setTimeout(() => {
                 navigate(`/auth/success?status=confirmed&email=${encodeURIComponent(email)}`, { replace: true });
               }, 1200);
               return;
             }
           }
+        }
+        
+        // Try immediate session check (might be already set)
+        const immediateCheck = await supabase.auth.getSession();
+        if (immediateCheck.data.session) {
+          isHandledRef.current = true;
+          setStatus('success');
+          setMessage('Email verification successful! Redirecting...');
+          const email = immediateCheck.data.session.user?.email ?? '';
+          console.log('Callback: Session found immediately, email:', email);
+          setTimeout(() => {
+            navigate(`/auth/success?status=confirmed&email=${encodeURIComponent(email)}`, { replace: true });
+          }, 1200);
+          return;
         }
 
         // Set up auth state change listener for real-time session detection
@@ -144,6 +132,7 @@ export default function AuthCallback() {
           
           if (sessionError) {
             console.error('Callback: Session error:', sessionError);
+            // Only fail on session error if we've exhausted retries
             if (retryCount >= maxRetries) {
               throw sessionError;
             }
@@ -168,14 +157,49 @@ export default function AuthCallback() {
           if (retryCount < maxRetries && !isHandledRef.current) {
             pollTimeout = setTimeout(pollForSession, 1000);
           } else if (retryCount >= maxRetries && !isHandledRef.current) {
-            // No session found after max retries
-            console.warn('Callback: No session found after polling, redirecting to home');
+            // No session found after max retries - NOW check for errors
+            console.warn('Callback: No session found after polling, checking for errors');
             isHandledRef.current = true;
             
             // Clean up listeners
             if (authStateSubscription) authStateSubscription.unsubscribe();
             if (pollTimeout) clearTimeout(pollTimeout);
             
+            // Only show expired error if we actually have error params AND no session
+            const isExpiredLink = error === 'access_denied' || 
+                                 errorCode === 'otp_expired' ||
+                                 errorDescription?.toLowerCase().includes('expired') ||
+                                 errorDescription?.toLowerCase().includes('invalid');
+            
+            if (isExpiredLink) {
+              const emailParam = searchParams.get('email') || queryParams.get('email') || window.location.search.match(/email=([^&]+)/)?.[1];
+              setStatus('expired');
+              setMessage('This verification link has expired or is invalid.');
+              if (emailParam) {
+                setEmail(decodeURIComponent(emailParam));
+              }
+              // Don't auto-redirect, let user choose to resend
+              return;
+            }
+            
+            // Generic error handling
+            if (error) {
+              setStatus('error');
+              setMessage(`Authentication failed: ${errorDescription || error}`);
+              setTimeout(() => {
+                navigate('/', { 
+                  replace: true,
+                  state: { 
+                    openAuthDialog: true, 
+                    authMode: 'signin', 
+                    error: errorDescription || error 
+                  }
+                });
+              }, 3000);
+              return;
+            }
+            
+            // No session and no error - just redirect to home
             setStatus('error');
             setMessage('No active authentication session found. Redirecting to home page...');
             setTimeout(() => {
