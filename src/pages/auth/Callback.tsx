@@ -28,7 +28,8 @@ export default function AuthCallback() {
     
     let authStateSubscription: { unsubscribe: () => void } | null = null;
     let pollTimeout: NodeJS.Timeout | null = null;
-    let maxRetries = 15; // Poll for up to 15 seconds (increased to give Supabase more time)
+    let finalTimeout: NodeJS.Timeout | null = null;
+    let maxRetries = 8; // Poll for up to 8 seconds (reasonable timeout)
     let retryCount = 0;
     
     const handleAuthCallback = async () => {
@@ -76,6 +77,7 @@ export default function AuthCallback() {
               setMessage('Authentication successful! Redirecting...');
               const email = data.session.user?.email ?? '';
               console.log('Callback: Session set successfully from hash tokens, email:', email);
+              if (finalTimeout) clearTimeout(finalTimeout);
               setTimeout(() => {
                 navigate(`/auth/success?status=confirmed&email=${encodeURIComponent(email)}`, { replace: true });
               }, 1200);
@@ -92,6 +94,7 @@ export default function AuthCallback() {
           setMessage('Email verification successful! Redirecting...');
           const email = immediateCheck.data.session.user?.email ?? '';
           console.log('Callback: Session found immediately, email:', email);
+          if (finalTimeout) clearTimeout(finalTimeout);
           setTimeout(() => {
             navigate(`/auth/success?status=confirmed&email=${encodeURIComponent(email)}`, { replace: true });
           }, 1200);
@@ -114,6 +117,7 @@ export default function AuthCallback() {
             // Clean up listeners
             if (authStateSubscription) authStateSubscription.unsubscribe();
             if (pollTimeout) clearTimeout(pollTimeout);
+            if (finalTimeout) clearTimeout(finalTimeout);
             
             setTimeout(() => {
               navigate(`/auth/success?status=confirmed&email=${encodeURIComponent(email)}`, { replace: true });
@@ -128,88 +132,205 @@ export default function AuthCallback() {
           retryCount++;
           console.log(`Callback: Polling for session (attempt ${retryCount}/${maxRetries})...`);
           
-          const { data, error: sessionError } = await supabase.auth.getSession();
-          
-          if (sessionError) {
-            console.error('Callback: Session error:', sessionError);
-            // Only fail on session error if we've exhausted retries
-            if (retryCount >= maxRetries) {
-              throw sessionError;
-            }
-          } else if (data.session) {
-            isHandledRef.current = true;
-            setStatus('success');
-            setMessage('Email verification successful! Redirecting...');
-            const email = data.session.user?.email ?? '';
-            console.log('Callback: Session found via polling, email:', email);
+          try {
+            const { data, error: sessionError } = await supabase.auth.getSession();
             
-            // Clean up listeners
-            if (authStateSubscription) authStateSubscription.unsubscribe();
-            if (pollTimeout) clearTimeout(pollTimeout);
-            
-            setTimeout(() => {
-              navigate(`/auth/success?status=confirmed&email=${encodeURIComponent(email)}`, { replace: true });
-            }, 1200);
-            return;
-          }
-          
-          // Continue polling if not found and haven't exceeded retries
-          if (retryCount < maxRetries && !isHandledRef.current) {
-            pollTimeout = setTimeout(pollForSession, 1000);
-          } else if (retryCount >= maxRetries && !isHandledRef.current) {
-            // No session found after max retries - NOW check for errors
-            console.warn('Callback: No session found after polling, checking for errors');
-            isHandledRef.current = true;
-            
-            // Clean up listeners
-            if (authStateSubscription) authStateSubscription.unsubscribe();
-            if (pollTimeout) clearTimeout(pollTimeout);
-            
-            // Only show expired error if we actually have error params AND no session
-            const isExpiredLink = error === 'access_denied' || 
-                                 errorCode === 'otp_expired' ||
-                                 errorDescription?.toLowerCase().includes('expired') ||
-                                 errorDescription?.toLowerCase().includes('invalid');
-            
-            if (isExpiredLink) {
-              const emailParam = searchParams.get('email') || queryParams.get('email') || window.location.search.match(/email=([^&]+)/)?.[1];
-              setStatus('expired');
-              setMessage('This verification link has expired or is invalid.');
-              if (emailParam) {
-                setEmail(decodeURIComponent(emailParam));
+            if (sessionError) {
+              console.error('Callback: Session error:', sessionError);
+              // Continue polling even with errors (might be transient) unless we've exhausted retries
+              if (retryCount >= maxRetries) {
+                // Final attempt failed - handle error
+                isHandledRef.current = true;
+                
+                // Clean up listeners
+                if (authStateSubscription) authStateSubscription.unsubscribe();
+                if (pollTimeout) clearTimeout(pollTimeout);
+                
+                // Check for expired link error
+                const isExpiredLink = error === 'access_denied' || 
+                                     errorCode === 'otp_expired' ||
+                                     errorDescription?.toLowerCase().includes('expired') ||
+                                     errorDescription?.toLowerCase().includes('invalid');
+                
+                if (isExpiredLink) {
+                  const emailParam = searchParams.get('email') || queryParams.get('email') || window.location.search.match(/email=([^&]+)/)?.[1];
+                  setStatus('expired');
+                  setMessage('This verification link has expired or is invalid.');
+                  if (emailParam) {
+                    setEmail(decodeURIComponent(emailParam));
+                  }
+                  return;
+                }
+                
+                setStatus('error');
+                setMessage(`Authentication failed: ${sessionError.message || errorDescription || error || 'Unknown error'}`);
+                setTimeout(() => {
+                  navigate('/', { 
+                    replace: true,
+                    state: { 
+                      openAuthDialog: true, 
+                      authMode: 'signin', 
+                      error: sessionError.message || errorDescription || error 
+                    }
+                  });
+                }, 3000);
+                return;
               }
-              // Don't auto-redirect, let user choose to resend
+            } else if (data.session) {
+              isHandledRef.current = true;
+              setStatus('success');
+              setMessage('Email verification successful! Redirecting...');
+              const email = data.session.user?.email ?? '';
+              console.log('Callback: Session found via polling, email:', email);
+              
+              // Clean up listeners
+              if (authStateSubscription) authStateSubscription.unsubscribe();
+              if (pollTimeout) clearTimeout(pollTimeout);
+              if (finalTimeout) clearTimeout(finalTimeout);
+              
+              setTimeout(() => {
+                navigate(`/auth/success?status=confirmed&email=${encodeURIComponent(email)}`, { replace: true });
+              }, 1200);
               return;
             }
             
-            // Generic error handling
-            if (error) {
+            // Continue polling if not found and haven't exceeded retries
+            if (retryCount < maxRetries && !isHandledRef.current) {
+              pollTimeout = setTimeout(pollForSession, 1000);
+            } else if (retryCount >= maxRetries && !isHandledRef.current) {
+              // No session found after max retries - NOW check for errors
+              console.warn('Callback: No session found after polling, checking for errors');
+              isHandledRef.current = true;
+              
+              // Clean up listeners
+              if (authStateSubscription) authStateSubscription.unsubscribe();
+              if (pollTimeout) clearTimeout(pollTimeout);
+              
+              // Only show expired error if we actually have error params AND no session
+              const isExpiredLink = error === 'access_denied' || 
+                                   errorCode === 'otp_expired' ||
+                                   errorDescription?.toLowerCase().includes('expired') ||
+                                   errorDescription?.toLowerCase().includes('invalid');
+              
+              if (isExpiredLink) {
+                const emailParam = searchParams.get('email') || queryParams.get('email') || window.location.search.match(/email=([^&]+)/)?.[1];
+                setStatus('expired');
+                setMessage('This verification link has expired or is invalid.');
+                if (emailParam) {
+                  setEmail(decodeURIComponent(emailParam));
+                }
+                // Don't auto-redirect, let user choose to resend
+                return;
+              }
+              
+              // Generic error handling
+              if (error) {
+                setStatus('error');
+                setMessage(`Authentication failed: ${errorDescription || error}`);
+                setTimeout(() => {
+                  navigate('/', { 
+                    replace: true,
+                    state: { 
+                      openAuthDialog: true, 
+                      authMode: 'signin', 
+                      error: errorDescription || error 
+                    }
+                  });
+                }, 3000);
+                return;
+              }
+              
+              // No session and no error - just redirect to home
               setStatus('error');
-              setMessage(`Authentication failed: ${errorDescription || error}`);
+              setMessage('No active authentication session found. Redirecting to home page...');
+              setTimeout(() => {
+                navigate('/', { replace: true });
+              }, 2000);
+            }
+          } catch (pollError) {
+            console.error('Callback: Error in polling:', pollError);
+            // If we've exhausted retries, handle the error
+            if (retryCount >= maxRetries && !isHandledRef.current) {
+              isHandledRef.current = true;
+              
+              // Clean up listeners
+              if (authStateSubscription) authStateSubscription.unsubscribe();
+              if (pollTimeout) clearTimeout(pollTimeout);
+              
+              setStatus('error');
+              setMessage(`Authentication failed: ${pollError instanceof Error ? pollError.message : 'Unknown error'}`);
               setTimeout(() => {
                 navigate('/', { 
                   replace: true,
                   state: { 
                     openAuthDialog: true, 
                     authMode: 'signin', 
-                    error: errorDescription || error 
+                    error: pollError instanceof Error ? pollError.message : 'Unknown error'
                   }
                 });
               }, 3000);
-              return;
+            } else if (retryCount < maxRetries && !isHandledRef.current) {
+              // Continue polling on error if we haven't exhausted retries
+              pollTimeout = setTimeout(pollForSession, 1000);
             }
-            
-            // No session and no error - just redirect to home
-            setStatus('error');
-            setMessage('No active authentication session found. Redirecting to home page...');
-            setTimeout(() => {
-              navigate('/', { replace: true });
-            }, 2000);
           }
         };
 
         // Start polling after a short delay (give Supabase time to process)
         pollTimeout = setTimeout(pollForSession, 500);
+        
+        // Final safety timeout - ensures we never load forever
+        // If we haven't resolved after 10 seconds, show an error and redirect
+        finalTimeout = setTimeout(() => {
+          if (!isHandledRef.current) {
+            console.warn('Callback: Final timeout reached, forcing resolution');
+            isHandledRef.current = true;
+            
+            // Clean up listeners
+            if (authStateSubscription) authStateSubscription.unsubscribe();
+            if (pollTimeout) clearTimeout(pollTimeout);
+            
+            // Last attempt to get session
+            supabase.auth.getSession().then(({ data }) => {
+              if (data.session) {
+                setStatus('success');
+                setMessage('Email verification successful! Redirecting...');
+                const email = data.session.user?.email ?? '';
+                setTimeout(() => {
+                  navigate(`/auth/success?status=confirmed&email=${encodeURIComponent(email)}`, { replace: true });
+                }, 1200);
+              } else {
+                // No session - check for errors or redirect
+                const isExpiredLink = error === 'access_denied' || 
+                                     errorCode === 'otp_expired' ||
+                                     errorDescription?.toLowerCase().includes('expired') ||
+                                     errorDescription?.toLowerCase().includes('invalid');
+                
+                if (isExpiredLink) {
+                  const emailParam = searchParams.get('email') || queryParams.get('email') || window.location.search.match(/email=([^&]+)/)?.[1];
+                  setStatus('expired');
+                  setMessage('This verification link has expired or is invalid.');
+                  if (emailParam) {
+                    setEmail(decodeURIComponent(emailParam));
+                  }
+                } else {
+                  setStatus('error');
+                  setMessage('Authentication timed out. Please try again or sign in.');
+                  setTimeout(() => {
+                    navigate('/', { 
+                      replace: true,
+                      state: { 
+                        openAuthDialog: true, 
+                        authMode: 'signin', 
+                        error: 'Authentication timed out. Please try again.'
+                      }
+                    });
+                  }, 3000);
+                }
+              }
+            });
+          }
+        }, 10000); // 10 second absolute timeout
         
       } catch (error) {
         if (isHandledRef.current) return;
@@ -244,6 +365,9 @@ export default function AuthCallback() {
       }
       if (pollTimeout) {
         clearTimeout(pollTimeout);
+      }
+      if (finalTimeout) {
+        clearTimeout(finalTimeout);
       }
     };
   }, [navigate, searchParams]);
