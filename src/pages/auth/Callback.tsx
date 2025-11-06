@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { supabase } from '../../lib/supabase/client';
 import { resendConfirmation } from '../../lib/supabase/auth';
+import { getAndClearRedirectUrl } from '../../lib/utils/redirects';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { motion } from 'framer-motion';
 
@@ -19,61 +20,73 @@ export default function AuthCallback() {
   const [email, setEmail] = useState<string | null>(null);
   const [emailInput, setEmailInput] = useState('');
   const [resending, setResending] = useState(false);
+  const isHandledRef = useRef(false);
 
   useEffect(() => {
+    // Reset handled flag when component mounts or dependencies change
+    isHandledRef.current = false;
+    
+    let authStateSubscription: { unsubscribe: () => void } | null = null;
+    let pollTimeout: NodeJS.Timeout | null = null;
+    let maxRetries = 10; // Poll for up to 10 seconds
+    let retryCount = 0;
+    
     const handleAuthCallback = async () => {
-      try {
-        // Get the hash fragment from the URL
-        const hash = window.location.hash;
-        
-        if (hash) {
-          // Parse the hash to extract auth parameters
-          const params = new URLSearchParams(hash.substring(1));
-          const accessToken = params.get('access_token');
-          const refreshToken = params.get('refresh_token');
-          const error = params.get('error');
-          const errorDescription = params.get('error_description');
 
-          if (error) {
-            console.error('Authentication error:', error, errorDescription);
-            
-            // Check if it's an expired/invalid link error
-            const isExpiredLink = error === 'access_denied' || 
-                                 errorDescription?.toLowerCase().includes('expired') ||
-                                 errorDescription?.toLowerCase().includes('invalid');
-            
-            // Try to extract email from URL search params (Supabase might include it)
-            const emailParam = searchParams.get('email') || window.location.search.match(/email=([^&]+)/)?.[1];
-            
-            if (isExpiredLink) {
-              setStatus('expired');
-              setMessage('This verification link has expired or is invalid.');
-              if (emailParam) {
-                setEmail(decodeURIComponent(emailParam));
-              }
-              // Don't auto-redirect, let user choose to resend
-              return;
+      try {
+        // Check for hash fragment (OAuth/PKCE flow)
+        const hash = window.location.hash;
+        const hashParams = hash ? new URLSearchParams(hash.substring(1)) : null;
+        
+        // Check for query parameters (email verification flow)
+        const queryParams = new URLSearchParams(window.location.search);
+        
+        // Check for errors in hash or query
+        const error = hashParams?.get('error') || queryParams.get('error');
+        const errorDescription = hashParams?.get('error_description') || queryParams.get('error_description');
+
+        if (error) {
+          console.error('Authentication error:', error, errorDescription);
+          
+          // Check if it's an expired/invalid link error
+          const isExpiredLink = error === 'access_denied' || 
+                               errorDescription?.toLowerCase().includes('expired') ||
+                               errorDescription?.toLowerCase().includes('invalid');
+          
+          // Try to extract email from URL params
+          const emailParam = searchParams.get('email') || queryParams.get('email') || window.location.search.match(/email=([^&]+)/)?.[1];
+          
+          if (isExpiredLink) {
+            setStatus('expired');
+            setMessage('This verification link has expired or is invalid.');
+            if (emailParam) {
+              setEmail(decodeURIComponent(emailParam));
             }
-            
-            setStatus('error');
-            setMessage(`Authentication failed: ${errorDescription || error}`);
-            
-            // Redirect to home page with auth dialog after 3 seconds
-            setTimeout(() => {
-              navigate('/', { 
-                replace: true,
-                state: { 
-                  openAuthDialog: true, 
-                  authMode: 'signin', 
-                  error: errorDescription || error 
-                }
-              });
-            }, 3000);
             return;
           }
+          
+          setStatus('error');
+          setMessage(`Authentication failed: ${errorDescription || error}`);
+          
+          setTimeout(() => {
+            navigate('/', { 
+              replace: true,
+              state: { 
+                openAuthDialog: true, 
+                authMode: 'signin', 
+                error: errorDescription || error 
+              }
+            });
+          }, 3000);
+          return;
+        }
 
+        // Handle hash fragment with tokens (OAuth/PKCE)
+        if (hashParams) {
+          const accessToken = hashParams.get('access_token');
+          const refreshToken = hashParams.get('refresh_token');
+          
           if (accessToken && refreshToken) {
-            // Set the session manually if needed
             const { data, error: sessionError } = await supabase.auth.setSession({
               access_token: accessToken,
               refresh_token: refreshToken
@@ -84,71 +97,109 @@ export default function AuthCallback() {
             }
 
             if (data.session) {
+              isHandledRef.current = true;
               setStatus('success');
               setMessage('Authentication successful! Redirecting...');
               const email = data.session.user?.email ?? '';
-              console.log('Callback: Session found, redirecting to success page with email:', email);
+              console.log('Callback: Session set from hash tokens, email:', email);
               setTimeout(() => {
                 navigate(`/auth/success?status=confirmed&email=${encodeURIComponent(email)}`, { replace: true });
               }, 1200);
-            } else {
-              throw new Error('No session data received');
-            }
-          } else {
-            // Handle the callback using Supabase's built-in method
-            const { data, error: callbackError } = await supabase.auth.getSession();
-            
-            if (callbackError) {
-              throw callbackError;
-            }
-
-            if (data.session) {
-              setStatus('success');
-              setMessage('Authentication successful! Redirecting...');
-              const email = data.session.user?.email ?? '';
-              console.log('Callback: Session found via getSession, redirecting to success page with email:', email);
-              setTimeout(() => {
-                navigate(`/auth/success?status=confirmed&email=${encodeURIComponent(email)}`, { replace: true });
-              }, 1200);
-            } else {
-              throw new Error('No session data received');
+              return;
             }
           }
-        } else {
-          // No hash fragment - this could be from email verification
-          // Wait a moment for Supabase to process the verification
-          await new Promise(resolve => setTimeout(resolve, 1000));
-          
-          const { data, error } = await supabase.auth.getSession();
-          
-          if (error) {
-            throw error;
-          }
+        }
 
-          if (data.session) {
+        // Set up auth state change listener for real-time session detection
+        authStateSubscription = supabase.auth.onAuthStateChange((event, session) => {
+          if (isHandledRef.current) return;
+          
+          console.log('Callback: Auth state changed:', event, 'Session:', !!session);
+          
+          if (event === 'SIGNED_IN' && session) {
+            isHandledRef.current = true;
             setStatus('success');
             setMessage('Email verification successful! Redirecting...');
-            const email = data.session.user?.email ?? '';
-            console.log('Callback: Email verification successful, redirecting to success page');
+            const email = session.user?.email ?? '';
+            console.log('Callback: Session detected via auth state change, email:', email);
+            
+            // Clean up listeners
+            if (authStateSubscription) authStateSubscription.unsubscribe();
+            if (pollTimeout) clearTimeout(pollTimeout);
+            
             setTimeout(() => {
               navigate(`/auth/success?status=confirmed&email=${encodeURIComponent(email)}`, { replace: true });
             }, 1200);
-          } else {
-            // No session found - this might be someone accessing callback directly
-            console.warn('Callback: No session found, redirecting to home');
+          }
+        });
+
+        // Poll for session (fallback for email verification that might take a moment)
+        const pollForSession = async (): Promise<void> => {
+          if (isHandledRef.current) return;
+          
+          retryCount++;
+          console.log(`Callback: Polling for session (attempt ${retryCount}/${maxRetries})...`);
+          
+          const { data, error: sessionError } = await supabase.auth.getSession();
+          
+          if (sessionError) {
+            console.error('Callback: Session error:', sessionError);
+            if (retryCount >= maxRetries) {
+              throw sessionError;
+            }
+          } else if (data.session) {
+            isHandledRef.current = true;
+            setStatus('success');
+            setMessage('Email verification successful! Redirecting...');
+            const email = data.session.user?.email ?? '';
+            console.log('Callback: Session found via polling, email:', email);
+            
+            // Clean up listeners
+            if (authStateSubscription) authStateSubscription.unsubscribe();
+            if (pollTimeout) clearTimeout(pollTimeout);
+            
+            setTimeout(() => {
+              navigate(`/auth/success?status=confirmed&email=${encodeURIComponent(email)}`, { replace: true });
+            }, 1200);
+            return;
+          }
+          
+          // Continue polling if not found and haven't exceeded retries
+          if (retryCount < maxRetries && !isHandledRef.current) {
+            pollTimeout = setTimeout(pollForSession, 1000);
+          } else if (retryCount >= maxRetries && !isHandledRef.current) {
+            // No session found after max retries
+            console.warn('Callback: No session found after polling, redirecting to home');
+            isHandledRef.current = true;
+            
+            // Clean up listeners
+            if (authStateSubscription) authStateSubscription.unsubscribe();
+            if (pollTimeout) clearTimeout(pollTimeout);
+            
             setStatus('error');
             setMessage('No active authentication session found. Redirecting to home page...');
             setTimeout(() => {
               navigate('/', { replace: true });
             }, 2000);
           }
-        }
+        };
+
+        // Start polling after a short delay (give Supabase time to process)
+        pollTimeout = setTimeout(pollForSession, 500);
+        
       } catch (error) {
+        if (isHandledRef.current) return;
+        
         console.error('Auth callback error:', error);
+        isHandledRef.current = true;
+        
+        // Clean up listeners
+        if (authStateSubscription) authStateSubscription.unsubscribe();
+        if (pollTimeout) clearTimeout(pollTimeout);
+        
         setStatus('error');
         setMessage(`Authentication failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
         
-        // Redirect to home page after 3 seconds
         setTimeout(() => {
           navigate('/', { 
             replace: true,
@@ -158,7 +209,19 @@ export default function AuthCallback() {
       }
     };
 
+    // Start the auth callback
     handleAuthCallback();
+    
+    // Return cleanup function from useEffect
+    return () => {
+      isHandledRef.current = true; // Mark as handled to prevent further processing
+      if (authStateSubscription) {
+        authStateSubscription.unsubscribe();
+      }
+      if (pollTimeout) {
+        clearTimeout(pollTimeout);
+      }
+    };
   }, [navigate, searchParams]);
 
   const handleResendVerification = async () => {
