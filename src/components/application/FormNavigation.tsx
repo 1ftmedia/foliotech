@@ -31,36 +31,19 @@ export const FormNavigation = memo(function FormNavigation({
 
   const handleNext = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
-    console.log('Next button clicked:', {
-      isLastStep,
-      canProceed: canProceedToNextStep(),
-      currentStep
-    });
     
     if (!isLastStep && canProceedToNextStep()) {
-      console.log('Proceeding to next step');
       onNext();
-    } else {
-      console.log('Cannot proceed:', { isLastStep, canProceed: canProceedToNextStep() });
     }
-  }, [isLastStep, onNext, canProceedToNextStep, currentStep]);
+  }, [isLastStep, onNext, canProceedToNextStep]);
 
   const handleSubmit = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
-    console.log('Submit button clicked:', {
-      hasOnSubmit: !!onSubmit,
-      canProceed: canProceedToNextStep(),
-      currentStep,
-      isLastStep
-    });
     
     if (onSubmit && canProceedToNextStep()) {
-      console.log('Executing form submission');
       onSubmit();
-    } else {
-      console.log('Cannot submit:', { hasOnSubmit: !!onSubmit, canProceed: canProceedToNextStep() });
     }
-  }, [onSubmit, canProceedToNextStep, currentStep, isLastStep]);
+  }, [onSubmit, canProceedToNextStep]);
 
   // Handle keyboard navigation
   const handleKeyDown = useCallback((e: React.KeyboardEvent) => {

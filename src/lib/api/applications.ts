@@ -43,29 +43,12 @@ export async function submitApplication(formData: ApplicationFormData): Promise<
       throw new Error(error.message);
     }
 
-    // Send confirmation emails via server-side API (non-blocking)
-    try {
-      console.log('Sending application confirmation emails...');
-      const response = await fetch('/api/send-application-emails', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ applicationId: data.id })
-      });
-      
-      if (response.ok) {
-        console.log('✅ Application confirmation emails sent successfully');
-      } else {
-        console.warn('⚠️ Email sending failed but application was saved');
-      }
-    } catch (emailError) {
-      console.error('❌ Error sending confirmation emails:', emailError);
-      // Don't block the application submission if emails fail
-    }
+    // Note: Confirmation emails are sent automatically via Supabase database webhook
+    // when a new application is inserted. No need to call an API endpoint here.
+    // The webhook triggers the Supabase Edge Function which sends emails to both
+    // the applicant and admin.
 
-    // Show success toast
-    toast.success('Application submitted successfully! Check your email for confirmation.');
+    // Success toast will be shown by the form component
     
     // Return success result
     return {

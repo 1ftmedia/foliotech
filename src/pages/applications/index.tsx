@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import React, { useEffect, useState, useRef } from 'react';
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { ProtectedRoute } from '../../components/ProtectedRoute';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { getUserApplications } from '../../lib/api/applications';
 import { Clock, CheckCircle, XCircle, AlertCircle, FileText, Eye } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 interface Application {
   id: string;
@@ -41,13 +42,33 @@ const statusIcons = {
 export default function ApplicationsPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [applications, setApplications] = useState<Application[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  
-  // Debug logging
-  console.log('ApplicationsPage component rendered');
-  console.log('Current state:', { isLoading, error, applicationsCount: applications.length });
+  const toastShownRef = useRef(false);
+
+  // Show success message if redirected from form submission (only once)
+  useEffect(() => {
+    const submitted = searchParams.get('submitted');
+    if (submitted === 'true' && !toastShownRef.current) {
+      toastShownRef.current = true;
+      toast.success(
+        'Application Submitted Successfully! 🎉\n\n✅ We\'ve received your application\n📧 Check your email for confirmation\n⏱️ We\'ll contact you within 3-5 business days',
+        {
+          duration: 7000,
+          icon: '✅',
+          style: {
+            minWidth: '360px',
+            whiteSpace: 'pre-line',
+            lineHeight: '1.6',
+          },
+        }
+      );
+      // Remove the query parameter from URL
+      setSearchParams({}, { replace: true });
+    }
+  }, [searchParams, setSearchParams]);
 
   useEffect(() => {
     const fetchApplications = async () => {
@@ -88,26 +109,10 @@ export default function ApplicationsPage() {
         <title>My Applications | FolioTech Institute</title>
         <meta name="description" content="View and manage your applications to FolioTech Institute" />
       </Helmet>
-      
-      {/* Debug: Check if component is rendering */}
-      {process.env.NODE_ENV === 'development' && (
-        <div className="fixed top-20 right-4 z-50 p-2 bg-red-500 text-white text-xs rounded">
-          Applications Page Rendered
-        </div>
-      )}
 
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Debug info - remove after fixing */}
-          {process.env.NODE_ENV === 'development' && (
-            <div className="mb-4 p-4 bg-yellow-100 border border-yellow-300 rounded-lg">
-              <p className="text-yellow-800">Debug: Header section should be visible</p>
-              <p className="text-yellow-800">Current step: {currentStep}</p>
-              <p className="text-yellow-800">Applications count: {applications.length}</p>
-            </div>
-          )}
-          
-          <div className="flex justify-between items-center mb-8 border-2 border-red-500 p-4 bg-blue-50">
+          <div className="flex justify-between items-center mb-8">
             <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
               My Applications
             </h1>

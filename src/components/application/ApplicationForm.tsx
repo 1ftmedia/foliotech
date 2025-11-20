@@ -269,16 +269,21 @@ function ApplicationForm({ onSubmit, draftId }: ApplicationFormProps) {
           throw new Error(result.message);
         }
         
-        toast.success('Application submitted successfully!');
+        // Don't show toast here - ApplicationsPage will show a detailed success toast
+        // The success screen below provides immediate visual feedback
       }
       
-      setSubmissionSuccess(true);
+      // Reset form state
       resetForm();
       reset();
       
+      // Show success state briefly, then redirect
+      setSubmissionSuccess(true);
+      
+      // Redirect to applications page with success parameter after showing success message
       setTimeout(() => {
-        navigate('/applications');
-      }, 3000);
+        navigate('/applications?submitted=true', { replace: true });
+      }, 2500);
       
     } catch (error) {
       console.error('Error submitting form:', error);
@@ -301,18 +306,58 @@ function ApplicationForm({ onSubmit, draftId }: ApplicationFormProps) {
       <motion.div 
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="text-center py-12"
+        className="text-center py-12 px-4"
       >
-        <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-100 dark:bg-green-900/30 mb-6">
-          <CheckCircle className="w-8 h-8 text-green-600 dark:text-green-400" />
+        <div className="max-w-md mx-auto">
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
+            className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-green-100 dark:bg-green-900/30 mb-6"
+          >
+            <CheckCircle className="w-10 h-10 text-green-600 dark:text-green-400" />
+          </motion.div>
+          <motion.h2 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="text-3xl font-bold text-gray-900 dark:text-white mb-3"
+          >
+            Application Submitted Successfully! 🎉
+          </motion.h2>
+          <motion.p 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 }}
+            className="text-gray-600 dark:text-gray-400 mb-4 text-lg"
+          >
+            Thank you for your application to FolioTech Institute.
+          </motion.p>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+            className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 mb-6"
+          >
+            <p className="text-sm text-blue-800 dark:text-blue-300">
+              <strong>What's next?</strong>
+            </p>
+            <ul className="text-sm text-blue-700 dark:text-blue-400 mt-2 space-y-1 text-left list-disc list-inside">
+              <li>You'll receive a confirmation email shortly</li>
+              <li>Our team will review your application</li>
+              <li>We'll contact you within 3-5 business days</li>
+            </ul>
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.6 }}
+            className="flex items-center justify-center space-x-2 text-sm text-gray-500 dark:text-gray-400"
+          >
+            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
+            <span>Redirecting to your applications...</span>
+          </motion.div>
         </div>
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Application Submitted Successfully</h2>
-        <p className="text-gray-600 dark:text-gray-400 mb-6">
-          Thank you for your application. We will review your information and contact you soon.
-        </p>
-        <p className="text-sm text-gray-500 dark:text-gray-500">
-          Redirecting to applications page...
-        </p>
       </motion.div>
     );
   }
